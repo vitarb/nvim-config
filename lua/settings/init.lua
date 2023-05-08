@@ -5,6 +5,7 @@ vim.cmd("colorscheme gruvbox")
 vim.opt.foldenable = false -- disable folding
 vim.opt.ttyfast = true -- enable fast redraws
 vim.opt.number = true -- Show line numbers
+vim.opt.autoindent = true -- Enable autoindent
 
 -- Tabs 
 vim.opt.shiftwidth = 4

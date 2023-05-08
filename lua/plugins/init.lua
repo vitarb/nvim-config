@@ -39,11 +39,11 @@ require('packer').startup(function(use)
         requires = 'nvim-tree/nvim-web-devicons',
         config = function() require('plugins/setup/bufferline') end
     }
-
     use {
         "folke/zen-mode.nvim",
         config = function() require('plugins/setup/zen-mode') end
     }
+
     -- Search
     use {
         'nvim-telescope/telescope.nvim',
@@ -56,6 +56,24 @@ require('packer').startup(function(use)
     use {
         'phaazon/hop.nvim',
         config = function() require('plugins/setup/hop') end
+    }
+
+    -- Code analysis
+    use {
+        'hrsh7th/nvim-cmp',
+        requires = {
+            'hrsh7th/cmp-nvim-lsp', 'hrsh7th/cmp-buffer', 'hrsh7th/cmp-path',
+            'hrsh7th/cmp-cmdline', 'dcampos/cmp-snippy', 'dcampos/cmp-snippy'
+        },
+        config = function() require('plugins/setup/cmp') end
+    }
+    use {
+        'neovim/nvim-lspconfig', requires = 'hrsh7th/nvim-cmp',
+        config = function() require('plugins/setup/nvim-lspconfig') end
+    }
+    use {
+        'simrat39/symbols-outline.nvim',
+        config = function() require('plugins/setup/symbols-outline') end
     }
 
     -- Automatically set up your configuration after cloning packer.nvim
