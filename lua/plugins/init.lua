@@ -13,6 +13,14 @@ local packer_bootstrap = ensure_packer()
 
 return require('packer').startup(function(use)
   use 'wbthomason/packer.nvim'
+
+  -- Project tree
+  use 'nvim-tree/nvim-web-devicons'
+  use({'nvim-tree/nvim-tree.lua', 
+      requires = 'nvim-tree/nvim-web-devicons',
+      config = function() require('plugins/setup/nvim-tree') end,
+      })
+
   -- My plugins here
   -- use 'foo1/bar1.nvim'
   -- use 'foo2/bar2.nvim'
