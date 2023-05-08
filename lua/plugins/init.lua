@@ -27,6 +27,8 @@ require('packer').startup(function(use)
   use {'akinsho/bufferline.nvim', tag = "*", requires = 'nvim-tree/nvim-web-devicons', 
   	config = function() require('plugins/setup/bufferline') end }
 
+  use {"folke/zen-mode.nvim", 
+    config = function() require('plugins/setup/zen-mode') end }
   -- Search
   use {'nvim-telescope/telescope.nvim', branch = '0.1.x', requires = 'nvim-lua/plenary.nvim',
   	config = function() require('plugins/setup/telescope') end }
