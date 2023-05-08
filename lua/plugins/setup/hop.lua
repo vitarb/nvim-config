@@ -3,5 +3,5 @@ require('hop').setup {
 }
 
 -- Hop mappings
-map('n', 'f', ':HopWord<CR>')
-map('n', '<C-g>', ':HopLine<CR>')
+vim.keymap.set('n', 'f', ':HopWord<CR>')
+vim.keymap.set('n', '<C-g>', ':HopLine<CR>')

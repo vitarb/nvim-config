@@ -22,6 +22,10 @@ require('packer').startup(function(use)
   use {'nvim-lualine/lualine.nvim', requires = 'nvim-tree/nvim-web-devicons',
   	config = function() require('plugins/setup/lualine') end }
 
+  -- Search
+  use {'nvim-telescope/telescope.nvim', branch = '0.1.x', requires = 'nvim-lua/plenary.nvim',
+  	config = function() require('plugins/setup/telescope') end }
+
   -- Navigation
   use {'phaazon/hop.nvim', config = function() require('plugins/setup/hop') end }
 
