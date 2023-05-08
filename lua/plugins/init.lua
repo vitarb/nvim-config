@@ -18,11 +18,12 @@ require('packer').startup(function(use)
   -- GUI enhancements 
   use 'nvim-tree/nvim-web-devicons'
   use {'nvim-tree/nvim-tree.lua', requires = 'nvim-tree/nvim-web-devicons',
-  	config = function() require('plugins/setup/nvim-tree') end 
-  }
+  	config = function() require('plugins/setup/nvim-tree') end }
   use {'nvim-lualine/lualine.nvim', requires = 'nvim-tree/nvim-web-devicons',
-  	config = function() require('plugins/setup/lualine') end 
-  }
+  	config = function() require('plugins/setup/lualine') end }
+
+  -- Navigation
+  use {'phaazon/hop.nvim', config = function() require('plugins/setup/hop') end }
 
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
