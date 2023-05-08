@@ -1,5 +1,4 @@
-require('nvim-tree').setup({
-})
+require('nvim-tree').setup({})
 
 -- Nvim hotkeys
 vim.keymap.set('n', '<leader>t', ':NvimTreeToggle<CR>')
