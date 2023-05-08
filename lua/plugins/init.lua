@@ -68,7 +68,8 @@ require('packer').startup(function(use)
         config = function() require('plugins/setup/cmp') end
     }
     use {
-        'neovim/nvim-lspconfig', requires = 'hrsh7th/nvim-cmp',
+        'neovim/nvim-lspconfig',
+        requires = 'hrsh7th/nvim-cmp',
         config = function() require('plugins/setup/nvim-lspconfig') end
     }
     use {
