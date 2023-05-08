@@ -15,12 +15,17 @@ local packer_bootstrap = ensure_packer()
 require('packer').startup(function(use)
   use 'wbthomason/packer.nvim'
 
+  -- Color scheme
+  use { "ellisonleao/gruvbox.nvim" }
+
   -- GUI enhancements 
   use 'nvim-tree/nvim-web-devicons'
   use {'nvim-tree/nvim-tree.lua', requires = 'nvim-tree/nvim-web-devicons',
   	config = function() require('plugins/setup/nvim-tree') end }
   use {'nvim-lualine/lualine.nvim', requires = 'nvim-tree/nvim-web-devicons',
   	config = function() require('plugins/setup/lualine') end }
+  use {'akinsho/bufferline.nvim', tag = "*", requires = 'nvim-tree/nvim-web-devicons', 
+  	config = function() require('plugins/setup/bufferline') end }
 
   -- Search
   use {'nvim-telescope/telescope.nvim', branch = '0.1.x', requires = 'nvim-lua/plenary.nvim',
