@@ -78,6 +78,9 @@ require('packer').startup(function(use)
         config = function() require('plugins/setup/symbols-outline') end
     }
 
+    -- git
+    use 'tpope/vim-fugitive'
+
     -- Automatically set up your configuration after cloning packer.nvim
     -- Put this at the end after all plugins
     if packer_bootstrap then require('packer').sync() end
