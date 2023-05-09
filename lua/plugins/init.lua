@@ -62,8 +62,8 @@ require('packer').startup(function(use)
     use {
         'hrsh7th/nvim-cmp',
         requires = {
-            'hrsh7th/cmp-nvim-lsp', 'hrsh7th/cmp-buffer', 'hrsh7th/cmp-path',
-            'hrsh7th/cmp-cmdline', 'dcampos/nvim-snippy', 'dcampos/cmp-snippy'
+            'hrsh7th/cmp-nvim-lsp', 'hrsh7th/cmp-buffer', 'hrsh7th/cmp-path', 
+            'hrsh7th/cmp-cmdline', 'dcampos/nvim-snippy', 'dcampos/cmp-snippy', 'honza/vim-snippets'
         },
         config = function() require('plugins/setup/cmp') end
     }
