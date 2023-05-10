@@ -33,7 +33,8 @@ vim.api.nvim_set_keymap('n', '#', '#zz', {silent = true})
 vim.api.nvim_set_keymap('n', 'g*', 'g*zz', {silent = true})
 
 -- Windows
-vim.api.nvim_set_keymap('n', '<leader>o', ':only<CR>', {noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', '<leader>o', ':only<CR>', {noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<C-c>', '<C-w>c', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<left>',  '<C-w>h', { noremap = true })
 vim.api.nvim_set_keymap('n', '<down>',  '<C-w>j', { noremap = true })
 vim.api.nvim_set_keymap('n', '<up>',    '<C-w>k', { noremap = true })
