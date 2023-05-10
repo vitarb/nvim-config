@@ -21,5 +21,5 @@ vim.opt.smartcase = true
 vim.opt.gdefault = true
 
 -- Permanent undo
-vim.o.undodir = '~/.vimdid'
-vim.o.undofile = true
+vim.opt.undofile = true
+vim.opt.undodir = vim.fn.expand("~/.vim/undo")
