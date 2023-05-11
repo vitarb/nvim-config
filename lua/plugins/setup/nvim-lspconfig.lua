@@ -4,7 +4,6 @@ local capabilities = require('cmp_nvim_lsp').default_capabilities()
 -- Setup language servers.
 local lspconfig = require('lspconfig')
 lspconfig.clangd.setup {
-    on_attach = on_attach,
     cmd = {
         'clangd', '--background-index', '--clang-tidy',
         '--completion-style=bundled'

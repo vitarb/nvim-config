@@ -68,6 +68,12 @@ require('packer').startup(function(use)
         },
         config = function() require('plugins/setup/cmp') end
     }
+    -- Lua
+    use {
+        "folke/trouble.nvim",
+        requires = "nvim-tree/nvim-web-devicons",
+        config = function() require('plugins/setup/trouble') end
+    }
     use {
         'neovim/nvim-lspconfig',
         requires = 'hrsh7th/nvim-cmp',
@@ -84,7 +90,7 @@ require('packer').startup(function(use)
     use {
         'lewis6991/gitsigns.nvim',
         config = function() require('plugins/setup/gitsigns') end
-}
+    }
 
     -- Automatically set up your configuration after cloning packer.nvim
     -- Put this at the end after all plugins
