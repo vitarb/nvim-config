@@ -1,9 +1,20 @@
 -- Set up lspconfig.
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
+local on_attach = function(client, bufnr)
+    -- Get signatures (and _only_ signatures) when in argument lists.
+    require "lsp_signature".on_attach({
+        doc_lines = 0,
+        handler_opts = {
+            border = "none"
+        },
+    })
+end
+
 -- Setup language servers.
 local lspconfig = require('lspconfig')
 lspconfig.clangd.setup {
+    on_attach = on_attach,
     cmd = {
         'clangd', '--background-index', '--clang-tidy',
         '--completion-style=bundled'
@@ -11,6 +22,7 @@ lspconfig.clangd.setup {
     capabilities = capabilities
 }
 lspconfig.rust_analyzer.setup {
+    on_attach = on_attach,
     -- Server-specific settings. See `:help lspconfig-setup`
     settings = {['rust-analyzer'] = {}},
     capabilities = capabilities
@@ -31,6 +43,9 @@ vim.api.nvim_create_autocmd('LspAttach', {
         -- Enable completion triggered by <c-x><c-o>
         vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
 
+        -- Mappings.
+        local opts = { noremap=true, silent=true }
+
         -- Buffer local mappings.
         -- See `:help vim.lsp.*` for documentation on any of the below functions
         local opts = {buffer = ev.buf}
@@ -49,7 +64,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
         end, opts)
         vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, opts)
         vim.keymap.set('n', '<C-r>', vim.lsp.buf.rename, opts)
-        vim.keymap.set({'n', 'v'}, '<C-space>', vim.lsp.buf.code_action, opts)
         vim.keymap.set({'n', 'v'}, '<M-CR>', vim.lsp.buf.code_action, opts)
         vim.keymap.set('n', 'gu', vim.lsp.buf.references, opts)
         vim.keymap.set('n', '<C-M-b>', vim.lsp.buf.references, opts)
