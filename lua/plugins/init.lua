@@ -68,6 +68,26 @@ require('packer').startup(function(use)
         },
         config = function() require('plugins/setup/cmp') end
     }
+
+    use {
+        'nvim-treesitter/nvim-treesitter',
+        run = ':TSUpdate',
+        config = function() require("plugins/setup/nvim-treesitter") end
+    }
+
+    use {
+        "glepnir/lspsaga.nvim",
+        opt = true,
+        branch = "main",
+        event = "LspAttach",
+        requires = {
+            {"nvim-tree/nvim-web-devicons"},
+            -- Make sure you install markdown and markdown_inline parser
+            {"nvim-treesitter/nvim-treesitter"}
+        },
+        config = function() require("plugins/setup/lspsaga") end
+    }
+
     -- Lua
     use {
         "folke/trouble.nvim",
