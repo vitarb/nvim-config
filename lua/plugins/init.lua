@@ -91,6 +91,11 @@ require('packer').startup(function(use)
         'lewis6991/gitsigns.nvim',
         config = function() require('plugins/setup/gitsigns') end
     }
+    -- Commenting
+    use {
+        'numToStr/Comment.nvim',
+        config = function() require('plugins/setup/comment') end
+    }
 
     -- Automatically set up your configuration after cloning packer.nvim
     -- Put this at the end after all plugins

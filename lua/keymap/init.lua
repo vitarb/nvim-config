@@ -21,10 +21,11 @@ vim.api.nvim_set_keymap('v', '<leader>c', '"+y', {noremap = true})
 vim.api.nvim_set_keymap('n', '<leader>c', '"+yy', {noremap = true})
 vim.api.nvim_set_keymap('n', '<leader>v', '"+p', {noremap = true})
 
--- Save and quit
+-- Save, quit and create
 vim.api.nvim_set_keymap('n', '<C-x>', ':confirm qall<CR>', {noremap = true})
 vim.api.nvim_set_keymap('n', '<C-s>', ':w<CR>', {noremap = true})
-vim.api.nvim_set_keymap('n', '<leader>n', ':e ' .. vim.fn.expand('%:p:h') .. '/', {noremap = true})
+vim.api.nvim_set_keymap('n', '<leader>n', ':e <C-R>=expand("%:p:h") . "/"<CR>',
+                        {noremap = true})
 
 -- Center search results
 vim.api.nvim_set_keymap('n', 'n', 'nzz', {silent = true})

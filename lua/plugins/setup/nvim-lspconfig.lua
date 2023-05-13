@@ -3,11 +3,9 @@ local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
 local on_attach = function(client, bufnr)
     -- Get signatures (and _only_ signatures) when in argument lists.
-    require "lsp_signature".on_attach({
+    require"lsp_signature".on_attach({
         doc_lines = 0,
-        handler_opts = {
-            border = "none"
-        },
+        handler_opts = {border = "none"}
     })
 end
 
@@ -44,7 +42,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
         vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
 
         -- Mappings.
-        local opts = { noremap=true, silent=true }
+        local opts = {noremap = true, silent = true}
 
         -- Buffer local mappings.
         -- See `:help vim.lsp.*` for documentation on any of the below functions
