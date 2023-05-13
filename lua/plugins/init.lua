@@ -43,12 +43,6 @@ require('packer').startup(function(use)
         "folke/zen-mode.nvim",
         config = function() require('plugins/setup/zen-mode') end
     }
-    use {
-        'glepnir/dashboard-nvim',
-        event = 'VimEnter',
-        requires = {'nvim-tree/nvim-web-devicons'},
-        config = function() require('plugins/setup/dashboard') end
-    }
 
     -- Search
     use {
