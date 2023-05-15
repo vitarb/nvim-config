@@ -19,6 +19,8 @@ local opts = {
 	undodir = vim.fn.expand("~/.vim/undo"),
 	omnifunc = 'v:lua.vim.lsp.omnifunc',
 }
+-- Don't show preview window while using omnicompletion
+vim.api.nvim_command('set completeopt-=preview')
 
 -- Set options from table
 for opt, val in pairs(opts) do
