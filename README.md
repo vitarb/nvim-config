@@ -2,7 +2,7 @@
 
 Nvim configuration for software development that uses lazy plugin manager.
 Code navigation hotkeys are inspired by Intellij.
-
+```
 ├──  lua
 │   ├──  core
 │   │   ├──  keymaps.lua       -- global key mappings
@@ -32,4 +32,4 @@ Code navigation hotkeys are inspired by Intellij.
 │       ├──  treesitter.lua        -- File structure awareness.
 │       ├──  which-key.lua         -- Displays a popup with possible key bindings of the command you started typing.
 │       └──  zen.lua               -- Zen mode for coding with no distractions.
-
+```
