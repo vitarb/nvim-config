@@ -1,7 +1,7 @@
 # nvim-config
 
-Nvim configuration for software development that uses lazy plugin manager.
-Code navigation hotkeys are inspired by Intellij.
+Nvim configuration for software development that uses lazy plugin manager and LSP integration.
+Code navigation hotkeys are mostly inspired by Intellij.
 ```
 ├──  lua
 │   ├──  core
