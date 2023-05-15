@@ -28,7 +28,6 @@ return {
 			map('n', '<C-n>', builtin.find_files, "Files")
 			map('n', '<C-f>', builtin.live_grep, "Grep")
 			map('n', '<C-e>', builtin.buffers, "Buffers")
-			map('n', '<C-t>', builtin.help_tags, "Help")
 
 			map("n", "<leader>/", function()
 				-- You can pass additional configuration to telescope to change theme, layout, etc.
