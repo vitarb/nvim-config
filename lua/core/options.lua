@@ -17,6 +17,7 @@ local opts = {
 	-- Permanent undo
 	undofile = true,
 	undodir = vim.fn.expand("~/.vim/undo"),
+	omnifunc = 'v:lua.vim.lsp.omnifunc',
 }
 
 -- Set options from table
