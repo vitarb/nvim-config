@@ -37,22 +37,23 @@ Code navigation hotkeys are inspired by Intellij.
 # Shortcuts
 
 Here are some common (non standard) shortcuts for a quick start:
-* <C-n> - search and open files  
-* <C-e> - open buffers
-* <C-f> - grep project files
-* <C-b> - go to definition
-* <C-M-b> - go to references
-* <C-p> - function parameters
-* <C-q> - quick help
-* <C-space> - quick completion (using omnifunction)
-* <leader><leader> - LSP fuzzy search in the current buffer (for quick jump to function or variable).
-* <F12> - File structure outline
-* <F11> - Toggle zen mode
+* `<C-n>` - search and open files  
+* `<C-e>` - open buffers
+* `<C-f>` - grep project files
+* `<C-b>` - go to definition
+* `<C-M-b>` - go to references
+* `<C-p>` - function parameters
+* `<C-q>` - quick help
+* `<C-space>` - quick completion (using omnifunction)
+* `<leader><leader>` - LSP fuzzy search in the current buffer (for quick jump to function or variable).
+* `<F12>` - File structure outline
+* `<F11>` - Toggle zen mode
 * Arrow keys - move between open windows
-* <C-c> - close current window.
-* <leader>o - close all windows except current.
-* <C-x> - quick exit
-* <C-s> - quick save
-* <C-/> - comment line
+* `H`/`L` - navigate left/right through open buffers.
+* `<C-c>` - close current window.
+* `<leader>o` - close all windows except current.
+* `<C-x>` - quick exit
+* `<C-s>` - quick save
+* `<C-/>` - comment line
 
 Other plugin specific shortcuts can be located in corresponding plugins lua files and core/keymaps.lua
