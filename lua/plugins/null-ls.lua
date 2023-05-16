@@ -8,11 +8,23 @@ return {
 			local null_ls = require("null-ls")
 			null_ls.setup({
 				sources = {
-					null_ls.builtins.formatting.stylua,
-					null_ls.builtins.formatting.clang_format,
-					null_ls.builtins.formatting.black,
-					null_ls.builtins.formatting.isort,
+					-- Anything not supported by mason.
 				},
+			})
+		end,
+	},
+	{ -- Configure mason-null-ls as a primary source.
+		"jay-babu/mason-null-ls.nvim",
+		event = { "BufReadPre", "BufNewFile" },
+		dependencies = {
+			"williamboman/mason.nvim",
+			"jose-elias-alvarez/null-ls.nvim",
+		},
+		config = function()
+			require("mason-null-ls").setup({
+				ensure_installed = { "clang-format", "stylua", "jq", "rustfmt", "gofmt" },
+				automatic_installation = false,
+				handlers = {},
 			})
 		end,
 	},
