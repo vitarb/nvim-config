@@ -23,7 +23,6 @@ map('n', 'g*', 'g*zz')
 
 -- Windows
 map('n', '<leader>o', ':only<CR>')
-map('n', '<C-c>', '<C-w>c')
 map('n', '<left>', '<C-w>h')
 map('n', '<down>', '<C-w>j')
 map('n', '<up>', '<C-w>k')
@@ -57,6 +56,7 @@ local buffers = require("helpers.buffers")
 map("n", "<leader>db", buffers.delete_this, "Current buffer")
 map("n", "<leader>do", buffers.delete_others, "Other buffers")
 map("n", "<leader>da", buffers.delete_all, "All buffers")
+map('n', '<C-c>', buffers.close_current, "Close current window or buffer.")
 
 -- Navigate buffers
 map("n", "<S-l>", ":bnext<CR>")
