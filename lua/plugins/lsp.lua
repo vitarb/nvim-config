@@ -19,7 +19,7 @@ return {
 					"clangd",
 					"gopls",
 					"pylsp",
-					"rust_analyzer"
+					"rust_analyzer",
 				},
 				automatic_installation = true,
 			})
@@ -64,26 +64,20 @@ return {
 			local on_attach = function(client, bufnr)
 				local lsp_map = require("helpers.keys").lsp_map
 				local ts = require("telescope.builtin")
-				lsp_map("<C-r>", vim.lsp.buf.rename, bufnr, "Rename symbol")
-				lsp_map("<leader>la", vim.lsp.buf.code_action, bufnr, "Code action")
-				lsp_map("<leader>ld", vim.lsp.buf.type_definition, bufnr, "Type definition")
-				lsp_map("<C-p>", vim.lsp.buf.signature_help, bufnr, "Signature help")
-				lsp_map("gd", vim.lsp.buf.definition, bufnr, "Goto Definition")
-				lsp_map("<C-b>", vim.lsp.buf.definition, bufnr, "Goto Definition")
-				lsp_map("<C-M-b>", ts.lsp_references, bufnr, "Goto References")
-				lsp_map("gr", ts.lsp_references, bufnr, "Goto References")
-				lsp_map("gi", ts.lsp_incoming_calls, bufnr, "Incoming calls")
-				lsp_map("<leader><leader>", ts.lsp_document_symbols, bufnr, "Document symbols")
-				lsp_map("<C-M-i>", vim.lsp.buf.implementation, bufnr, "Goto Implementation")
-				lsp_map("<C-q>", vim.lsp.buf.hover, bufnr, "Hover Documentation")
-				lsp_map("gD", vim.lsp.buf.declaration, bufnr, "Goto Declaration")
-
-				-- Create a command `:Format` local to the LSP buffer
-				vim.api.nvim_buf_create_user_command(bufnr, "Format", function(_)
-					vim.lsp.buf.format()
-				end, { desc = "Format current buffer with LSP" })
-
-				lsp_map("<leader>ff", "<cmd>Format<cr>", bufnr, "Format")
+				lsp_map("n", "<C-r>", vim.lsp.buf.rename, bufnr, "Rename symbol")
+				lsp_map("n", "<leader>la", vim.lsp.buf.code_action, bufnr, "Code action")
+				lsp_map("n", "<leader>ld", vim.lsp.buf.type_definition, bufnr, "Type definition")
+				lsp_map("n", "<C-p>", vim.lsp.buf.signature_help, bufnr, "Signature help")
+				lsp_map("n", "gd", vim.lsp.buf.definition, bufnr, "Goto Definition")
+				lsp_map("n", "<C-b>", vim.lsp.buf.definition, bufnr, "Goto Definition")
+				lsp_map("n", "<C-M-b>", ts.lsp_references, bufnr, "Goto References")
+				lsp_map("n", "gr", ts.lsp_references, bufnr, "Goto References")
+				lsp_map("n", "gi", ts.lsp_incoming_calls, bufnr, "Incoming calls")
+				lsp_map("n", "<leader><leader>", ts.lsp_document_symbols, bufnr, "Document symbols")
+				lsp_map("n", "<C-M-i>", vim.lsp.buf.implementation, bufnr, "Goto Implementation")
+				lsp_map("n", "<C-q>", vim.lsp.buf.hover, bufnr, "Hover Documentation")
+				lsp_map("n", "gD", vim.lsp.buf.declaration, bufnr, "Goto Declaration")
+				lsp_map({"n", "v"}, "<leader>f", vim.lsp.buf.format, bufnr, "Format")
 
 				-- Attach and configure vim-illuminate
 				require("illuminate").on_attach(client)
@@ -99,23 +93,26 @@ return {
 				offsetEncoding = "utf-8",
 			})
 
-			local lspconfig = require('lspconfig')
+			local lspconfig = require("lspconfig")
 			-- C
-			lspconfig.clangd.setup {
+			lspconfig.clangd.setup({
 				on_attach = on_attach,
 				cmd = {
-					'clangd', '--background-index', '--clang-tidy', '--completion-style=bundled'
+					"clangd",
+					"--background-index",
+					"--clang-tidy",
+					"--completion-style=bundled",
 				},
-				capabilities = clangd_capabilities
-			}
+				capabilities = clangd_capabilities,
+			})
 
 			-- Rust
-			lspconfig.rust_analyzer.setup {
+			lspconfig.rust_analyzer.setup({
 				on_attach = on_attach,
 				-- Server-specific settings. See `:help lspconfig-setup`
-				settings = { ['rust-analyzer'] = {} },
-				capabilities = capabilities
-			}
+				settings = { ["rust-analyzer"] = {} },
+				capabilities = capabilities,
+			})
 
 			-- Lua
 			lspconfig.lua_ls.setup({

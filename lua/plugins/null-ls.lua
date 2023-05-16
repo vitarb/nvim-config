@@ -8,7 +8,7 @@ return {
 			local null_ls = require("null-ls")
 			null_ls.setup({
 				sources = {
-					-- Anything not supported by mason.
+					-- Automatically registered by mason-null-ls
 				},
 			})
 		end,
