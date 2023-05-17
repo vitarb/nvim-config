@@ -5,6 +5,8 @@ return {
 		"williamboman/mason.nvim",
 		"jay-babu/mason-nvim-dap.nvim",
 		"rcarriga/nvim-notify",
+		"theHamsta/nvim-dap-virtual-text",
+		"nvim-treesitter/nvim-treesitter",
 	},
 	config = function()
 		require("mason-nvim-dap").setup({
@@ -23,7 +25,7 @@ return {
 			type = "executable",
 			command = vim.fn.stdpath("data") .. "/mason/bin/OpenDebugAD7",
 		}
-		dap.configurations.c = {
+		dap.configurations.cpp = {
 			{
 				name = "Launch file",
 				type = "cppdbg",
@@ -47,6 +49,7 @@ return {
 				end,
 			},
 		}
+		dap.configurations.c = dap.configurations.cpp
 		-- vim.fn.sign_define("DapBreakpoint", { text = "🐞" })
 
 		-- Start debugging session:
@@ -82,5 +85,10 @@ return {
 		-- DAP mappings
 		local map = require("helpers.keys").map
 		map("n", "<leader>dt", require("dapui").toggle, "Toggle debugger")
+
+		require("nvim-dap-virtual-text").setup({
+			all_references = true, -- show virtual text on all all references of the variable (not only definitions)
+			highlight_changed_variables = false, -- do not highlight changed values with NvimDapVirtualTextChanged
+		})
 	end,
 }
