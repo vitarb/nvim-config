@@ -1,13 +1,18 @@
 return {
 	"rcarriga/nvim-dap-ui",
-	dependencies = { "mfussenegger/nvim-dap", "williamboman/mason.nvim", "jay-babu/mason-nvim-dap.nvim" },
+	dependencies = {
+		"mfussenegger/nvim-dap",
+		"williamboman/mason.nvim",
+		"jay-babu/mason-nvim-dap.nvim",
+		"rcarriga/nvim-notify",
+	},
 	config = function()
 		require("mason-nvim-dap").setup({
 			ensure_installed = { "cppdbg" },
 		})
 		local dap = require("dap")
 		local ui = require("dapui")
-		ui.setup{}
+		ui.setup({})
 		dap.set_log_level("INFO") -- Helps when configuring DAP, see logs with :DapShowLog
 
 		-- For details on how to setup additional adapters look at this wiki:
@@ -44,7 +49,7 @@ return {
 		}
 		-- vim.fn.sign_define("DapBreakpoint", { text = "🐞" })
 
-		-- Start debugging session: 
+		-- Start debugging session:
 		-- Note that modifiers on F keys can be handled differently on different systems.
 		-- In order to get correct values, press C^v in the insert mode and then desired combo.
 		vim.keymap.set("n", "<F21>", function() -- <S-F9>
@@ -54,7 +59,7 @@ return {
 		end)
 
 		-- Set breakpoints, get variable values, step into/out of functions, etc.
-		vim.keymap.set("n", "<leader>dh", require("dap.ui.widgets").hover)
+		vim.keymap.set("n", "<F25>", require("dap.ui.widgets").hover) -- <C-F1>
 		vim.keymap.set("n", "<F9>", dap.continue)
 		vim.keymap.set("n", "<F32>", dap.toggle_breakpoint) -- <C-F8>
 		vim.keymap.set("n", "<F8>", dap.step_over)
@@ -62,7 +67,7 @@ return {
 		vim.keymap.set("n", "<F20>", dap.step_out) -- <S-F8>
 		vim.keymap.set("n", "<leader>dc", function()
 			dap.clear_breakpoints()
-			-- require("notify")("Breakpoints cleared", "warn")
+			require("notify")("Breakpoints cleared", "warn")
 		end)
 
 		-- Close debugger and clear breakpoints
@@ -71,7 +76,7 @@ return {
 			ui.toggle({})
 			dap.terminate()
 			vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-w>=", false, true, true), "n", false)
-			-- require("notify")("Debugger session ended", "warn")
+			require("notify")("Debugger session ended", "warn")
 		end)
 
 		-- DAP mappings
