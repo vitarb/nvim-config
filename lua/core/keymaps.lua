@@ -53,9 +53,9 @@ map("n", "<C-Right>", ":vertical resize -2<CR>")
 
 -- Deleting buffers
 local buffers = require("helpers.buffers")
-map("n", "<leader>db", buffers.delete_this, "Current buffer")
-map("n", "<leader>do", buffers.delete_others, "Other buffers")
-map("n", "<leader>da", buffers.delete_all, "All buffers")
+map("n", "<leader>bd", buffers.delete_this, "Current buffer")
+map("n", "<leader>bb", buffers.delete_others, "Other buffers")
+map("n", "<leader>ba", buffers.delete_all, "All buffers")
 map('n', '<C-c>', buffers.close_current, "Close current window or buffer.")
 
 -- Navigate buffers
