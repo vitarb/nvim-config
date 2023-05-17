@@ -14,6 +14,11 @@ return {
 			preserve_window_layout = { "this", "nameless" },
 		},
 	},
+	{
+		"rcarriga/nvim-notify",
+		config = function()
+			vim.notify = require("notify") -- Other plugins can use the notification windows by setting it as your default notify function
+		end,
+	},
 	"tpope/vim-sleuth", -- Detect tabstop and shiftwidth automatically
-	"rcarriga/nvim-notify",
 }
