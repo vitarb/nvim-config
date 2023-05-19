@@ -63,8 +63,7 @@ return {
 				lsp_map("n", "<C-M-i>", vim.lsp.buf.implementation, bufnr, "Goto Implementation")
 				lsp_map("n", "<C-q>", vim.lsp.buf.hover, bufnr, "Hover Documentation")
 				lsp_map("n", "gD", vim.lsp.buf.declaration, bufnr, "Goto Declaration")
-				lsp_map({"n", "v"}, "<C-M-l>", vim.lsp.buf.format, bufnr, "Format")
-				lsp_map({"n", "v"}, "<leader>ff", vim.lsp.buf.format, bufnr, "Format")
+				lsp_map({"n", "v", "i"}, "<C-M-l>", vim.lsp.buf.format, bufnr, "Format")
 
 				-- Attach and configure vim-illuminate
 				require("illuminate").on_attach(client)
