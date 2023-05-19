@@ -10,7 +10,7 @@ return {
 	},
 	config = function()
 		require("mason-nvim-dap").setup({
-			ensure_installed = { "cppdbg" },
+			ensure_installed = { "codelldb" },
 		})
 		local dap = require("dap")
 		local ui = require("dapui")
@@ -20,36 +20,43 @@ return {
 		-- For details on how to setup additional adapters look at this wiki:
 		-- https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation
 		-- Generally all you need is to add the tool to the mason-nvim-dap install list and add adapter config below.
-		dap.adapters.cppdbg = {
-			id = "cppdbg",
-			type = "executable",
-			command = vim.fn.stdpath("data") .. "/mason/bin/OpenDebugAD7",
+		dap.adapters.codelldb = {
+			type = "server",
+			port = "${port}",
+			executable = {
+				-- provide the absolute path for `codelldb` command if not using the one installed using `mason.nvim`
+				command = vim.fn.stdpath("data") .. "/mason/bin/codelldb",
+				args = { "--port", "${port}" },
+			},
 		}
-		dap.configurations.cpp = {
+		dap.configurations.c = {
 			{
-				name = "Launch file",
-				type = "cppdbg",
+				-- launch
+				name = "Launch",
+				type = "codelldb",
 				request = "launch",
+				program = function()
+					---@diagnostic disable-next-line: redundant-parameter
+					return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
+				end,
+				cwd = "${workspaceFolder}",
+				stopOnEntry = false,
+				args = {},
+			},
+			{
+				-- attach
+				name = "Attach process",
+				type = "codelldb",
+				request = "attach",
+				processId = require("dap.utils").pick_process,
 				program = function()
 					return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
 				end,
 				cwd = "${workspaceFolder}",
-				stopAtEntry = true,
-			},
-			{
-				name = "Attach to gdbserver :1234",
-				type = "cppdbg",
-				request = "launch",
-				MIMode = "gdb",
-				miDebuggerServerAddress = "localhost:1234",
-				miDebuggerPath = "/usr/bin/gdb",
-				cwd = "${workspaceFolder}",
-				program = function()
-					return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
-				end,
 			},
 		}
-		dap.configurations.c = dap.configurations.cpp
+		dap.configurations.cpp = dap.configurations.c
+		dap.configurations.rust = dap.configurations.c
 		-- vim.fn.sign_define("DapBreakpoint", { text = "🐞" })
 
 		-- Start debugging session:
