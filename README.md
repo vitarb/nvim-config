@@ -1,7 +1,16 @@
 # nvim-config
 
-Nvim configuration for software development that uses lazy plugin manager and LSP integration.
+Nvim configuration for software development that uses lazy plugin manager and LSP integration for code actions.
 Code navigation hotkeys are mostly inspired by Intellij.
+
+List of configured languages:
+* C/C++
+* Rust
+* Go
+* Python
+
+Configurations include language server, debugging support and git integration.
+
 ```
 ├──  lua
 │   ├──  core
@@ -29,6 +38,7 @@ Code navigation hotkeys are mostly inspired by Intellij.
 │       ├──  symbols-outline.lua   -- File structure outline with functions and variables.
 │       ├──  telescope.lua         -- Search files, buffers, grep and more.
 │       ├──  themes.lua            -- Themes
+│       ├──  toggleterm.lua        -- Integrated terminal
 │       ├──  treesitter.lua        -- File structure awareness.
 │       ├──  which-key.lua         -- Displays a popup with possible key bindings of the command you started typing.
 │       └──  zen.lua               -- Zen mode for coding with no distractions.
@@ -36,7 +46,8 @@ Code navigation hotkeys are mostly inspired by Intellij.
 
 # Shortcuts
 
-Here are some common (non standard) shortcuts for a quick start:
+Here are some common (non standard) shortcuts for a quick start (C - Control, M - Alt/Meta, S - Shift, leader - vim leader key):
+## Navigation
 * `<C-n>` - search and open files  
 * `<C-e>` - open buffers
 * `<C-f>` - grep project files
@@ -46,14 +57,31 @@ Here are some common (non standard) shortcuts for a quick start:
 * `<C-q>` - quick help
 * `<C-space>` - quick completion (using omnifunction)
 * `<leader><leader>` - LSP fuzzy search in the current buffer (for quick jump to function or variable).
+* `<leader>j` - Toggle project tree
+
+## Windows and buffers
+* `← ↓ ↑ →` - move between open windows
+* `H`/`L` - navigate left/right through open buffers
+* `<leader>o` - Only keep current window, close the rest
+* `<C-c>` - close current window
+
+## Project management
 * `<F12>` - File structure outline
+* `<M-F12>` - Toggle terminal
+* `<C-k>` - Lazy git dialogue (see lazygit [installation](https://github.com/jesseduffield/lazygit#installation))
 * `<F11>` - Toggle zen mode
-* Arrow keys - move between open windows
-* `H`/`L` - navigate left/right through open buffers.
-* `<C-c>` - close current window.
-* `<leader>o` - close all windows except current.
 * `<C-x>` - quick exit
 * `<C-s>` - quick save
-* `<C-/>` - comment line
+* `<C-/>` - comment line (works in visual mode too)
+* `<M-k>`/`<M-j>` - move line(s) up/down
+
+## Debugging
+* `<S-F9>`- Start debugging
+* `<C-F8>`- Toggle breakpoint
+* `<F7>` - step into
+* `<F8>` - step over
+* `<S-F8>` - step out
+* `<F9>` - continue
+* `<C-F2>` - terminate session
 
 Other plugin specific shortcuts can be located in corresponding plugins lua files and core/keymaps.lua
