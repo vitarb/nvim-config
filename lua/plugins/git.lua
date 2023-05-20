@@ -33,6 +33,9 @@ return {
 		config = function()
 			local map = require("helpers.keys").map
 			map({ "n", "t", "v" }, "<C-k>", "<cmd>LazyGit<cr>", "LazyGit view")
+			if vim.fn.executable("nvr") then
+				vim.env.GIT_EDITOR = "nvr --remote-tab-wait +'set bufhidden=wipe'"
+			end
 		end,
 	},
 }
