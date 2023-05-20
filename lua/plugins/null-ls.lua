@@ -22,7 +22,7 @@ return {
 		},
 		config = function()
 			require("mason-null-ls").setup({
-				ensure_installed = { "clang-format", "stylua", "jq", "rustfmt", "gofmt" },
+				ensure_installed = { "clang-format", "stylua", "jq", "rustfmt", "gofmt", "goimports" },
 				automatic_installation = false,
 				handlers = {},
 			})
