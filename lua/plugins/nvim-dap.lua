@@ -10,7 +10,7 @@ return {
 	},
 	config = function()
 		require("mason-nvim-dap").setup({
-			ensure_installed = { "codelldb" },
+			ensure_installed = { "codelldb", "delve" },
 		})
 		local dap = require("dap")
 		local ui = require("dapui")
@@ -29,6 +29,16 @@ return {
 				args = { "--port", "${port}" },
 			},
 		}
+		dap.adapters.delve = {
+			type = "server",
+			port = "${port}",
+			executable = {
+				command = vim.fn.stdpath("data") .. "/mason/bin/dlv",
+				args = { "dap", "-l", "127.0.0.1:${port}" },
+			},
+		}
+
+		--Configurations
 		dap.configurations.c = {
 			{
 				-- launch
@@ -57,6 +67,31 @@ return {
 		}
 		dap.configurations.cpp = dap.configurations.c
 		dap.configurations.rust = dap.configurations.c
+
+		-- https://github.com/go-delve/delve/blob/master/Documentation/usage/dlv_dap.md
+		dap.configurations.go = {
+			{
+				type = "delve",
+				name = "Debug",
+				request = "launch",
+				program = "${file}",
+			},
+			{
+				type = "delve",
+				name = "Debug test", -- configuration for debugging test files
+				request = "launch",
+				mode = "test",
+				program = "${file}",
+			},
+			-- works with go.mod packages and sub packages
+			{
+				type = "delve",
+				name = "Debug test (go.mod)",
+				request = "launch",
+				mode = "test",
+				program = "./${relativeFileDirname}",
+			},
+		}
 		-- vim.fn.sign_define("DapBreakpoint", { text = "🐞" })
 
 		-- Start debugging session:
@@ -71,7 +106,7 @@ return {
 		-- Set breakpoints, get variable values, step into/out of functions, etc.
 		vim.keymap.set("n", "<F25>", require("dap.ui.widgets").hover) -- <C-F1>
 		vim.keymap.set("n", "<F9>", dap.continue)
-		vim.keymap.set("n", "<F32>", dap.toggle_breakpoint) -- <C-F8>
+		vim.keymap.set("n", "<F32>", dap.toggle_breakpoint)     -- <C-F8>
 		vim.keymap.set("n", "<F8>", dap.step_over)
 		vim.keymap.set("n", "<F7>", dap.step_into)
 		vim.keymap.set("n", "<F20>", dap.step_out) -- <S-F8>
@@ -94,7 +129,7 @@ return {
 		map("n", "<leader>dt", require("dapui").toggle, "Toggle debugger")
 
 		require("nvim-dap-virtual-text").setup({
-			all_references = true, -- show virtual text on all all references of the variable (not only definitions)
+			all_references = true,      -- show virtual text on all all references of the variable (not only definitions)
 			highlight_changed_variables = false, -- do not highlight changed values with NvimDapVirtualTextChanged
 		})
 	end,

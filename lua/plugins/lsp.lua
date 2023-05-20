@@ -100,6 +100,11 @@ return {
 				capabilities = capabilities,
 			})
 
+			lspconfig.gopls.setup{
+				on_attach = on_attach,
+				capabilities = capabilities,
+			}
+
 			-- Lua
 			lspconfig.lua_ls.setup({
 				on_attach = on_attach,
