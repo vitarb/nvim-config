@@ -55,7 +55,6 @@ Here are some common (non standard) shortcuts for a quick start (C - Control, M 
 * `<C-M-b>` - go to references
 * `<C-p>` - function parameters
 * `<C-q>` - quick help
-* `<C-space>` - quick completion (using omnifunction)
 * `<leader><leader>` - LSP fuzzy search in the current buffer (for quick jump to function or variable).
 * `<leader>j` - Toggle project tree
 
@@ -75,6 +74,11 @@ Here are some common (non standard) shortcuts for a quick start (C - Control, M 
 * `<C-s>` - quick save
 * `<C-/>` - comment line (works in visual mode too)
 * `<M-k>`/`<M-j>` - move line(s) up/down
+
+## Code actions
+* `<S-F6>` - Rename symbol
+* `<C-space>` - quick completion (using omnifunction)
+* `<leader>space`- LSP code actions.
 
 ## Debugging
 * `<S-F9>`- Start debugging
