@@ -50,7 +50,7 @@ return {
 			local on_attach = function(client, bufnr)
 				local lsp_map = require("helpers.keys").lsp_map
 				local ts = require("telescope.builtin")
-				lsp_map("n", "<F54>", vim.lsp.buf.rename, bufnr, "Rename symbol") -- <S-F6>
+				lsp_map("n", "<F18>", vim.lsp.buf.rename, bufnr, "Rename symbol") -- <S-F6>
 				lsp_map("n", "<leader><space>", vim.lsp.buf.code_action, bufnr, "Code action")
 				lsp_map("n", "<leader>ld", vim.lsp.buf.type_definition, bufnr, "Type definition")
 				lsp_map("n", "<C-p>", vim.lsp.buf.signature_help, bufnr, "Signature help")
