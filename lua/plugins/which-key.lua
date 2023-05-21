@@ -18,6 +18,7 @@ return {
 					}
 				}
 			)
+			require("helpers.keys").map({ "n", "i", "v" }, "<F1>", "<cmd>WhichKey<CR>", "Show Which key help")
 		end
 	}
 }
