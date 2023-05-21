@@ -39,4 +39,14 @@ return {
 			end
 		end,
 	},
+	{
+		"Almo7aya/openingh.nvim",
+
+		config = function()
+			local map = require("helpers.keys").map
+			map("n", "<leader>gg", "V:OpenInGHFile<cr><esc>", "Open file on github")
+			map("v", "<leader>gg", ":OpenInGHFile<cr>", "Open file on github")
+			map("n", "<leader>gr", ":OpenInGHRepo<cr>", "Open github repo")
+		end,
+	},
 }
