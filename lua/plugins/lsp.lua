@@ -54,15 +54,12 @@ return {
 				lsp_map("n", "<leader><space>", vim.lsp.buf.code_action, bufnr, "Code action")
 				lsp_map("n", "<leader>ld", vim.lsp.buf.type_definition, bufnr, "Type definition")
 				lsp_map("n", "<C-p>", vim.lsp.buf.signature_help, bufnr, "Signature help")
-				lsp_map("n", "gd", vim.lsp.buf.definition, bufnr, "Goto Definition")
 				lsp_map("n", "<C-b>", vim.lsp.buf.definition, bufnr, "Goto Definition")
 				lsp_map("n", "<C-M-b>", ts.lsp_references, bufnr, "Goto References")
-				lsp_map("n", "gr", ts.lsp_references, bufnr, "Goto References")
-				lsp_map("n", "gi", ts.lsp_incoming_calls, bufnr, "Incoming calls")
+				lsp_map("n", "<F55>", ts.lsp_incoming_calls, bufnr, "Incoming calls") -- <M-F7>
 				lsp_map("n", "<leader><leader>", ts.lsp_document_symbols, bufnr, "Document symbols")
 				lsp_map("n", "<C-M-i>", vim.lsp.buf.implementation, bufnr, "Goto Implementation")
 				lsp_map("n", "<C-q>", vim.lsp.buf.hover, bufnr, "Hover Documentation")
-				lsp_map("n", "gD", vim.lsp.buf.declaration, bufnr, "Goto Declaration")
 				lsp_map({"n", "v", "i"}, "<C-M-l>", vim.lsp.buf.format, bufnr, "Format")
 
 				-- Attach and configure vim-illuminate

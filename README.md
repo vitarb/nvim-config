@@ -55,6 +55,7 @@ Here are some common (non standard) shortcuts for a quick start (C - Control, M 
 * `<C-M-b>` - go to references
 * `<C-p>` - function parameters
 * `<C-q>` - quick help
+* `<M-F7>` - incoming calls
 * `<leader><leader>` - LSP fuzzy search in the current buffer (for quick jump to function or variable).
 * `<leader>j` - Toggle project tree
 
