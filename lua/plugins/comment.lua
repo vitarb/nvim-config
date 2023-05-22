@@ -1,4 +1,4 @@
--- Fancier statusline
+-- Comment line or selection 
 return {
 	"numToStr/Comment.nvim",
 	config = function()

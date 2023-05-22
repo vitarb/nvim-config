@@ -20,5 +20,13 @@ return {
 			vim.notify = require("notify") -- Other plugins can use the notification windows by setting it as your default notify function
 		end,
 	},
+	{
+		"folke/zen-mode.nvim",
+		config = function()
+			require("zen-mode").setup({})
+			local map = require("helpers.keys").map
+			map({ "n", "v" }, "<F11>", ":ZenMode<CR>", "Files")
+		end,
+	},
 	"tpope/vim-sleuth", -- Detect tabstop and shiftwidth automatically
 }
