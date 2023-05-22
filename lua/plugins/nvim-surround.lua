@@ -12,7 +12,7 @@ return {
     --     <b>or tag* types</b>        csth1<CR>       <h1>or tag types</h1>
     --     delete(functi*on calls)     dsf             function calls
     config = function()
-        require(nvim - surround).setup({
+        require("nvim-surround").setup({
             -- Configuration here, or leave empty to use defaults
         })
     end,
