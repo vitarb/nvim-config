@@ -28,6 +28,12 @@ return {
 			map('n', '<C-n>', builtin.find_files, "Files")
 			map('n', '<C-f>', builtin.live_grep, "Grep")
 			map('n', '<C-e>', builtin.buffers, "Buffers")
+			-- Git mappings for telescope
+			map('n', 'gf', builtin.git_files, "Git files")
+			map('n', 'gl', builtin.git_commits, "Git commit log")
+			map('n', 'gs', builtin.git_status, "Git status")
+			map('n', 'gt', builtin.git_stash, "Git stash")
+			map('n', 'gb', builtin.git_branches, "Git branches")
 
 			map("n", "<leader>/", function()
 				-- You can pass additional configuration to telescope to change theme, layout, etc.

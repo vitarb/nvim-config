@@ -26,6 +26,7 @@ return {
 			local map = require("helpers.keys").map
 			map("n", "<leader>ga", "<cmd>Git add %<cr>", "Stage the current file")
 			map("n", "<C-M-a>", "<cmd>Git blame<cr>", "Show the blame")
+			map("n", "ga", "<cmd>Git blame<cr>", "Show the blame")
 			map("n", "<C-t>", "<cmd>Git pull --rebase<cr>", "Git pull rebase")
 		end,
 	},
