@@ -6,6 +6,7 @@ local opts = {
 	wrap = false,
 	-- Colors
 	termguicolors = true,
+	cursorline = true,
 	-- Line numbers
 	number = true,
 	relativenumber = true,
