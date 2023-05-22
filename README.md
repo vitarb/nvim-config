@@ -21,12 +21,12 @@ Configuration includes language server, code formatting, debugging support and g
 │   │   ├──  buffers.lua
 │   │   ├──  colorscheme.lua
 │   │   └──  keys.lua
-│   └──  plugins                   -- Plugin configurations (auto loaded by lazy)    
+│   └──  plugins                  -- Plugin configurations (auto loaded by lazy)    
 │       ├──  bufferline.lua        -- Tabs at the top of the screen
 │       ├──  cmp.lua               -- Code completion
 │       ├──  comment.lua           -- Commenting in the code
 │       ├──  git.lua               -- Git plugins
-│       ├──  harpoon.lua           -- Fast navigation between selected buffers
+│       ├──  grapple.lua           -- Fast navigation between buffers
 │       ├──  hop.lua               -- Fast navigation inside of the buffer
 │       ├──  lsp.lua               -- Language servers and code navigation hotkeys
 │       ├──  lualine.lua           -- Status line
@@ -34,15 +34,36 @@ Configuration includes language server, code formatting, debugging support and g
 │       ├──  neo-tree.lua          -- Project tree
 │       ├──  null-ls.lua           -- LSP diagnostics, code actions
 │       ├──  nvim-autopairs.lua    -- Automatically add matching brackets, quotes, etc.
+│       ├──  nvim-dap.lua          -- Debug Adapter Protocol client implementation for Neovim.
 │       ├──  nvim-surround.lua     -- Surround text with brackets or quotes.
 │       ├──  symbols-outline.lua   -- File structure outline with functions and variables.
 │       ├──  telescope.lua         -- Search files, buffers, grep and more.
 │       ├──  themes.lua            -- Themes
 │       ├──  toggleterm.lua        -- Integrated terminal
 │       ├──  treesitter.lua        -- File structure awareness.
-│       ├──  which-key.lua         -- Displays a popup with possible key bindings of the command you started typing.
-│       └──  zen.lua               -- Zen mode for coding with no distractions.
+│       └──  which-key.lua         -- Displays a popup with possible key bindings of the command you started typing.
 ```
+
+# Pros&Cons comparing to the IDE like Intellij or VSCode
+Similar:
+* Editor capabilities - navigation, code completion, search, file structure, 
+* Language support - by plugging in relevant language server you enable support for indexing, navgiation and basic refactorings.
+* Git integration - thanks to lazygit (must be installed separately), you get nice git UI.
+* Debugging - nvim-dap enables seamless integration with modern debuggers.
+
+Pros:
+* Consistency - same setup for all programming languages, no need to install new tools, just add language servers.
+* Free - you can have same setup at work and at home without having to worry about recurring fees.
+* Lightweight - doesn't require X server, can run on a remote machine via ssh or in docker container.
+* Speed - most operations are much faster than in the IDE.
+* Customizable - sky is the limit, especially if you are ready to write your own plugins.
+* Incremental setup - you can gradually evolve your setup over time.
+* Cool factor - your IDE is in your terminal, not the other way around.
+
+Cons:
+* Learning curve - somewhat high upfront investment is required to learn plugin ecosystem and relevant shortcuts.
+* Refactorings - propriatory tools (especially Intellij) have better refactoring capabilities.
+* Git conflict resolution - lazygit is nice, but Intellij's conflict resolution tool's magic wand button is unmatched.
 
 # Shortcuts
 
