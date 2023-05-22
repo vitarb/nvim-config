@@ -44,7 +44,24 @@ Configuration includes language server, code formatting, debugging support and g
 │       └──  which-key.lua         -- Displays a popup with possible key bindings of the command you started typing.
 ```
 
-# Pros&Cons comparing to the IDE like Intellij or VSCode
+# Installation
+## Requirements
+* NVIM v0.9.0 or higher (see [installation instructions](https://github.com/neovim/neovim/wiki/Installing-Neovim))
+* lazygit for better git experience (see [installation instructions](https://github.com/jesseduffield/lazygit#installation)) 
+
+## Steps
+* [optional] Backup your current nvim config 
+```
+mv ~/.config/nvim/ ~/.config/nvim.bak
+```
+* Clone this repo into `~/.config/nvim`
+```
+git clone https://github.com/vitarb/nvim-config.git ~/.config/nvim
+```
+* launch nvim (Do not forget to create alias that maps vim to nvim in your shell otherwise you might be launching vanilla vim) -
+lazy plugin manager should download and setup all plugins and tools automatically.
+
+# Pros&Cons vs IDE
 Similar:
 * Editor capabilities - navigation, code completion, search, file structure, 
 * Language support - by plugging in relevant language server you enable support for indexing, navgiation and basic refactorings.
