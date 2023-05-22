@@ -12,8 +12,10 @@ map("v", "<leader>c", '"+y')
 map("n", "<leader>c", '"+yy')
 map("n", "<leader>v", '"+p')
 
--- Omni completion
-map("i", "<C-space>", "<C-x><C-o>")
+-- Insert mode improvements 
+map("i", "<C-space>", "<C-x><C-o>") -- Omnicompletion
+map("i", "<C-del>", "<C-o>dw") -- delete word 
+
 -- Center search results
 map("n", "n", "nzz")
 map("n", "N", "Nzz")
