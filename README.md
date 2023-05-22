@@ -85,6 +85,9 @@ Cons:
 # Shortcuts
 
 Here are some common (non standard) shortcuts for a quick start (C - Control, M - Alt/Meta, S - Shift, leader - vim leader key):
+## Help
+* `<F1>` - interactive help menu for all shortcuts.
+* `:help` - standard vim help.
 ## Navigation
 * `<C-n>` - search and open files  
 * `<C-e>` - open buffers
