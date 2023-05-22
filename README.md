@@ -4,10 +4,11 @@ Nvim configuration for software development that uses lazy plugin manager and LS
 Code navigation hotkeys are mostly inspired by Intellij.
 
 List of configured languages (can be easily extended):
-* C/C++
+* C/C++ (requires compile_commands.json for clangd, consider using [bear](https://github.com/rizsotto/Bear) to auto-generate this file from make commands)
 * Rust
 * Go
 * Python
+* Lua
 
 Configuration includes language server, code formatting, debugging support and git integration.
 
