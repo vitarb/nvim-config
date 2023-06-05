@@ -9,7 +9,7 @@ local opts = {
 	cursorline = true,
 	-- Line numbers
 	number = true,
-	relativenumber = true,
+	-- relativenumber = true,
 	-- Search
 	incsearch = true,
 	ignorecase = true,
