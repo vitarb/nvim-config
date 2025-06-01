@@ -46,8 +46,9 @@ Configuration includes language server, code formatting, debugging support and g
 
 # Installation
 ## Requirements
-* NVIM v0.9.0 or higher (see [installation instructions](https://github.com/neovim/neovim/wiki/Installing-Neovim))
-* lazygit for better git experience (see [installation instructions](https://github.com/jesseduffield/lazygit#installation)) 
+* NVIM ≥ 0.10.0 is recommended (this config targets 0.10+; pin to 0.9.5 if you prefer stability)
+  (see [installation instructions](https://github.com/neovim/neovim/wiki/Installing-Neovim)). Older builds may fail.
+* lazygit for better git experience (see [installation instructions](https://github.com/jesseduffield/lazygit#installation))
 
 ## Steps
 * [optional] Backup your current nvim config 
