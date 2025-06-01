@@ -61,6 +61,10 @@ git clone https://github.com/vitarb/nvim-config.git ~/.config/nvim
 ```
 * launch nvim (Do not forget to create alias that maps vim to nvim in your shell otherwise you might be launching vanilla vim) -
 lazy plugin manager should download and setup all plugins and tools automatically.
+## Offline smoke test
+After cloning, run `make smoke`.
+It launches Neovim head-less with plugins disabled via `NVIM_OFFLINE_BOOT=1` and should print "SMOKE OK".
+
 
 # Pros&Cons vs IDE
 Similar:
