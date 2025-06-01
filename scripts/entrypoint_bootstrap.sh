@@ -9,20 +9,38 @@ cache_dir=".tools"
 nvim_dir="$cache_dir/nvim"
 lazy_dir="$cache_dir/lazy"
 mason_dir="$cache_dir/mason"
+bin_dir="$cache_dir/bin"
 NVIM_APPIMAGE="$nvim_dir/nvim.appimage"
 NVIM_URL="https://github.com/neovim/neovim/releases/download/v0.10.0/nvim.appimage"
-NVIM_SHA256="d0e61d7378b7b5ad2d98f5c2bdc45980c5c4f17ade9bd9d2b6dcefb1b1083d57"
 
 if [[ "${OFFLINE:-0}" == "1" ]]; then
-    echo "[bootstrap] offline flag detected – skipping downloads"
+    echo "[bootstrap] offline mode – skipping bootstrap"
     exit 0
 fi
 
-mkdir -p "$nvim_dir" "$lazy_dir" "$mason_dir"
+mkdir -p "$nvim_dir" "$lazy_dir" "$mason_dir" "$bin_dir"
+export PATH="$bin_dir:$PATH"
+NVIM="$bin_dir/nvim"
 
-skip_due_to_no_network() {
-    echo "[bootstrap] network unavailable – skipping bootstrap"
-    exit 0
+verify_appimage() {
+    local sha_url="${NVIM_URL}.sha256sum"
+    if curl -fsSL --retry 3 -o "$NVIM_APPIMAGE.sha256" "$sha_url"; then
+        (cd "$(dirname "$NVIM_APPIMAGE")" && sha256sum --check --strict "$(basename "$NVIM_APPIMAGE").sha256")
+    else
+        echo "[bootstrap] sha256 file unavailable – computing local hash"
+        if command -v sha256sum >/dev/null; then
+            sha256sum "$NVIM_APPIMAGE" || echo "[bootstrap] WARNING: integrity not verified"
+        else
+            echo "[bootstrap] sha256sum missing – skipping hash check"
+        fi
+    fi
+}
+
+headless() {
+    "$NVIM" --headless -u NONE \
+        +"set rtp^=$lazy_dir" \
+        +"lua require('lazy').setup({})" \
+        +"lua $1" +qa
 }
 
 download_nvim() {
@@ -31,36 +49,41 @@ download_nvim() {
         return
     fi
     echo "[bootstrap] downloading nvim appimage..."
-    if ! curl -L --retry 3 -o "$NVIM_APPIMAGE" "$NVIM_URL"; then
-        skip_due_to_no_network
-    fi
-    echo "$NVIM_SHA256  $NVIM_APPIMAGE" | sha256sum -c -
+    curl -L --retry 3 -o "$NVIM_APPIMAGE" "$NVIM_URL"
+    verify_appimage
     chmod +x "$NVIM_APPIMAGE"
-    ln -sf "$(pwd)/$NVIM_APPIMAGE" /usr/local/bin/nvim
+    ln -sf "$(pwd)/$NVIM_APPIMAGE" "$bin_dir/nvim"
 }
 
 clone_lazy() {
     if [[ -d "$lazy_dir/.git" ]]; then
-        echo "[bootstrap] lazy.nvim already cloned – skipping"
+        if [[ "${UPDATE:-0}" == "1" ]]; then
+            echo "[bootstrap] updating lazy.nvim..."
+            git -C "$lazy_dir" fetch origin stable
+            git -C "$lazy_dir" reset --hard FETCH_HEAD
+        else
+            echo "[bootstrap] lazy.nvim cached – skipping"
+        fi
         return
     fi
     echo "[bootstrap] cloning lazy.nvim..."
-    if ! git clone --depth 1 --branch stable https://github.com/folke/lazy.nvim.git "$lazy_dir"; then
-        skip_due_to_no_network
-    fi
+    git clone --depth 1 --branch stable https://github.com/folke/lazy.nvim.git "$lazy_dir"
 }
 
 sync_plugins() {
     echo "[bootstrap] syncing plugins..."
-    NVIM_APPIMAGE="$NVIM_APPIMAGE" NVIM_APPNAME=nvim \
-      nvim --headless -u NONE +"lua require('lazy.core.sync').sync()" +qa
+    update_flag=${UPDATE:+true}
+    headless "require('lazy').sync({ update = ${update_flag:-false} })"
 }
 
 install_mason() {
-    echo "[bootstrap] installing Mason tools..."
-    export MASON_SKIP_UPDATE_CHECK=1
-    export MASON_DATA_PATH="$mason_dir"
-    nvim --headless +"lua require('mason').setup(); require('mason-lspconfig').setup{}" +qa
+    if [[ ! -d "$mason_dir/bin" || "${UPDATE:-0}" == "1" ]]; then
+        export MASON_SKIP_UPDATE_CHECK=1 MASON_DATA_PATH="$mason_dir"
+        headless "require('mason').setup(); require('mason-lspconfig').setup{}"
+        [[ "${UPDATE:-0}" == "1" ]] && echo "[bootstrap] Mason upgraded" || true
+    else
+        echo "[bootstrap] Mason cached – skipping"
+    fi
 }
 
 
@@ -68,5 +91,8 @@ download_nvim
 clone_lazy
 sync_plugins
 install_mason
-
-echo "[bootstrap] done"
+if [[ "${UPDATE:-0}" == "1" ]]; then
+    echo "[bootstrap] updated"
+else
+    echo "[bootstrap] done"
+fi

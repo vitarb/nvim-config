@@ -66,9 +66,18 @@ After cloning, run `make smoke`.
 It launches Neovim head-less with plugins disabled via `NVIM_OFFLINE_BOOT=1` and should print "SMOKE OK".
 
 ## Running full bootstrap
+The bootstrap script places a private copy of Neovim under `.tools/bin`.  Optionally add it to your PATH:
+```
+export PATH="$(pwd)/.tools/bin:$PATH"
+```
 To fetch Neovim and all tools in advance (requires internet):
 ```
 make setup-offline
+```
+
+Refresh plugins and tools on demand:
+```
+UPDATE=1 make setup-offline
 ```
 
 Offline rebuilds can then use:
