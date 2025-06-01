@@ -65,6 +65,17 @@ lazy plugin manager should download and setup all plugins and tools automaticall
 After cloning, run `make smoke`.
 It launches Neovim head-less with plugins disabled via `NVIM_OFFLINE_BOOT=1` and should print "SMOKE OK".
 
+## Running full bootstrap
+To fetch Neovim and all tools in advance (requires internet):
+```
+make setup-offline
+```
+
+Offline rebuilds can then use:
+```
+OFFLINE=1 make smoke
+```
+
 
 # Pros&Cons vs IDE
 Similar:
