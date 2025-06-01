@@ -27,7 +27,6 @@ Configuration includes language server, code formatting, debugging support and g
 │       ├──  cmp.lua               -- Code completion
 │       ├──  comment.lua           -- Commenting in the code
 │       ├──  git.lua               -- Git plugins
-│       ├──  grapple.lua           -- Fast navigation between buffers
 │       ├──  hop.lua               -- Fast navigation inside of the buffer
 │       ├──  lsp.lua               -- Language servers and code navigation hotkeys
 │       ├──  lualine.lua           -- Status line

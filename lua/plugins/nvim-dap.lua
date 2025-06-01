@@ -7,6 +7,7 @@ return {
 		"rcarriga/nvim-notify",
 		"theHamsta/nvim-dap-virtual-text",
 		"nvim-treesitter/nvim-treesitter",
+		"nvim-neotest/nvim-nio",
 	},
 	config = function()
 		require("mason-nvim-dap").setup({
