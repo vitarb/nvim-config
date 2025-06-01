@@ -7,7 +7,7 @@ set -euo pipefail
 
 # Pin lazy.nvim to a reproducible commit
 LZ_REPO="https://github.com/folke/lazy.nvim.git"
-LZ_COMMIT="fa31704e45c04408aea4a3b5db11d3bee3b5d908"
+LZ_COMMIT="3ad9f5e3e9db1e7e07d448f2d8e2d574b4bb1c05"
 
 cache_dir=".tools"
 nvim_dir="$cache_dir/nvim"
@@ -74,6 +74,10 @@ clone_lazy() {
     fi
     git -C "$lazy_dir" fetch --depth 1 origin "$LZ_COMMIT"
     git -C "$lazy_dir" reset --hard "$LZ_COMMIT"
+    if [[ "$(git -C "$lazy_dir" rev-parse --verify HEAD)" != "$LZ_COMMIT" ]]; then
+        echo "[bootstrap] ERROR: failed to checkout Lazy commit $LZ_COMMIT" >&2
+        exit 1
+    fi
 
     if [[ "${UPDATE:-0}" == "1" ]]; then
         echo "[bootstrap] updating lazy.nvim to latest main..."
