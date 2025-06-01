@@ -5,6 +5,10 @@
 
 set -euo pipefail
 
+# Pin lazy.nvim to a reproducible commit
+LZ_REPO="https://github.com/folke/lazy.nvim.git"
+LZ_COMMIT="fa31704e45c04408aea4a3b5db11d3bee3b5d908"
+
 cache_dir=".tools"
 nvim_dir="$cache_dir/nvim"
 lazy_dir="$cache_dir/lazy"
@@ -14,6 +18,10 @@ NVIM_APPIMAGE="$nvim_dir/nvim.appimage"
 NVIM_URL="https://github.com/neovim/neovim/releases/download/v0.10.0/nvim.appimage"
 
 if [[ "${OFFLINE:-0}" == "1" ]]; then
+    if [[ ! -d "$lazy_dir/.git" ]]; then
+        echo "[bootstrap] Lazy cache missing — run bootstrap with network first"
+        exit 1
+    fi
     echo "[bootstrap] offline mode – skipping bootstrap"
     exit 0
 fi
@@ -56,31 +64,39 @@ download_nvim() {
 }
 
 clone_lazy() {
-    if [[ -d "$lazy_dir/.git" ]]; then
-        if [[ "${UPDATE:-0}" == "1" ]]; then
-            echo "[bootstrap] updating lazy.nvim..."
-            git -C "$lazy_dir" fetch origin stable
-            git -C "$lazy_dir" reset --hard FETCH_HEAD
-        else
-            echo "[bootstrap] lazy.nvim cached – skipping"
+    if [[ ! -d "$lazy_dir/.git" ]]; then
+        if [[ "${OFFLINE:-0}" == "1" ]]; then
+            echo "[bootstrap] Lazy cache missing — run with network first"
+            exit 1
         fi
-        return
+        echo "[bootstrap] cloning lazy.nvim@${LZ_COMMIT:0:7}..."
+        git clone --depth 1 "$LZ_REPO" "$lazy_dir"
     fi
-    echo "[bootstrap] cloning lazy.nvim..."
-    git clone --depth 1 --branch stable https://github.com/folke/lazy.nvim.git "$lazy_dir"
+    git -C "$lazy_dir" fetch --depth 1 origin "$LZ_COMMIT"
+    git -C "$lazy_dir" reset --hard "$LZ_COMMIT"
+
+    if [[ "${UPDATE:-0}" == "1" ]]; then
+        echo "[bootstrap] updating lazy.nvim to latest main..."
+        git -C "$lazy_dir" fetch --depth 1 origin main
+        NEW_COMMIT=$(git -C "$lazy_dir" rev-parse FETCH_HEAD)
+        git -C "$lazy_dir" reset --hard "$NEW_COMMIT"
+        sed -i "s/^LZ_COMMIT=.*/LZ_COMMIT=\"$NEW_COMMIT\"/" "$0"
+    fi
 }
 
 sync_plugins() {
     echo "[bootstrap] syncing plugins..."
     update_flag=${UPDATE:+true}
-    headless "require('lazy').sync({ update = ${update_flag:-false} })"
+    headless "require('lazy').sync{update=${update_flag:-false}}"
+    # ensure new plugins are on runtimepath before mason loads
+    headless "vim.cmd('quit')"
 }
 
 install_mason() {
     if [[ ! -d "$mason_dir/bin" || "${UPDATE:-0}" == "1" ]]; then
         export MASON_SKIP_UPDATE_CHECK=1 MASON_DATA_PATH="$mason_dir"
         headless "require('mason').setup(); require('mason-lspconfig').setup{}"
-        [[ "${UPDATE:-0}" == "1" ]] && echo "[bootstrap] Mason upgraded" || true
+        [[ "${UPDATE:-0}" == "1" ]] && echo "[bootstrap] Mason upgraded"
     else
         echo "[bootstrap] Mason cached – skipping"
     fi

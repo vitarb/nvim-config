@@ -79,6 +79,8 @@ Refresh plugins and tools on demand:
 ```
 UPDATE=1 make setup-offline
 ```
+The bootstrap pins Lazy.nvim to a specific commit for reproducibility. Running
+`UPDATE=1 make setup-offline` advances that commit hash.
 
 Offline rebuilds can then use:
 ```
