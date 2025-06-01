@@ -63,7 +63,9 @@ return {
 				lsp_map({"n", "v", "i"}, "<C-M-l>", vim.lsp.buf.format, bufnr, "Format")
 
 				-- Attach and configure vim-illuminate
-				require("illuminate").on_attach(client)
+				if client.server_capabilities.documentHighlightProvider then
+					require("illuminate").on_attach(client)
+				end
 			end
 
 			-- nvim-cmp supports additional completion capabilities, so broadcast that to servers
