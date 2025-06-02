@@ -82,5 +82,15 @@ Any mistake that requires Internet after step 1 will fail the build.
 
 ---
 
+#### 5.  Keep docs in sync
+
+Whenever you add new plugins, commands, flags or change parameters, update the
+`README.md` accordingly. Document new usage, options and any additional
+prerequisites so others can reproduce the environment offline. If you create or
+move files, adjust the file tree section of the README so it reflects the
+current layout.
+
+---
+
 Happy hacking — 100 % reproducible, 100 % offline!
 
