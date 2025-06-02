@@ -103,7 +103,8 @@ local want = {
 
 local ok, err = pcall(vim.cmd, 'MasonInstall --sync ' .. table.concat(want, ' '))
 if not ok then
-  vim.notify(('MasonInstall warning: %s'):format(err), vim.log.levels.WARN)
+  io.stderr:write(('MasonInstall error: %s\n'):format(err))
+  os.exit(1)
 end
 LUA
 
