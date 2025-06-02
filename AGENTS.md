@@ -78,6 +78,12 @@ prove the binary is runnable.
 
 A PR that forgets to update `bootstrap.sh` will fail here.
 
+## Makefile
+
+**Makefile tip:** each command under a target **must start with a TAB**,  
+not spaces. If you indent with spaces `make` treats the line as a new
+target and the recipe won’t run.
+
 ---
 That’s all – **`make offline` → `make smoke` → hack away!**
 
