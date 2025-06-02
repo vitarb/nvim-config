@@ -1,0 +1,37 @@
+name: test
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  nvim-config:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out sources
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # get tags/commits for good measure
+
+      # ─────────────────────────────────────────────────────────────
+      # 1 · Online phase – download & bootstrap the tool-chain
+      # ─────────────────────────────────────────────────────────────
+      - name: Bootstrap (online)
+        run: make offline
+
+      # ─────────────────────────────────────────────────────────────
+      # 2 · Offline phase – verify the repo works without network
+      # ─────────────────────────────────────────────────────────────
+      - name: Smoke test (offline, no plugins)
+        run: make smoke
+        env:
+          OFFLINE: 1          # skip downloads
+          NVIM_OFFLINE_BOOT: 1  # skip plugin load
+
+      - name: Head-less full test (offline, plugins enabled)
+        run: make test
+        env:
+          OFFLINE: 1          # skip downloads
+
