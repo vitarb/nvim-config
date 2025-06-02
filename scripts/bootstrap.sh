@@ -49,7 +49,11 @@ fi
 ##############################################################################
 # Helper: run headless nvim with repo init.lua
 ##############################################################################
-nvim_h() { "$NVIM_BIN" --headless -u "$ROOT/init.lua" +"$1" +qa; }
+nvim_h() { \
+  "$NVIM_BIN" --headless \
+    -u "$ROOT/init.lua" \
+    --cmd "set runtimepath+=${ROOT}" \
+    +"$1" +qa; }
 
 ##############################################################################
 # 3. Sync Lazy plugins
