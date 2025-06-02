@@ -20,16 +20,31 @@ say() { printf "\e[1;34m[bootstrap]\e[0m %s\n" "$*"; }
 mkdir -p "$NVIM_DIR" "$BIN_DIR"
 
 ##############################################################################
-# 1. Neovim binary (cached)
+# 1. Download Neovim once
 ##############################################################################
 if [[ ! -x $NVIM_APP ]]; then
   say "Downloading Neovim …"
   curl -L --retry 3 -o "$NVIM_APP" "$NVIM_URL"
   chmod +x "$NVIM_APP"
-else
-  say "Neovim cached – skipping download"
 fi
-ln -sf "$NVIM_APP" "$NVIM_BIN"
+
+##############################################################################
+# 2. Make Neovim runnable even if FUSE is missing
+##############################################################################
+if "$NVIM_APP" --version >/dev/null 2>&1; then
+  # FUSE present – use AppImage as-is
+  say "Neovim AppImage runnable (FUSE present)"
+  ln -sf "$NVIM_APP" "$NVIM_BIN"
+else
+  # FUSE absent – extract once, then point NVIM_BIN at the inner nvim
+  say "FUSE not available – extracting AppImage …"
+  EXTRACT_DIR="$NVIM_DIR/extracted"
+  if [[ ! -d $EXTRACT_DIR/squashfs-root ]]; then
+    mkdir -p "$EXTRACT_DIR"
+    (cd "$EXTRACT_DIR" && "$NVIM_APP" --appimage-extract >/dev/null)
+  fi
+  ln -sf "$EXTRACT_DIR/squashfs-root/usr/bin/nvim" "$NVIM_BIN"
+fi
 
 ##############################################################################
 # Helper: run headless nvim with repo init.lua
@@ -37,13 +52,13 @@ ln -sf "$NVIM_APP" "$NVIM_BIN"
 nvim_h() { "$NVIM_BIN" --headless -u "$ROOT/init.lua" +"$1" +qa; }
 
 ##############################################################################
-# 2. Sync Lazy plugins
+# 3. Sync Lazy plugins
 ##############################################################################
 say "Syncing Lazy plugins …"
 nvim_h "lua require('lazy').sync{wait=true}"
 
 ##############################################################################
-# 3. Install Mason packages (blocking, errors downgraded to warnings)
+# 4. Install Mason packages (blocking, errors downgraded to warnings)
 ##############################################################################
 say "Installing Mason packages …"
 
