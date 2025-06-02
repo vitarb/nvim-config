@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Private, fail-fast, offline-friendly bootstrap (minimal – no Mason/LSP)."""
 from __future__ import annotations
-import os, shutil, subprocess, sys, tarfile
+import os, shutil, subprocess, sys, tarfile, zipfile
 from pathlib import Path
 
 ROOT   = Path(__file__).resolve().parent
@@ -21,6 +21,32 @@ if not asset:
     sys.exit(f"[bootstrap] Unsupported platform: {os.uname().sysname} {os.uname().machine}")
 NVIM_URL = f"https://github.com/neovim/neovim/releases/download/{NVIM_VERSION}/{asset}"
 STAMP    = TOOLS / f".nvim.{NVIM_VERSION}.{asset}.ok"
+
+STYLUA_VERSION = "v0.20.0"
+STYLUA_ASSETS = {
+    ("Linux",  "x86_64"):  "stylua-linux-x86_64.zip",
+    ("Linux",  "aarch64"): "stylua-linux-aarch64.zip",
+    ("Darwin", "x86_64"):  "stylua-macos.zip",
+    ("Darwin", "arm64"):   "stylua-macos.zip",
+}
+
+SHELLCHECK_VERSION = "v0.9.0"
+SHELLCHECK_ASSETS = {
+    ("Linux",  "x86_64"):  "shellcheck-v0.9.0.linux.x86_64.tar.xz",
+    ("Linux",  "aarch64"): "shellcheck-v0.9.0.linux.aarch64.tar.xz",
+    ("Darwin", "x86_64"):  "shellcheck-v0.9.0.darwin.x86_64.tar.xz",
+    ("Darwin", "arm64"):   "shellcheck-v0.9.0.darwin.aarch64.tar.xz",
+}
+
+stylua_asset = STYLUA_ASSETS.get((os.uname().sysname, os.uname().machine))
+shellcheck_asset = SHELLCHECK_ASSETS.get((os.uname().sysname, os.uname().machine))
+if not stylua_asset or not shellcheck_asset:
+    sys.exit(f"[bootstrap] Unsupported platform: {os.uname().sysname} {os.uname().machine}")
+
+STYLUA_URL = f"https://github.com/JohnnyMorganz/StyLua/releases/download/{STYLUA_VERSION}/{stylua_asset}"
+SHELLCHECK_URL = f"https://github.com/koalaman/shellcheck/releases/download/{SHELLCHECK_VERSION}/{shellcheck_asset}"
+STYLUA_STAMP = TOOLS / f".stylua.{STYLUA_VERSION}.{stylua_asset}.ok"
+SHELLCHECK_STAMP = TOOLS / f".shellcheck.{SHELLCHECK_VERSION}.{shellcheck_asset}.ok"
 
 say = lambda m: print(f"\033[1;34m[bootstrap]\033[0m {m}", flush=True)
 
@@ -77,6 +103,48 @@ def run_nvim(*extra_args: str) -> None:
 ##############################################################################
 say("Syncing Lazy plugins …")
 run_nvim("+lua require('lazy').sync{wait=true}", "+qa")
+
+##############################################################################
+# 3. Ensure Stylua is installed
+##############################################################################
+if not STYLUA_STAMP.exists():
+    archive = TOOLS / stylua_asset
+    say(f"Fetching Stylua {STYLUA_VERSION} …")
+    subprocess.check_call(["curl", "-Lf", "--retry", "3", "-o", archive, STYLUA_URL])
+    say("Extracting …")
+    shutil.rmtree(TOOLS / "stylua-extracted", ignore_errors=True)
+    (TOOLS / "stylua-extracted").mkdir()
+    with zipfile.ZipFile(archive) as zf:
+        zf.extractall(TOOLS / "stylua-extracted")
+    found = next((p for p in (TOOLS / "stylua-extracted").rglob("stylua")), None)
+    if not found:
+        sys.exit("[bootstrap] stylua binary not found inside archive")
+    found.chmod(0o755)
+    if (BIN / "stylua").exists() or (BIN / "stylua").is_symlink():
+        (BIN / "stylua").unlink()
+    (BIN / "stylua").symlink_to(found)
+    STYLUA_STAMP.touch()
+
+##############################################################################
+# 4. Ensure ShellCheck is installed
+##############################################################################
+if not SHELLCHECK_STAMP.exists():
+    archive = TOOLS / shellcheck_asset
+    say(f"Fetching ShellCheck {SHELLCHECK_VERSION} …")
+    subprocess.check_call(["curl", "-Lf", "--retry", "3", "-o", archive, SHELLCHECK_URL])
+    say("Extracting …")
+    shutil.rmtree(TOOLS / "shellcheck-extracted", ignore_errors=True)
+    (TOOLS / "shellcheck-extracted").mkdir()
+    with tarfile.open(archive, mode="r:xz") as tf:
+        tf.extractall(TOOLS / "shellcheck-extracted")
+    found = next((p for p in (TOOLS / "shellcheck-extracted").rglob("shellcheck")), None)
+    if not found:
+        sys.exit("[bootstrap] shellcheck binary not found inside archive")
+    found.chmod(0o755)
+    if (BIN / "shellcheck").exists() or (BIN / "shellcheck").is_symlink():
+        (BIN / "shellcheck").unlink()
+    (BIN / "shellcheck").symlink_to(found)
+    SHELLCHECK_STAMP.touch()
 
 say("✅ bootstrap complete")
 

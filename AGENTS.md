@@ -26,19 +26,23 @@ OFFLINE=1 make smoke     # → prints “SMOKE OK”
 
 # 2) verify the real config & plugins load cleanly
 OFFLINE=1 make test      # → prints “TEST OK”
+
+# 3) run linters
+OFFLINE=1 make lint      # → prints “LINT OK”
 ```
 
 That’s the whole workflow for an agent:
-`OFFLINE=1 make smoke → OFFLINE=1 make test → hack away`.
+`OFFLINE=1 make smoke → OFFLINE=1 make test → OFFLINE=1 make lint → hack away`.
 
 ---
 
 #### 2.  Make targets available to you
 
-| Target             | Purpose during an **offline** run                                                                                                          |
-| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| `smoke`            | Head-less Neovim, plugins disabled.<br>Fails fast on any error.                                                                            |
-| `test`             | Head-less Neovim with full config & plugins.<br>Fails fast on any error.                                                                   |
+| Target | Purpose during an **offline** run |
+| ------ | --------------------------------- |
+| `smoke` | Head-less Neovim, plugins disabled.<br>Fails fast on any error. |
+| `test`  | Head-less Neovim with full config & plugins.<br>Fails fast on any error. |
+| `lint`  | Runs Stylua and ShellCheck to verify formatting. |
 | `clean` *(rarely)* | Delete `.tools/` & `.cache/` – **only** if you need a fresh bootstrap (you’ll then need someone with network to run `make offline` again). |
 
 Do **not**:
@@ -64,6 +68,7 @@ Then verify locally:
 make clean            # blow away old tool-chain
 make offline          # *with* Internet – once
 OFFLINE=1 make test   # should print “TEST OK”
+OFFLINE=1 make lint   # should print “LINT OK”
 ```
 
 Commit only when that passes.
@@ -77,6 +82,7 @@ Commit only when that passes.
 1. `make offline`   *(networked, once)*
 2. `OFFLINE=1 make smoke`
 3. `OFFLINE=1 make test`
+4. `OFFLINE=1 make lint`
 
 Any mistake that requires Internet after step 1 will fail the build.
 
