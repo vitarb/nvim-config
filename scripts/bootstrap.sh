@@ -6,12 +6,26 @@ set -euo pipefail
 ##############################################################################
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
-NVIM_VERSION="v0.10.0"
-NVIM_URL="https://github.com/neovim/neovim/releases/download/${NVIM_VERSION}/nvim.appimage"
+NVIM_VERSION="v0.11.2"                 # update here when bumping Neovim
+OS="$(uname -s)"
+ARCH="$(uname -m)"
+
+# ── map uname → asset suffix ────────────────────────────────────────────────
+case "$OS:$ARCH" in
+  Linux:x86_64)   ASSET="nvim-linux-x86_64.tar.gz" ;;
+  Linux:aarch64)  ASSET="nvim-linux-arm64.tar.gz"  ;;
+  Darwin:x86_64)  ASSET="nvim-macos-x86_64.tar.gz" ;;
+  Darwin:arm64)   ASSET="nvim-macos-arm64.tar.gz"  ;;
+  *)
+    echo "[bootstrap] Unsupported platform: $OS $ARCH" >&2
+    exit 1
+    ;;
+esac
+
+NVIM_URL="https://github.com/neovim/neovim/releases/download/${NVIM_VERSION}/${ASSET}"
 
 TOOLS="$ROOT/.tools"
-NVIM_DIR="$TOOLS/nvim"
-NVIM_APP="$NVIM_DIR/nvim.appimage"
+NVIM_DIR="$TOOLS/nvim"                 # holds archives & extracted dirs
 BIN_DIR="$TOOLS/bin"
 NVIM_BIN="$BIN_DIR/nvim"
 
@@ -20,30 +34,36 @@ say() { printf "\e[1;34m[bootstrap]\e[0m %s\n" "$*"; }
 mkdir -p "$NVIM_DIR" "$BIN_DIR"
 
 ##############################################################################
-# 1. Download Neovim once
+# 1. Download & extract Neovim once
 ##############################################################################
-if [[ ! -x $NVIM_APP ]]; then
-  say "Downloading Neovim …"
-  curl -L --retry 3 -o "$NVIM_APP" "$NVIM_URL"
-  chmod +x "$NVIM_APP"
-fi
+STAMP="$NVIM_DIR/.installed-${NVIM_VERSION}-${ASSET}"
+ARCHIVE="$NVIM_DIR/$ASSET"
 
-##############################################################################
-# 2. Make Neovim runnable even if FUSE is missing
-##############################################################################
-if "$NVIM_APP" --version >/dev/null 2>&1; then
-  # FUSE present – use AppImage as-is
-  say "Neovim AppImage runnable (FUSE present)"
-  ln -sf "$NVIM_APP" "$NVIM_BIN"
-else
-  # FUSE absent – extract once, then point NVIM_BIN at the inner nvim
-  say "FUSE not available – extracting AppImage …"
-  EXTRACT_DIR="$NVIM_DIR/extracted"
-  if [[ ! -d $EXTRACT_DIR/squashfs-root ]]; then
-    mkdir -p "$EXTRACT_DIR"
-    (cd "$EXTRACT_DIR" && "$NVIM_APP" --appimage-extract >/dev/null)
+if [[ ! -f $STAMP ]]; then
+  say "Fetching Neovim $NVIM_VERSION for $OS/$ARCH …"
+  curl -Lf --retry 3 -o "$ARCHIVE" "$NVIM_URL"
+
+  say "Extracting …"
+  # clean previous extraction of any version
+  rm -rf "$NVIM_DIR/extracted"
+  mkdir -p "$NVIM_DIR/extracted"
+  tar -xzf "$ARCHIVE" -C "$NVIM_DIR/extracted"
+
+  # find the freshly-unpacked nvim binary
+  FOUND_BIN=$(find "$NVIM_DIR/extracted" -path '*/bin/nvim' -type f | head -n1)
+  if [[ -z $FOUND_BIN ]]; then
+    echo "[bootstrap] nvim binary not found inside archive" >&2
+    exit 1
   fi
-  ln -sf "$EXTRACT_DIR/squashfs-root/usr/bin/nvim" "$NVIM_BIN"
+  ln -sf "$FOUND_BIN" "$NVIM_BIN"
+  touch "$STAMP"
+else
+  say "Neovim cached – skipping download"
+  # ensure symlink still exists
+  [[ -x $NVIM_BIN ]] || {
+    FOUND_BIN=$(find "$NVIM_DIR/extracted" -path '*/bin/nvim' -type f | head -n1)
+    ln -sf "$FOUND_BIN" "$NVIM_BIN"
+  }
 fi
 
 ##############################################################################
@@ -51,25 +71,25 @@ fi
 ##############################################################################
 nvim_h() {
   "$NVIM_BIN" --headless \
-    --cmd "set runtimepath+=${ROOT}" \
+    --cmd "set rtp^=${ROOT} packpath^=${ROOT}" \
     -u "$ROOT/init.lua" +"$1" +qa
 }
 
 ##############################################################################
-# 3. Sync Lazy plugins
+# 2. Sync Lazy plugins
 ##############################################################################
 say "Syncing Lazy plugins …"
 nvim_h "lua require('lazy').sync{wait=true}"
 
 ##############################################################################
-# 4. Install Mason packages (blocking, errors downgraded to warnings)
+# 3. Install Mason packages (blocking, errors downgraded to warnings)
 ##############################################################################
 say "Installing Mason packages …"
 
 tmp_lua="$(mktemp)"
 cat >"$tmp_lua" <<'LUA'
-pcall(function() require('mason').setup() end)        -- ensure Mason initialised
-require('mason-registry').refresh()                  -- fresh index
+pcall(function() require('mason').setup() end)
+require('mason-registry').refresh()
 
 local want = {
   -- LSP servers
@@ -77,12 +97,11 @@ local want = {
   'python-lsp-server', 'rust-analyzer',
   -- DAP adapters
   'codelldb', 'delve',
-  -- Formatters / linters
+  -- formatters / linters
   'clang-format', 'stylua', 'jq', 'rustfmt', 'gofumpt', 'goimports',
 }
 
-local cmd = 'MasonInstall --sync ' .. table.concat(want, ' ')
-local ok, err = pcall(vim.cmd, cmd)
+local ok, err = pcall(vim.cmd, 'MasonInstall --sync ' .. table.concat(want, ' '))
 if not ok then
   vim.notify(('MasonInstall warning: %s'):format(err), vim.log.levels.WARN)
 end
