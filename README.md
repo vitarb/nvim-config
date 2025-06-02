@@ -81,6 +81,8 @@ UPDATE=1 make offline
 ```
 The bootstrap pins Lazy.nvim to a specific commit for reproducibility. Running
 `UPDATE=1 make offline` advances that commit hash.
+If you add or remove Mason packages, update `want` in `scripts/bootstrap.sh`; CI will fail otherwise.
+The bootstrap script stops at the first Neovim error so CI can catch issues early.
 
 Offline rebuilds can then use:
 ```
