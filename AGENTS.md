@@ -1,57 +1,84 @@
-# AGENTS.md – quick guide for Codex
-
-The repo is a **self‑contained, offline‑friendly Neovim setup**.  Once you run
-`make offline` everything lives in `.tools/` – no further network needed.
+This repo is a **fully-portable Neovim toolkit**.  
+Once you run `make offline` everything (Neovim, Lazy plugins, Mason tools) is cached
+under `.tools/` and the project works without the Internet.
 
 ---
 
-## 1. Bootstrap (requires the Internet *once*)
+## 1 · Bootstrap (needs the Internet once)
 
 ```bash
-make offline      # downloads nvim + plugins + Mason tools
-```
+make offline          # downloads nvim + plugins + Mason packages
+````
 
-*If you are in CI and a tool cache already exists, set `OFFLINE=1` to skip the
-step.*
+*If CI already restored the `.tools` cache, set `OFFLINE=1` and the step is
+skipped.*
 
 ---
 
-## 2. Smoke test (works offline)
+## 2 · Smoke test (works offline)
 
 ```bash
-make smoke        # prints “SMOKE OK” on success
+make smoke            # prints “SMOKE OK” on success
 ```
 
-This starts Neovim head‑less with plugins disabled just to prove the binary
-runs.
+Runs Neovim head-less with plugins disabled (`NVIM_OFFLINE_BOOT=1`) just to
+prove the binary is runnable.
 
 ---
 
-## 3. Use the tool‑chain
+## 3 · Daily usage
 
-* Launch with the private binary: `./.tools/bin/nvim`
-  *(or add `.tools/bin` to your `PATH`).*
-* All usual interactive features (Lazy, Mason, etc.) are ready.
+* **Launch** with the private binary: `./.tools/bin/nvim`
+  (or add `.tools/bin` to your `PATH`).
+* All interactive goodies (Lazy, Mason, DAP, etc.) are ready.
 
 ---
 
-## Make targets summary
+## Make targets
 
-| Target    | Purpose                                   |
-| --------- | ----------------------------------------- |
-| `offline` | Full bootstrap. Skipped when `OFFLINE=1`. |
-| `smoke`   | Minimal head‑less check (no plugin load). |
+| Target    | What it does                               |
+| --------- | ------------------------------------------ |
+| `offline` | Full bootstrap (skipped when `OFFLINE=1`). |
+| `smoke`   | Minimal head-less check (no plugin load).  |
 
 ---
 
 ## Environment variables
 
-| Variable              | Effect                                                       |
-| --------------------- | ------------------------------------------------------------ |
-| `OFFLINE=1`           | Don’t run bootstrap (CI cache is warm).                      |
-| `NVIM_OFFLINE_BOOT=1` | Tell `init.lua` to bypass Lazy at startup (used by `smoke`). |
+| Var                 | Meaning                                                    |
+| ------------------- | ---------------------------------------------------------- |
+| `OFFLINE=1`         | Don’t run bootstrap (cache already warm).                  |
+| `NVIM_OFFLINE_BOOT` | Tell `init.lua` to bypass Lazy at startup (used by smoke). |
 
 ---
 
-That’s all an agent needs: **`make offline` → `make smoke` → hack away.**
+## **When you add or change tools**
+
+1. **Plugin / config** goes in `lua/plugins/…` as usual.
+2. **Mason registry names** of every new tool **must be added in *two places*:**
+
+   * the `want` list inside `scripts/bootstrap.sh`, **and**
+   * the identical `want` list inside the Lua snippet embedded in the
+     `make test` target (found in the Makefile).
+
+> **Why?**
+> Our CI workflow (`.github/workflows/offline.yml`) runs `make offline`
+> to pre-fetch all tools, then re-runs `make smoke` with `OFFLINE=1`.
+> If a tool is not listed in `bootstrap.sh`, the offline phase will break.
+
+---
+
+## CI check
+
+`offline-bootstrap` GitHub Actions workflow:
+
+* restores the `.tools/` cache;
+* runs `make offline` (online phase);
+* runs `make smoke` with `OFFLINE=1` (offline phase).
+
+A PR that forgets to update `bootstrap.sh` will fail here.
+
+---
+That’s all – **`make offline` → `make smoke` → hack away!**
+
 
