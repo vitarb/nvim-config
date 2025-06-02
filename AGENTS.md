@@ -55,11 +55,8 @@ prove the binary is runnable.
 ## **When you add or change tools**
 
 1. **Plugin / config** goes in `lua/plugins/…` as usual.
-2. **Mason registry names** of every new tool **must be added in *two places*:**
-
-   * the `want` list inside `scripts/bootstrap.sh`, **and**
-   * the identical `want` list inside the Lua snippet embedded in the
-     `make test` target (found in the Makefile).
+2. Add every new tool’s Mason registry name to the `want` list in
+   `scripts/bootstrap.sh`.
 
 > **Why?**
 > Our CI workflow (`.github/workflows/offline.yml`) runs `make offline`
@@ -80,9 +77,8 @@ A PR that forgets to update `bootstrap.sh` will fail here.
 
 ## Makefile
 
-**Makefile tip:** each command under a target **must start with a TAB**,  
-not spaces. If you indent with spaces `make` treats the line as a new
-target and the recipe won’t run.
+> **Makefile tip:** every recipe line **must start with a TAB**.  
+> Spaces break targets and silently skip the commands.
 
 ---
 That’s all – **`make offline` → `make smoke` → hack away!**

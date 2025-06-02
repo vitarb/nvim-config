@@ -1,11 +1,12 @@
-.PHONY: smoke setup-offline
-smoke: ## lightweight test usable after network cutoff
+.PHONY: smoke offline
+
+smoke: ## lightweight head-less check
 	@./scripts/smoke_test.sh
 
-offline:  ## run bootstrap unless OFFLINE=1
+offline: ## bootstrap unless OFFLINE=1
 	@if [ "$${OFFLINE:-0}" -eq 1 ]; then \
-		echo "(offline mode – skipping bootstrap)"; \
+	echo "(offline mode – skipping bootstrap)"; \
 	else \
-		./scripts/bootstrap.sh; \
+	./scripts/bootstrap.sh; \
 	fi
 
