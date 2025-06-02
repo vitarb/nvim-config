@@ -57,6 +57,8 @@ prove the binary is runnable.
 1. **Plugin / config** goes in `lua/plugins/…` as usual.
 2. Add every new tool’s Mason registry name to the `want` list in
    `scripts/bootstrap.sh`.
+   If you add or remove Mason packages, update `want` in `scripts/bootstrap.sh`; CI will fail otherwise.
+   The bootstrap script exits on any Neovim error so CI turns red immediately.
 
 > **Why?**
 > Our CI workflow (`.github/workflows/offline.yml`) runs `make offline`

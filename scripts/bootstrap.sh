@@ -79,7 +79,8 @@ nvim_h() {
 # 2. Sync Lazy plugins
 ##############################################################################
 say "Syncing Lazy plugins …"
-nvim_h "lua require('lazy').sync{wait=true}"
+nvim_h $'lua local ok,err=pcall(function() require("lazy").sync{wait=true} end)
+       if not ok then vim.api.nvim_err_writeln(err); vim.cmd("cquit 1") end'
 
 ##############################################################################
 # 3. Install Mason packages (blocking, errors downgraded to warnings)
@@ -103,7 +104,8 @@ local want = {
 
 local ok, err = pcall(vim.cmd, 'MasonInstall --sync ' .. table.concat(want, ' '))
 if not ok then
-  vim.notify(('MasonInstall warning: %s'):format(err), vim.log.levels.WARN)
+  io.stderr:write(('MasonInstall error: %s\n'):format(err))
+  os.exit(1)
 end
 LUA
 
