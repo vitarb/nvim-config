@@ -97,6 +97,7 @@ OFFLINE=1 make test
 | `offline`       | Bootstrap Neovim and plugins (skipped with `OFFLINE=1`) |
 | `smoke`         | Headless start; prints `SMOKE OK` on success |
 | `test`          | Headless full config test; fails on any error |
+| `lint`          | Run Stylua and ShellCheck |
 | `clean`         | Remove downloaded tools and caches |
 | `docker-image`  | Build dev image (Ubuntu 22.04) |
 
@@ -117,4 +118,6 @@ GitHub Actions performs the same bootstrap and offline tests:
 `make offline` once online, then `make smoke` and `make test` with `OFFLINE=1`
 variables set. If any target fails,
 CI blocks the change.
+
+Optionally install [pre-commit](https://pre-commit.com/) to run the same linters automatically: `pip install pre-commit && pre-commit install`.
 

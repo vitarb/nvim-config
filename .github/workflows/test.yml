@@ -35,3 +35,8 @@ jobs:
         env:
           OFFLINE: 1          # skip downloads
 
+      - name: Lint (offline)
+        run: make lint
+        env:
+          OFFLINE: 1
+
