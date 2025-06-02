@@ -10,3 +10,5 @@ offline: ## bootstrap unless OFFLINE=1
 	./scripts/bootstrap.sh; \
 	fi
 
+clean:
+	rm -rf .tools
