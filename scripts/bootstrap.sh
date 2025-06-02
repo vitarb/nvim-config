@@ -29,6 +29,9 @@ NVIM_DIR="$TOOLS/nvim"                 # holds archives & extracted dirs
 BIN_DIR="$TOOLS/bin"
 NVIM_BIN="$BIN_DIR/nvim"
 
+: "${GOPROXY:=direct}"
+export GOPROXY
+
 say() { printf "\e[1;34m[bootstrap]\e[0m %s\n" "$*"; }
 
 mkdir -p "$NVIM_DIR" "$BIN_DIR"
