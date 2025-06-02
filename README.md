@@ -72,15 +72,15 @@ export PATH="$(pwd)/.tools/bin:$PATH"
 ```
 To fetch Neovim and all tools in advance (requires internet):
 ```
-make setup-offline
+make offline
 ```
 
 Refresh plugins and tools on demand:
 ```
-UPDATE=1 make setup-offline
+UPDATE=1 make offline
 ```
 The bootstrap pins Lazy.nvim to a specific commit for reproducibility. Running
-`UPDATE=1 make setup-offline` advances that commit hash.
+`UPDATE=1 make offline` advances that commit hash.
 
 Offline rebuilds can then use:
 ```
