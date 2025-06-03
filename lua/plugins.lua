@@ -48,7 +48,7 @@ return {
 				renderer = { group_empty = true },
 				filters = { dotfiles = false },
 			})
-			vim.keymap.set("n", "<leader>e", "<cmd>NvimTreeToggle<CR>", { desc = "Toggle tree" })
+			-- keymap moved to core/keymaps.lua
 		end,
 	},
 }

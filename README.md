@@ -60,9 +60,17 @@ Additional plugins or language integrations will be documented here.
 
 | Mapping | Description |
 | ------- | ----------- |
-| `<leader>ff` | Find files (Telescope) |
-| `<leader>fg` | Live grep (Telescope) |
-| `<leader>e`  | Toggle file explorer |
+| `<C-n>` | Find files |
+| `<leader>o` | Document symbols |
+| `<C-e>` | Recent files |
+| `<leader>s` | Search project |
+| `'1` | Toggle file explorer |
+| `<C-F4>`/`<D-w>` | Close buffer |
+| `<M-Right>`/`<M-Left>` | Next/previous buffer |
+| `<C-Tab>`/`<C-S-Tab>` | Next/previous buffer |
+| `<leader>w` | Save file |
+| `<leader>x` | Close window |
+| `<leader>/` | Toggle comment line |
 
 ## Development
 

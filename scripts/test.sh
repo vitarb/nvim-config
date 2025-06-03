@@ -51,11 +51,12 @@ for f in "${FILES[@]}"; do
 	CMD_OPEN+=" | edit ${f}"
 done
 CMD_OPEN="${CMD_OPEN# | }" # drop leading separator
-CMD="${CMD_OPEN} | checkhealth | qa"
+CMD="${CMD_OPEN} | edit $ROOT/scripts/test.lua | execute 'normal! gg' | checkhealth | qa"
 
 set +e
 OUT="$("$NVIM" --headless \
 	--cmd "set rtp^=$ROOT packpath^=$ROOT" \
+	--cmd "set noswapfile" \
 	-u "$ROOT/init.lua" \
 	+"$CMD" 2>&1)"
 STATUS=$?
