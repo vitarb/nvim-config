@@ -37,12 +37,12 @@ STYLUA_ASSETS  = {
     ("Darwin", "arm64"):   "stylua-macos.zip",
 }
 
-SHELLCHECK_VERSION = "v0.9.0"
+SHELLCHECK_VERSION = "v0.10.0"
 SHELLCHECK_ASSETS  = {
-    ("Linux",  "x86_64"):  "shellcheck-v0.9.0.linux.x86_64.tar.xz",
-    ("Linux",  "aarch64"): "shellcheck-v0.9.0.linux.aarch64.tar.xz",
-    ("Darwin", "x86_64"):  "shellcheck-v0.9.0.darwin.x86_64.tar.xz",
-    ("Darwin", "arm64"):   "shellcheck-v0.9.0.darwin.aarch64.tar.xz",
+    ("Linux",  "x86_64"):  "shellcheck-v0.10.0.linux.x86_64.tar.xz",
+    ("Linux",  "aarch64"): "shellcheck-v0.10.0.linux.aarch64.tar.xz",
+    ("Darwin", "x86_64"):  "shellcheck-v0.10.0.darwin.x86_64.tar.xz",
+    ("Darwin", "arm64"):   "shellcheck-v0.10.0.darwin.aarch64.tar.xz",
 }
 
 # ────────────────────────────── NEW: shfmt ────────────────────────────────
@@ -67,6 +67,14 @@ def link_into_bin(binary: Path, name: str) -> None:
         target.unlink()
     target.symlink_to(binary)
     binary.chmod(0o755)
+
+def untar_or_unzip(archive: Path, dest: Path) -> None:
+    if archive.suffixes[-2:] == [".tar", ".xz"]:
+        with tarfile.open(archive, "r:xz") as tf:
+            tf.extractall(dest)
+    else:
+        with zipfile.ZipFile(archive) as zf:
+            zf.extractall(dest)
 
 # ───────────────────────── download & extract Neovim ──────────────────────
 if not STAMP.exists():
@@ -118,8 +126,7 @@ if not stylua_stamp.exists():
     say("Extracting …")
     shutil.rmtree(TOOLS / "stylua-x", ignore_errors=True)
     (TOOLS / "stylua-x").mkdir()
-    with zipfile.ZipFile(archive) as zf:
-        zf.extractall(TOOLS / "stylua-x")
+    untar_or_unzip(archive, TOOLS / "stylua-x")
     bin_path = next((p for p in (TOOLS / "stylua-x").rglob("stylua")), None)
     if not bin_path:
         sys.exit("[bootstrap] stylua binary not found")
@@ -137,8 +144,7 @@ if not shell_stamp.exists():
     say("Extracting …")
     shutil.rmtree(TOOLS / "shellcheck-x", ignore_errors=True)
     (TOOLS / "shellcheck-x").mkdir()
-    with tarfile.open(archive, "r:xz") as tf:
-        tf.extractall(TOOLS / "shellcheck-x")
+    untar_or_unzip(archive, TOOLS / "shellcheck-x")
     bin_path = next((p for p in (TOOLS / "shellcheck-x").rglob("shellcheck")), None)
     if not bin_path:
         sys.exit("[bootstrap] shellcheck binary not found")
