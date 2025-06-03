@@ -58,7 +58,11 @@ Additional plugins or language integrations will be documented here.
 
 ### Common hotkeys
 
-No custom mappings are provided; all stock Neovim keys work as usual.
+| Mapping | Description |
+| ------- | ----------- |
+| `<leader>ff` | Find files (Telescope) |
+| `<leader>fg` | Live grep (Telescope) |
+| `<leader>e`  | Toggle file explorer |
 
 ## Development
 
