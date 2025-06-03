@@ -12,7 +12,7 @@ remains reproducible.
 ├── init.lua              # entry point
 ├── lua/
 │   ├── core/lazy.lua     # minimal plugin manager
-│   └── plugins.lua       # plugin list (empty for now)
+│   └── plugins.lua       # starter plugin list
 ├── scripts/
 │   ├── smoke_test.sh     # quick check
 │   └── test.sh           # full headless test
@@ -47,7 +47,14 @@ ln -s /path/to/nvim-config/.tools/bin/nvim ~/bin/nvim
 
 ### Plugins and language support
 
-This configuration intentionally stays tiny. Only the plugin manager is fetched; no user plugins or language tools are pre-loaded. When new plugins or language integrations are added, they will be documented here.
+This configuration intentionally stays tiny. A handful of popular plugins are bundled out of the box:
+
+- **nvim-treesitter/nvim-treesitter** – Modern syntax highlighting (and more)
+- **nvim-telescope/telescope.nvim** – fuzzy finder powered by plenary
+- **nvim-lualine/lualine.nvim** – sleek status line
+- **nvim-tree/nvim-tree.lua** – simple file explorer
+
+Additional plugins or language integrations will be documented here.
 
 ### Common hotkeys
 
