@@ -104,6 +104,8 @@ def run_nvim(*extra: str) -> None:
 
 say("Syncing Lazy plugins …")
 run_nvim("+lua require('lazy').sync{wait=true}", "+qa")
+# Compile treesitter grammars once while we still have network
+run_nvim("+TSUpdateSync", "+qa")
 
 # ───────────────────────────── grab Stylua ────────────────────────────────
 stylua_asset = STYLUA_ASSETS[(os.uname().sysname, os.uname().machine)]
