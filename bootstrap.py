@@ -103,12 +103,15 @@ def run_nvim(*extra: str) -> None:
         "XDG_STATE_HOME":  str(xdg / "state"),
         "XDG_CACHE_HOME":  str(xdg / "cache"),
     }
-    subprocess.check_call(
-        [str(NVIM), "--headless",
-         "--cmd", f"set rtp^={ROOT} packpath^={ROOT}",
-         "-u", str(ROOT / "init.lua"), *extra],
-        env=env,
-    )
+    try:
+        subprocess.check_call(
+            [str(NVIM), "--headless",
+             "--cmd", f"set rtp^={ROOT} packpath^={ROOT}",
+             "-u", str(ROOT / "init.lua"), *extra],
+            env=env,
+        )
+    except subprocess.CalledProcessError as e:
+        sys.exit(e.returncode)
 
 say("Syncing Lazy plugins …")
 run_nvim("+lua require('lazy').sync{wait=true}", "+qa")
