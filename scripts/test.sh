@@ -1,44 +1,77 @@
 #!/usr/bin/env bash
+# -----------------------------------------------------------------------------
+# Offline self-test – extended
+#   • starts Neovim head-less with full plugins
+#   • sequentially opens one buffer for each listed file-type
+#   • aborts on *any* error or non-zero exit
+#   • prints “TEST OK” on success
+# -----------------------------------------------------------------------------
 set -euo pipefail
 
-# ---------------------------------------------------------------------------
-# Offline self-test
-#  – runs Neovim head-less with the repo’s runtimepath
-#  – fails fast on *any* non-zero exit or Lua/Vim error
-#  – prints “TEST OK” on success
-# ---------------------------------------------------------------------------
-
-ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 NVIM="$ROOT/.tools/bin/nvim"
 
-if [[ ! -x $NVIM ]]; then
-	echo "❌ test: $NVIM not found (run \`make offline\` first)" >&2
-	exit 1
-fi
+[[ -x $NVIM ]] || { echo "❌ test: $NVIM not found (run \`make offline\` first)"; exit 1; }
 
-export NVIM_OFFLINE_BOOT=1
+export NVIM_OFFLINE_BOOT=1  # we still want plugins, just no network pokes
 
-# run Neovim; capture both stdout & stderr
+# ----------------------------------------------------------------------------- 
+# 1.  Create tiny scratch files (lives in tmpfs, auto-deleted)
+# -----------------------------------------------------------------------------
+TMPDIR="$(mktemp -d)"
+trap 'rm -rf "$TMPDIR"' EXIT
+
+declare -A SNIPPET=(
+  [lua]='print("hello")'
+  [python]='print("hello")'
+  [go]='package main; func main(){}'
+  [rust]='fn main(){}'
+  [c]='int main() {return 0;}'
+  [cpp]='int main() {return 0;}'
+  [markdown]='# Hello'
+  [vim]='echo "hi"'
+)
+
+FILES=()
+for ft in "${!SNIPPET[@]}"; do
+  f="$TMPDIR/test.$ft"
+  echo "${SNIPPET[$ft]}" >"$f"
+  FILES+=("$f")
+done
+
+# ----------------------------------------------------------------------------- 
+# 2.  One Neovim instance, open all buffers, then quit
+#     (running :checkhealth at the end for good measure)
+# -----------------------------------------------------------------------------
+CMD_OPEN=""
+for f in "${FILES[@]}"; do
+  CMD_OPEN+=" | edit ${f}"
+done
+CMD_OPEN="${CMD_OPEN# | }"         # drop leading separator
+CMD="${CMD_OPEN} | checkhealth | qa"
+
 set +e
 OUT="$("$NVIM" --headless \
-	--cmd "set rtp^=$ROOT packpath^=$ROOT" \
-	-u "$ROOT/init.lua" \
-	+qa 2>&1)"
+        --cmd "set rtp^=$ROOT packpath^=$ROOT" \
+        -u "$ROOT/init.lua" \
+        +"$CMD" 2>&1)"
 STATUS=$?
 set -e
 
-# non-zero exit?
-if ((STATUS != 0)); then
-	echo "$OUT"
-	echo "❌ Neovim exited with status $STATUS" >&2
-	exit $STATUS
+# ----------------------------------------------------------------------------- 
+# 3.  Fail-fast diagnostics
+# -----------------------------------------------------------------------------
+if (( STATUS != 0 )); then
+  echo "$OUT"
+  echo "❌ Neovim exited with status $STATUS"
+  exit $STATUS
 fi
 
-# did Neovim print any E-style error messages?
-if echo "$OUT" | grep -E "E[0-9]{4}:" -q; then
-	echo "$OUT"
-	echo "❌ Neovim reported errors" >&2
-	exit 1
+if grep -E "E[0-9]{4}:" <<<"$OUT" >/dev/null; then
+  echo "$OUT"
+  echo "❌ Neovim reported errors"
+  exit 1
 fi
 
 echo "TEST OK"
+
