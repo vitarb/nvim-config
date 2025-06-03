@@ -1,7 +1,7 @@
 #───────────────────────────────────────────────────────────────────────────────
 #  Neovim mini-config – make targets
 #───────────────────────────────────────────────────────────────────────────────
-.PHONY: offline smoke test clean docker-image
+.PHONY: offline smoke test lint clean docker-image
 
 #-------------------------------------------------------------
 # build or update the tool-chain in .tools/  (downloads once)
@@ -27,6 +27,35 @@ ifeq ($(DOCKER),1)
 	$(call run_in_docker,make test DOCKER=0)
 else
 	@./scripts/test.sh
+endif
+
+#-------------------------------------------------------------
+# lint Lua & shell scripts
+#-------------------------------------------------------------
+lint: offline     ## run Stylua & ShellCheck
+ifeq ($(DOCKER),1)
+	$(call run_in_docker,make lint DOCKER=0)
+else
+	@.tools/bin/stylua --check init.lua lua
+	@if [ -d scripts ] && ls scripts/*.sh >/dev/null 2>&1; then \
+	  .tools/bin/shellcheck scripts/*.sh; \
+	fi
+	@echo "LINT OK"
+endif
+
+#-------------------------------------------------------------
+# format helper – beautify sources in-place
+#-------------------------------------------------------------
+format: offline   ## stylua + shfmt rewrite
+ifeq ($(DOCKER),1)
+	$(call run_in_docker,make format DOCKER=0)
+else
+	@.tools/bin/stylua init.lua lua
+	@if command -v .tools/bin/shfmt >/dev/null 2>&1; then \
+	  .tools/bin/shfmt -w scripts 2>/dev/null || true; \
+	else \
+	  echo "(shfmt not present – skipped shell formatting)"; \
+	fi
 endif
 
 #-------------------------------------------------------------

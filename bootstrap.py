@@ -1,14 +1,20 @@
 #!/usr/bin/env python3
-"""Private, fail-fast, offline-friendly bootstrap (minimal – no Mason/LSP)."""
+"""Private, fail-fast, offline-friendly bootstrap."""
+
 from __future__ import annotations
-import os, shutil, subprocess, sys, tarfile
+import os, shutil, subprocess, sys, tarfile, zipfile
 from pathlib import Path
 
-ROOT   = Path(__file__).resolve().parent
-TOOLS  = ROOT / ".tools"
-BIN    = TOOLS / "bin"
-NVIM   = BIN / "nvim"
+# ───────────────────────────────────────── paths ──────────────────────────
+ROOT  = Path(__file__).resolve().parent
+TOOLS = ROOT / ".tools"
+BIN   = TOOLS / "bin"
+NVIM  = BIN / "nvim"
 
+TOOLS.mkdir(parents=True, exist_ok=True)
+BIN.mkdir(exist_ok=True)
+
+# ──────────────────────────── Neovim (same as before) ─────────────────────
 NVIM_VERSION = "v0.11.2"
 ASSET_MAP = {
     ("Linux",  "x86_64"):  "nvim-linux-x86_64.tar.gz",
@@ -22,18 +28,51 @@ if not asset:
 NVIM_URL = f"https://github.com/neovim/neovim/releases/download/{NVIM_VERSION}/{asset}"
 STAMP    = TOOLS / f".nvim.{NVIM_VERSION}.{asset}.ok"
 
-say = lambda m: print(f"\033[1;34m[bootstrap]\033[0m {m}", flush=True)
+# ────────────────────────────── Stylua & ShellCheck ───────────────────────
+STYLUA_VERSION = "v0.20.0"
+STYLUA_ASSETS  = {
+    ("Linux",  "x86_64"):  "stylua-linux-x86_64.zip",
+    ("Linux",  "aarch64"): "stylua-linux-aarch64.zip",
+    ("Darwin", "x86_64"):  "stylua-macos.zip",
+    ("Darwin", "arm64"):   "stylua-macos.zip",
+}
 
-TOOLS.mkdir(parents=True, exist_ok=True)
-BIN.mkdir(parents=True, exist_ok=True)
+SHELLCHECK_VERSION = "v0.9.0"
+SHELLCHECK_ASSETS  = {
+    ("Linux",  "x86_64"):  "shellcheck-v0.9.0.linux.x86_64.tar.xz",
+    ("Linux",  "aarch64"): "shellcheck-v0.9.0.linux.aarch64.tar.xz",
+    ("Darwin", "x86_64"):  "shellcheck-v0.9.0.darwin.x86_64.tar.xz",
+    ("Darwin", "arm64"):   "shellcheck-v0.9.0.darwin.aarch64.tar.xz",
+}
 
-##############################################################################
-# 1. Download & extract Neovim once
-##############################################################################
+# ────────────────────────────── NEW: shfmt ────────────────────────────────
+SHFMT_VERSION = "v3.7.0"
+SHFMT_ASSETS  = {
+    ("Linux",  "x86_64"):  "shfmt_v3.7.0_linux_amd64",
+    ("Linux",  "aarch64"): "shfmt_v3.7.0_linux_arm64",
+    ("Darwin", "x86_64"):  "shfmt_v3.7.0_darwin_amd64",
+    ("Darwin", "arm64"):   "shfmt_v3.7.0_darwin_arm64",
+}
+
+# ───────────────────────────────── utilities ──────────────────────────────
+def say(msg: str) -> None:
+    print(f"\033[1;34m[bootstrap]\033[0m {msg}", flush=True)
+
+def fetch(url: str, out: Path) -> None:
+    subprocess.check_call(["curl", "-Lf", "--retry", "3", "-o", out, url])
+
+def link_into_bin(binary: Path, name: str) -> None:
+    target = BIN / name
+    if target.exists() or target.is_symlink():
+        target.unlink()
+    target.symlink_to(binary)
+    binary.chmod(0o755)
+
+# ───────────────────────── download & extract Neovim ──────────────────────
 if not STAMP.exists():
     archive = TOOLS / asset
     say(f"Fetching Neovim {NVIM_VERSION} …")
-    subprocess.check_call(["curl", "-Lf", "--retry", "3", "-o", archive, NVIM_URL])
+    fetch(NVIM_URL, archive)
 
     say("Extracting …")
     shutil.rmtree(TOOLS / "nvim-extracted", ignore_errors=True)
@@ -44,20 +83,11 @@ if not STAMP.exists():
     found = next((p for p in (TOOLS / "nvim-extracted").rglob("bin/nvim")), None)
     if not found:
         sys.exit("[bootstrap] nvim binary not found inside archive")
-
-    # ------------------------------------------------------------------
-    # NEW – (force-)create symlink every time (cross-platform safe)
-    # ------------------------------------------------------------------
-    if NVIM.exists() or NVIM.is_symlink():
-        NVIM.unlink()
-    NVIM.symlink_to(found)
-
+    link_into_bin(found, "nvim")
     STAMP.touch()
 
-##############################################################################
-# Helper: run headless Neovim with our runtime path
-##############################################################################
-def run_nvim(*extra_args: str) -> None:
+# ───────────────────── run Neovim once to install Lazy ────────────────────
+def run_nvim(*extra: str) -> None:
     xdg = ROOT / ".cache" / "xdg"
     env = os.environ | {
         "XDG_DATA_HOME":   str(xdg / "data"),
@@ -68,15 +98,61 @@ def run_nvim(*extra_args: str) -> None:
     subprocess.check_call(
         [str(NVIM), "--headless",
          "--cmd", f"set rtp^={ROOT} packpath^={ROOT}",
-         "-u", str(ROOT / "init.lua"), *extra_args],
+         "-u", str(ROOT / "init.lua"), *extra],
         env=env,
     )
 
-##############################################################################
-# 2. Sync Lazy plugins (none configured – still exercises bootstrap)
-##############################################################################
 say("Syncing Lazy plugins …")
 run_nvim("+lua require('lazy').sync{wait=true}", "+qa")
+
+# ───────────────────────────── grab Stylua ────────────────────────────────
+stylua_asset = STYLUA_ASSETS[(os.uname().sysname, os.uname().machine)]
+stylua_stamp = TOOLS / f".stylua.{STYLUA_VERSION}.ok"
+if not stylua_stamp.exists():
+    archive = TOOLS / stylua_asset
+    say(f"Fetching Stylua {STYLUA_VERSION} …")
+    fetch(f"https://github.com/JohnnyMorganz/StyLua/releases/download/{STYLUA_VERSION}/{stylua_asset}", archive)
+
+    say("Extracting …")
+    shutil.rmtree(TOOLS / "stylua-x", ignore_errors=True)
+    (TOOLS / "stylua-x").mkdir()
+    with zipfile.ZipFile(archive) as zf:
+        zf.extractall(TOOLS / "stylua-x")
+    bin_path = next((p for p in (TOOLS / "stylua-x").rglob("stylua")), None)
+    if not bin_path:
+        sys.exit("[bootstrap] stylua binary not found")
+    link_into_bin(bin_path, "stylua")
+    stylua_stamp.touch()
+
+# ──────────────────────────── grab ShellCheck ─────────────────────────────
+shell_asset = SHELLCHECK_ASSETS[(os.uname().sysname, os.uname().machine)]
+shell_stamp = TOOLS / f".shellcheck.{SHELLCHECK_VERSION}.ok"
+if not shell_stamp.exists():
+    archive = TOOLS / shell_asset
+    say(f"Fetching ShellCheck {SHELLCHECK_VERSION} …")
+    fetch(f"https://github.com/koalaman/shellcheck/releases/download/{SHELLCHECK_VERSION}/{shell_asset}", archive)
+
+    say("Extracting …")
+    shutil.rmtree(TOOLS / "shellcheck-x", ignore_errors=True)
+    (TOOLS / "shellcheck-x").mkdir()
+    with tarfile.open(archive, "r:xz") as tf:
+        tf.extractall(TOOLS / "shellcheck-x")
+    bin_path = next((p for p in (TOOLS / "shellcheck-x").rglob("shellcheck")), None)
+    if not bin_path:
+        sys.exit("[bootstrap] shellcheck binary not found")
+    link_into_bin(bin_path, "shellcheck")
+    shell_stamp.touch()
+
+# ───────────────────────────── grab shfmt ─────────────────────────────────
+shfmt_asset = SHFMT_ASSETS[(os.uname().sysname, os.uname().machine)]
+shfmt_stamp = TOOLS / f".shfmt.{SHFMT_VERSION}.ok"
+if not shfmt_stamp.exists():
+    url = f"https://github.com/mvdan/sh/releases/download/{SHFMT_VERSION}/{shfmt_asset}"
+    bin_path = TOOLS / shfmt_asset
+    say(f"Fetching shfmt {SHFMT_VERSION} …")
+    fetch(url, bin_path)
+    link_into_bin(bin_path, "shfmt")
+    shfmt_stamp.touch()
 
 say("✅ bootstrap complete")
 

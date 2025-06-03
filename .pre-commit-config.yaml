@@ -1,0 +1,13 @@
+repos:
+  - repo: local
+    hooks:
+      - id: stylua
+        name: stylua
+        entry: ./.tools/bin/stylua
+        language: system
+        types: [lua]
+      - id: shellcheck
+        name: shellcheck
+        entry: ./.tools/bin/shellcheck
+        language: system
+        files: scripts/.*\.sh
