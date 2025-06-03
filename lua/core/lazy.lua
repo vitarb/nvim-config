@@ -1,6 +1,18 @@
+-- lua/core/lazy.lua
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
-	vim.fn.system({ "git", "clone", "--filter=blob:none", "https://github.com/folke/lazy.nvim", lazypath })
+	vim.fn.system({
+		"git",
+		"clone",
+		"--filter=blob:none",
+		"https://github.com/folke/lazy.nvim",
+		lazypath,
+	})
 end
 vim.opt.rtp:prepend(lazypath)
-require("lazy").setup({}) -- empty plugin list for now
+
+-----------------------------------------------------------------
+-- NEW: pull the spec from lua/plugins.lua instead of `{}`.
+-----------------------------------------------------------------
+local plugins = require("plugins") -- your list lives here
+require("lazy").setup(plugins) -- hand it to Lazy
