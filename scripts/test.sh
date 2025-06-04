@@ -136,38 +136,32 @@ else
 fi
 
 # -----------------------------------------------------------------------------
-# 5.  Session save and restore
+# 5.  'x closes the current window
 # -----------------------------------------------------------------------------
 set +e
-"${TIMEOUT[@]}" "$NVIM" --headless "${FILES[0]}" "${FILES[1]}" \
-	--cmd "set rtp^=$ROOT packpath^=$ROOT" \
-	--cmd "set noswapfile" \
-	-u "$ROOT/init.lua" \
-	+qa 2>&1
+OUT_CLOSE="$("${TIMEOUT[@]}" "$NVIM" --headless "${FILES[0]}" \
+        --cmd "set rtp^=$ROOT packpath^=$ROOT" \
+        --cmd "set noswapfile" \
+        -u "$ROOT/init.lua" \
+        +vsplit +"lua print(vim.fn.winnr('$'))" \
+        +"normal 'x" \
+        +"lua print(vim.fn.winnr('$'))" +qa 2>&1)"
 STATUS=$?
 set -e
 if ((STATUS != 0)); then
-	echo "❌ session save failed"
-	exit $STATUS
+        echo "$OUT_CLOSE"
+        echo "❌ 'x close window failed"
+        exit $STATUS
 fi
-set +e
-OUT_SESSION="$("${TIMEOUT[@]}" "$NVIM" --headless \
-	--cmd "set rtp^=$ROOT packpath^=$ROOT" \
-	--cmd "set noswapfile" \
-	-u "$ROOT/init.lua" \
-	+"lua require('persistence').load({ last = true })" \
-	+"lua print(vim.fn.argc())" +qa 2>&1)"
-STATUS=$?
-set -e
-if ((STATUS != 0)); then
-	echo "$OUT_SESSION"
-	echo "❌ session restore failed"
-	exit $STATUS
-fi
-if [ "$(printf '%s\n' "$OUT_SESSION" | tr -d '\r' | head -n1)" != '2' ]; then
-	echo "$OUT_SESSION"
-	echo "❌ session not restored"
-	exit 1
+readarray -t wn_lines <<<"$(printf '%s\n' "$OUT_CLOSE" | tr -d '\r' | head -n2)"
+wn_before="${wn_lines[0]}"
+wn_after="${wn_lines[1]}"
+if [ "$wn_before" = "2" ] && [ "$wn_after" = "1" ]; then
+        :
+else
+        echo "$OUT_CLOSE"
+        echo "❌ 'x did not close window"
+        exit 1
 fi
 
 NVIM_CMD=("$NVIM" --headless
