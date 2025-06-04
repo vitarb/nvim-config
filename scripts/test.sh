@@ -85,7 +85,13 @@ fi
 # -----------------------------------------------------------------------------
 GIT_REPO="$TMPDIR/repo"
 mkdir "$GIT_REPO"
-(cd "$GIT_REPO" && git init -q && echo "hi" >a.txt && git add a.txt && git commit -qm init && echo "change" >>a.txt)
+(cd "$GIT_REPO" && git init -q &&
+	git config user.email "test@example.com" &&
+	git config user.name "Test" &&
+	echo "hi" >a.txt &&
+	git add a.txt &&
+	git commit -qm init &&
+	echo "change" >>a.txt)
 set +e
 OUT_GIT="$("${TIMEOUT[@]}" "$NVIM" --headless \
 	--cmd "set rtp^=$ROOT packpath^=$ROOT" \
@@ -129,7 +135,7 @@ if ((STATUS != 0)); then
 	echo "❌ session restore failed"
 	exit $STATUS
 fi
-if ! grep -qx '2' <<<"$OUT_SESSION"; then
+if [ "$(printf '%s\n' "$OUT_SESSION" | tr -d '\r' | head -n1)" != '2' ]; then
 	echo "$OUT_SESSION"
 	echo "❌ session not restored"
 	exit 1
