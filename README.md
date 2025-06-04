@@ -53,6 +53,7 @@ This configuration intentionally stays tiny. A handful of popular plugins are bu
 - **nvim-telescope/telescope.nvim** – fuzzy finder powered by plenary
 - **nvim-lualine/lualine.nvim** – sleek status line
 - **nvim-tree/nvim-tree.lua** – simple file explorer
+- **akinsho/bufferline.nvim** – tab-like buffer list
 
 Additional plugins or language integrations will be documented here.
 
