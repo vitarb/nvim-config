@@ -43,7 +43,15 @@ done
 # -----------------------------------------------------------------------------
 # 2.  Hotkey list from README.md
 # -----------------------------------------------------------------------------
-mapfile -t HOTKEYS < <(awk '/^### Common hotkeys/{flag=1; next}/^##/{flag=0} flag && /\*/{match($0,/`([^`]*)`/,a); print a[1];}' "$ROOT/README.md")
+HOTKEYS=()
+while IFS= read -r line; do
+    key=$(printf '%s\n' "$line" | sed -n "s/.*\`\([^\`]*\)\`.*/\1/p")
+    if [ -n "$key" ]; then
+        HOTKEYS+=("$key")
+    fi
+done < <(
+    awk '/^### Common hotkeys/{flag=1; next}/^##/{flag=0} flag && /\*/' "$ROOT/README.md"
+)
 
 # -----------------------------------------------------------------------------
 # 3.  One Neovim instance, open all buffers, test hotkeys, then quit
@@ -62,12 +70,24 @@ done
 
 CMD="${CMD_OPEN} | edit $ROOT/scripts/test.lua${CMD_KEYS} | execute 'normal! gg' | checkhealth | qa!"
 
-set +e
-OUT="$(timeout 30s "$NVIM" --headless \
+# On macOS, `timeout` might not exist, so fall back to `gtimeout` (from coreutils)
+# or a Perl alarm wrapper as a last resort.
+if command -v timeout >/dev/null 2>&1; then
+        TIMEOUT=(timeout 30s)
+elif command -v gtimeout >/dev/null 2>&1; then
+        TIMEOUT=(gtimeout 30s)
+else
+        TIMEOUT=(perl -e 'alarm shift; exec @ARGV' 30)
+fi
+
+NVIM_CMD=("$NVIM" --headless \
         --cmd "set rtp^=$ROOT packpath^=$ROOT" \
         --cmd "set noswapfile" \
         -u "$ROOT/init.lua" \
-        +"$CMD" 2>&1)"
+        +"$CMD")
+
+set +e
+OUT="$("${TIMEOUT[@]}" "${NVIM_CMD[@]}" 2>&1)"
 STATUS=$?
 set -e
 
