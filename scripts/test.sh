@@ -26,18 +26,18 @@ trap 'rm -rf "$TMPDIR"' EXIT
 
 FILES=()
 for ft in lua python go rust c cpp markdown vim; do
-        case "$ft" in
-        lua)      snippet='print("hello")' ;;
-        python)   snippet='print("hello")' ;;
-        go)       snippet='package main; func main(){}' ;;
-        rust)     snippet='fn main(){}' ;;
-        c|cpp)    snippet='int main() {return 0;}' ;;
-        markdown) snippet='# Hello' ;;
-        vim)      snippet='echo "hi"' ;;
-        esac
-        f="$TMPDIR/test.$ft"
-        echo "$snippet" >"$f"
-        FILES+=("$f")
+	case "$ft" in
+	lua) snippet='print("hello")' ;;
+	python) snippet='print("hello")' ;;
+	go) snippet='package main; func main(){}' ;;
+	rust) snippet='fn main(){}' ;;
+	c | cpp) snippet='int main() {return 0;}' ;;
+	markdown) snippet='# Hello' ;;
+	vim) snippet='echo "hi"' ;;
+	esac
+	f="$TMPDIR/test.$ft"
+	echo "$snippet" >"$f"
+	FILES+=("$f")
 done
 
 # -----------------------------------------------------------------------------

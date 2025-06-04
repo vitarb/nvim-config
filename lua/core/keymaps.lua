@@ -53,3 +53,6 @@ map("n", "<leader>/", function()
 		api.toggle.linewise.current()
 	end
 end, "Toggle comment")
+map("v", "<leader>c", '"+y', "Copy to clipboard")
+map({ "n", "v" }, "<leader>v", '"+p', "Paste from clipboard")
+map("n", "<C-x>", "<cmd>qa<CR>", "Exit Neovim")
