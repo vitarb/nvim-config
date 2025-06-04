@@ -73,6 +73,9 @@ Additional plugins or language integrations will be documented here.
 * `<leader>w` – Save file
 * `<leader>x` – Close window
 * `<leader>/` – Toggle comment line
+* `<leader>c` – Copy to clipboard
+* `<leader>v` – Paste from clipboard
+* `<C-x>` – Exit Vim
 
 ## Development
 
