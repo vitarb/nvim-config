@@ -51,4 +51,13 @@ return {
 			-- keymap moved to core/keymaps.lua
 		end,
 	},
+	{
+		"akinsho/bufferline.nvim",
+		event = "VeryLazy",
+		config = function()
+			require("bufferline").setup({
+				options = { separator_style = "thin" },
+			})
+		end,
+	},
 }
