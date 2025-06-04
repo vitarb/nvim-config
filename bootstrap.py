@@ -71,7 +71,7 @@ def link_into_bin(binary: Path, name: str) -> None:
 def untar_or_unzip(archive: Path, dest: Path) -> None:
     if archive.suffixes[-2:] == [".tar", ".xz"]:
         with tarfile.open(archive, "r:xz") as tf:
-            tf.extractall(dest)
+            tf.extractall(dest, filter="data")
     else:
         with zipfile.ZipFile(archive) as zf:
             zf.extractall(dest)
@@ -86,7 +86,7 @@ if not STAMP.exists():
     shutil.rmtree(TOOLS / "nvim-extracted", ignore_errors=True)
     (TOOLS / "nvim-extracted").mkdir()
     with tarfile.open(archive) as tf:
-        tf.extractall(TOOLS / "nvim-extracted")
+        tf.extractall(TOOLS / "nvim-extracted", filter="data")
 
     found = next((p for p in (TOOLS / "nvim-extracted").rglob("bin/nvim")), None)
     if not found:

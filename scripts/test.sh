@@ -43,7 +43,18 @@ done
 # -----------------------------------------------------------------------------
 # 2.  Hotkey list from README.md
 # -----------------------------------------------------------------------------
-mapfile -t HOTKEYS < <(awk '/^### Common hotkeys/{flag=1; next}/^##/{flag=0} flag && /\*/{match($0,/`([^`]*)`/,a); print a[1];}' "$ROOT/README.md")
+HOTKEYS=()
+IFS=$'\n' read -r -d '' -a HOTKEYS < <(
+    awk '
+        /^### Common hotkeys/ {flag=1; next}
+        /^##/ {flag=0}
+        flag && /\*/ {
+            match($0, /`([^`]*)`/, a)
+            print a[1]
+        }
+    ' "$ROOT/README.md"
+    printf '\0'
+)
 
 # -----------------------------------------------------------------------------
 # 3.  One Neovim instance, open all buffers, test hotkeys, then quit
