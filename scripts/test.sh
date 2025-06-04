@@ -24,22 +24,20 @@ export NVIM_OFFLINE_BOOT=1 # we still want plugins, just no network pokes
 TMPDIR="$(mktemp -d)"
 trap 'rm -rf "$TMPDIR"' EXIT
 
-declare -A SNIPPET=(
-	[lua]='print("hello")'
-	[python]='print("hello")'
-	[go]='package main; func main(){}'
-	[rust]='fn main(){}'
-	[c]='int main() {return 0;}'
-	[cpp]='int main() {return 0;}'
-	[markdown]='# Hello'
-	[vim]='echo "hi"'
-)
-
 FILES=()
-for ft in "${!SNIPPET[@]}"; do
-	f="$TMPDIR/test.$ft"
-	echo "${SNIPPET[$ft]}" >"$f"
-	FILES+=("$f")
+for ft in lua python go rust c cpp markdown vim; do
+        case "$ft" in
+        lua)      snippet='print("hello")' ;;
+        python)   snippet='print("hello")' ;;
+        go)       snippet='package main; func main(){}' ;;
+        rust)     snippet='fn main(){}' ;;
+        c|cpp)    snippet='int main() {return 0;}' ;;
+        markdown) snippet='# Hello' ;;
+        vim)      snippet='echo "hi"' ;;
+        esac
+        f="$TMPDIR/test.$ft"
+        echo "$snippet" >"$f"
+        FILES+=("$f")
 done
 
 # -----------------------------------------------------------------------------
