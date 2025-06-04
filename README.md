@@ -54,6 +54,8 @@ This configuration intentionally stays tiny. A handful of popular plugins are bu
 - **nvim-lualine/lualine.nvim** – sleek status line
 - **nvim-tree/nvim-tree.lua** – simple file explorer
 - **akinsho/bufferline.nvim** – tab-like buffer list
+- **lewis6991/gitsigns.nvim** – Git decorations
+- **folke/persistence.nvim** – session management
 
 Additional plugins or language integrations will be documented here.
 
@@ -76,6 +78,10 @@ Additional plugins or language integrations will be documented here.
 * `<leader>c` – Copy to clipboard
 * `<leader>v` – Paste from clipboard
 * `<C-x>` – Exit Vim
+* `'gh` – Stage Git hunk
+* `'gl` – Reset Git hunk
+* `'gp` – Preview Git hunk
+* `'sr` – Restore last session
 
 ## Development
 

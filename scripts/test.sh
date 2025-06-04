@@ -45,12 +45,12 @@ done
 # -----------------------------------------------------------------------------
 HOTKEYS=()
 while IFS= read -r line; do
-    key=$(printf '%s\n' "$line" | sed -n "s/.*\`\([^\`]*\)\`.*/\1/p")
-    if [ -n "$key" ]; then
-        HOTKEYS+=("$key")
-    fi
+	key=$(printf '%s\n' "$line" | sed -n "s/.*\`\([^\`]*\)\`.*/\1/p")
+	if [ -n "$key" ]; then
+		HOTKEYS+=("$key")
+	fi
 done < <(
-    awk '/^### Common hotkeys/{flag=1; next}/^##/{flag=0} flag && /\*/' "$ROOT/README.md"
+	awk '/^### Common hotkeys/{flag=1; next}/^##/{flag=0} flag && /\*/' "$ROOT/README.md"
 )
 
 # -----------------------------------------------------------------------------
@@ -59,13 +59,13 @@ done < <(
 # -----------------------------------------------------------------------------
 CMD_OPEN=""
 for f in "${FILES[@]}"; do
-        CMD_OPEN+=" | edit ${f}"
+	CMD_OPEN+=" | edit ${f}"
 done
 CMD_OPEN="${CMD_OPEN# | }" # drop leading separator
 
 CMD_KEYS=""
 for k in "${HOTKEYS[@]}"; do
-        CMD_KEYS+=" | silent! execute \"normal ${k}\""
+	CMD_KEYS+=" | silent! execute \"normal ${k}\""
 done
 
 CMD="${CMD_OPEN} | edit $ROOT/scripts/test.lua${CMD_KEYS} | execute 'normal! gg' | checkhealth | qa!"
@@ -73,18 +73,73 @@ CMD="${CMD_OPEN} | edit $ROOT/scripts/test.lua${CMD_KEYS} | execute 'normal! gg'
 # On macOS, `timeout` might not exist, so fall back to `gtimeout` (from coreutils)
 # or a Perl alarm wrapper as a last resort.
 if command -v timeout >/dev/null 2>&1; then
-        TIMEOUT=(timeout 30s)
+	TIMEOUT=(timeout 30s)
 elif command -v gtimeout >/dev/null 2>&1; then
-        TIMEOUT=(gtimeout 30s)
+	TIMEOUT=(gtimeout 30s)
 else
-        TIMEOUT=(perl -e 'alarm shift; exec @ARGV' 30)
+	TIMEOUT=(perl -e 'alarm shift; exec @ARGV' 30)
 fi
 
-NVIM_CMD=("$NVIM" --headless \
-        --cmd "set rtp^=$ROOT packpath^=$ROOT" \
-        --cmd "set noswapfile" \
-        -u "$ROOT/init.lua" \
-        +"$CMD")
+# -----------------------------------------------------------------------------
+# 3.  Gitsigns non-interactive API test
+# -----------------------------------------------------------------------------
+GIT_REPO="$TMPDIR/repo"
+mkdir "$GIT_REPO"
+(cd "$GIT_REPO" && git init -q && echo "hi" >a.txt && git add a.txt && git commit -qm init && echo "change" >>a.txt)
+set +e
+OUT_GIT="$("${TIMEOUT[@]}" "$NVIM" --headless \
+	--cmd "set rtp^=$ROOT packpath^=$ROOT" \
+	--cmd "set noswapfile" \
+	-u "$ROOT/init.lua" \
+	+"edit $GIT_REPO/a.txt" +"lua require('gitsigns').stage_hunk()" +q 2>&1)"
+STATUS=$?
+set -e
+if ((STATUS != 0)); then
+	echo "$OUT_GIT"
+	echo "❌ gitsigns stage_hunk failed"
+	exit $STATUS
+fi
+
+# -----------------------------------------------------------------------------
+# 4.  Session save and restore
+# -----------------------------------------------------------------------------
+set +e
+"${TIMEOUT[@]}" "$NVIM" --headless "${FILES[0]}" "${FILES[1]}" \
+	--cmd "set rtp^=$ROOT packpath^=$ROOT" \
+	--cmd "set noswapfile" \
+	-u "$ROOT/init.lua" \
+	+qa 2>&1
+STATUS=$?
+set -e
+if ((STATUS != 0)); then
+	echo "❌ session save failed"
+	exit $STATUS
+fi
+set +e
+OUT_SESSION="$("${TIMEOUT[@]}" "$NVIM" --headless \
+	--cmd "set rtp^=$ROOT packpath^=$ROOT" \
+	--cmd "set noswapfile" \
+	-u "$ROOT/init.lua" \
+	+"lua require('persistence').load({ last = true })" \
+	+"lua print(vim.fn.argc())" +qa 2>&1)"
+STATUS=$?
+set -e
+if ((STATUS != 0)); then
+	echo "$OUT_SESSION"
+	echo "❌ session restore failed"
+	exit $STATUS
+fi
+if ! grep -qx '2' <<<"$OUT_SESSION"; then
+	echo "$OUT_SESSION"
+	echo "❌ session not restored"
+	exit 1
+fi
+
+NVIM_CMD=("$NVIM" --headless
+	--cmd "set rtp^=$ROOT packpath^=$ROOT"
+	--cmd "set noswapfile"
+	-u "$ROOT/init.lua"
+	+"$CMD")
 
 set +e
 OUT="$("${TIMEOUT[@]}" "${NVIM_CMD[@]}" 2>&1)"

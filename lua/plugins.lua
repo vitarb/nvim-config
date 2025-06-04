@@ -67,4 +67,30 @@ return {
 			require("Comment").setup({})
 		end,
 	},
+	{
+		"lewis6991/gitsigns.nvim",
+		config = function()
+			require("gitsigns").setup({})
+			local gs = require("gitsigns")
+			vim.keymap.set("n", "'gh", gs.stage_hunk, { desc = "Stage hunk" })
+			vim.keymap.set("n", "'gl", gs.reset_hunk, { desc = "Reset hunk" })
+			vim.keymap.set("n", "'gp", gs.preview_hunk, { desc = "Preview hunk" })
+		end,
+	},
+	{
+		"folke/persistence.nvim",
+		event = "BufReadPre",
+		config = function()
+			local persistence = require("persistence")
+			persistence.setup({})
+			vim.api.nvim_create_autocmd("VimLeavePre", {
+				callback = function()
+					persistence.save()
+				end,
+			})
+			vim.keymap.set("n", "'sr", function()
+				persistence.load({ last = true })
+			end, { desc = "Restore last session" })
+		end,
+	},
 }

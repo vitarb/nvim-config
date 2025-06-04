@@ -42,4 +42,11 @@ Update README.md (and this file) so others know how to use the new feature.
 
 Happy hacking — reproducible and CI-verified!
 
+### Hotkeys added in this repo
+
+* `'gh` – Stage Git hunk
+* `'gl` – Reset Git hunk
+* `'gp` – Preview Git hunk
+* `'sr` – Restore last session
+
 Whenever you add, remove, or change a shortcut in *Common hotkeys* of `README.md`, update `scripts/test.sh` accordingly so CI still passes.
