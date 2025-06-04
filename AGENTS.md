@@ -47,7 +47,6 @@ Happy hacking — reproducible and CI-verified!
 * `'gh` – Stage Git hunk
 * `'gl` – Reset Git hunk
 * `'gp` – Preview Git hunk
-* `'sr` – Restore last session
 * `<C-Tab>` – Next buffer
 * `<C-S-Tab>` – Previous buffer
 

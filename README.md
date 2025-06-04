@@ -56,7 +56,6 @@ This configuration intentionally stays tiny. A handful of popular plugins are bu
 - **nvim-tree/nvim-tree.lua** – simple file explorer
 - **akinsho/bufferline.nvim** – tab-like buffer list
 - **lewis6991/gitsigns.nvim** – Git decorations
-- **folke/persistence.nvim** – session management
 
 Additional plugins or language integrations will be documented here.
 
@@ -87,7 +86,7 @@ Line numbers (absolute and relative) are enabled by default.
 * `'gh` – Stage Git hunk
 * `'gl` – Reset Git hunk
 * `'gp` – Preview Git hunk
-* `'sr` – Restore last session
+* Use stock `Ctrl-w` motions for splits
 
 ## Development
 
