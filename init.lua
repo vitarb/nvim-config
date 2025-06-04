@@ -3,6 +3,8 @@ vim.opt.rtp:prepend(root)
 package.path = root .. "/lua/?.lua;" .. root .. "/lua/?/init.lua;" .. package.path
 vim.g.mapleader = "'"
 vim.g.maplocalleader = "'"
+vim.opt.number = true -- absolute line numbers
+vim.opt.relativenumber = true -- relative line numbers
 if vim.env.NVIM_OFFLINE_BOOT == "1" then
 	return
 end

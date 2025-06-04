@@ -60,6 +60,10 @@ This configuration intentionally stays tiny. A handful of popular plugins are bu
 
 Additional plugins or language integrations will be documented here.
 
+### Editor behaviour
+
+Line numbers (absolute and relative) are enabled by default.
+
 ### Common hotkeys
 
 * `<C-n>` – Find files
@@ -69,6 +73,7 @@ Additional plugins or language integrations will be documented here.
 * `'1` – Toggle file explorer
 * `'j` – Next buffer
 * `'k` – Previous buffer
+* `<C-Tab> / <C-S-Tab>` – Next / previous buffer
 * `'q` – Close buffer
 * `'Q` – Close all but current
 * `'h` – Move buffer left

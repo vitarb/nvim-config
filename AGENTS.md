@@ -48,5 +48,7 @@ Happy hacking — reproducible and CI-verified!
 * `'gl` – Reset Git hunk
 * `'gp` – Preview Git hunk
 * `'sr` – Restore last session
+* `<C-Tab>` – Next buffer
+* `<C-S-Tab>` – Previous buffer
 
-Whenever you add, remove, or change a shortcut in *Common hotkeys* of `README.md`, update `scripts/test.sh` accordingly so CI still passes.
+Whenever you add, remove, or change a shortcut in *Common hotkeys* of `README.md`, add or update the matching test in `scripts/test.sh` so CI still passes.
