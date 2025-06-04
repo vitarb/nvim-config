@@ -45,7 +45,6 @@ map("n", "'l", function()
 		bl.move(1)
 	end
 end, "Move buffer right")
-map("n", "'x", "<cmd>close<CR>", "Close window")
 map("n", "<C-Tab>", "<cmd>bnext<CR>", "Next buffer")
 map("n", "<C-S-Tab>", "<cmd>bprevious<CR>", "Previous buffer")
 map("n", "<leader>w", "<cmd>w<CR>", "Save file")

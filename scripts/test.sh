@@ -135,39 +135,10 @@ else
 	exit 1
 fi
 
-# -----------------------------------------------------------------------------
-# 5.  'x closes the current window
-# -----------------------------------------------------------------------------
-set +e
-OUT_CLOSE="$("${TIMEOUT[@]}" "$NVIM" --headless "${FILES[0]}" \
-        --cmd "set rtp^=$ROOT packpath^=$ROOT" \
-        --cmd "set noswapfile" \
-        -u "$ROOT/init.lua" \
-        +vsplit +"lua print(vim.fn.winnr('$'))" \
-        +"normal 'x" \
-        +"lua print(vim.fn.winnr('$'))" +qa 2>&1)"
-STATUS=$?
-set -e
-if ((STATUS != 0)); then
-        echo "$OUT_CLOSE"
-        echo "❌ 'x close window failed"
-        exit $STATUS
-fi
-readarray -t wn_lines <<<"$(printf '%s\n' "$OUT_CLOSE" | tr -d '\r' | head -n2)"
-wn_before="${wn_lines[0]}"
-wn_after="${wn_lines[1]}"
-if [ "$wn_before" = "2" ] && [ "$wn_after" = "1" ]; then
-        :
-else
-        echo "$OUT_CLOSE"
-        echo "❌ 'x did not close window"
-        exit 1
-fi
-
 NVIM_CMD=("$NVIM" --headless
-	--cmd "set rtp^=$ROOT packpath^=$ROOT"
-	--cmd "set noswapfile"
-	-u "$ROOT/init.lua"
+        --cmd "set rtp^=$ROOT packpath^=$ROOT"
+        --cmd "set noswapfile"
+        -u "$ROOT/init.lua"
 	+"$CMD")
 
 set +e
