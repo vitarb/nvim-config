@@ -1,4 +1,4 @@
-# Neovim mini-config (offline friendly)
+# Neovim mini-config
 
 A tiny Neovim configuration with its own pinned binary.  Everything lives in
 this repository so a clone can be bootstrapped and tested without Internet
