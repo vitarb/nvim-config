@@ -16,7 +16,7 @@ NVIM="$ROOT/.tools/bin/nvim"
 	exit 1
 }
 
-export NVIM_OFFLINE_BOOT=1 # we still want plugins, just no network pokes
+# plugins are loaded during tests
 
 # -----------------------------------------------------------------------------
 # 1.  Create tiny scratch files (lives in tmpfs, auto-deleted)
@@ -41,22 +41,33 @@ for ft in lua python go rust c cpp markdown vim; do
 done
 
 # -----------------------------------------------------------------------------
-# 2.  One Neovim instance, open all buffers, then quit
+# 2.  Hotkey list from README.md
+# -----------------------------------------------------------------------------
+mapfile -t HOTKEYS < <(awk '/^### Common hotkeys/{flag=1; next}/^##/{flag=0} flag && /\*/{match($0,/`([^`]*)`/,a); print a[1];}' "$ROOT/README.md")
+
+# -----------------------------------------------------------------------------
+# 3.  One Neovim instance, open all buffers, test hotkeys, then quit
 #     (running :checkhealth at the end for good measure)
 # -----------------------------------------------------------------------------
 CMD_OPEN=""
 for f in "${FILES[@]}"; do
-	CMD_OPEN+=" | edit ${f}"
+        CMD_OPEN+=" | edit ${f}"
 done
 CMD_OPEN="${CMD_OPEN# | }" # drop leading separator
-CMD="${CMD_OPEN} | edit $ROOT/scripts/test.lua | execute 'normal! gg' | checkhealth | qa"
+
+CMD_KEYS=""
+for k in "${HOTKEYS[@]}"; do
+        CMD_KEYS+=" | silent! execute \"normal ${k}\""
+done
+
+CMD="${CMD_OPEN} | edit $ROOT/scripts/test.lua${CMD_KEYS} | execute 'normal! gg' | checkhealth | qa!"
 
 set +e
-OUT="$("$NVIM" --headless \
-	--cmd "set rtp^=$ROOT packpath^=$ROOT" \
-	--cmd "set noswapfile" \
-	-u "$ROOT/init.lua" \
-	+"$CMD" 2>&1)"
+OUT="$(timeout 30s "$NVIM" --headless \
+        --cmd "set rtp^=$ROOT packpath^=$ROOT" \
+        --cmd "set noswapfile" \
+        -u "$ROOT/init.lua" \
+        +"$CMD" 2>&1)"
 STATUS=$?
 set -e
 
