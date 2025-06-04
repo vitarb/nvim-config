@@ -50,6 +50,7 @@ ln -s /path/to/nvim-config/.tools/bin/nvim ~/bin/nvim
 This configuration intentionally stays tiny. A handful of popular plugins are bundled out of the box:
 
 - **nvim-treesitter/nvim-treesitter** – Modern syntax highlighting (and more)
+- **catppuccin/nvim** – pastel color scheme
 - **nvim-telescope/telescope.nvim** – fuzzy finder powered by plenary
 - **nvim-lualine/lualine.nvim** – sleek status line
 - **nvim-tree/nvim-tree.lua** – simple file explorer
