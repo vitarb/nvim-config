@@ -41,3 +41,5 @@ Run the four commands above locally— they must all succeed.
 Update README.md (and this file) so others know how to use the new feature.
 
 Happy hacking — reproducible and CI-verified!
+
+Whenever you add, remove, or change a shortcut in *Common hotkeys* of `README.md`, update `scripts/test.sh` accordingly so CI still passes.
