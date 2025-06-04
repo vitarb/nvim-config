@@ -107,7 +107,36 @@ if ((STATUS != 0)); then
 fi
 
 # -----------------------------------------------------------------------------
-# 4.  Session save and restore
+# 4.  Buffer cycling via <C-Tab> / <C-S-Tab>
+# -----------------------------------------------------------------------------
+set +e
+OUT_BUF="$("${TIMEOUT[@]}" "$NVIM" --headless "${FILES[0]}" "${FILES[1]}" \
+	--cmd "set rtp^=$ROOT packpath^=$ROOT" \
+	--cmd "set noswapfile" \
+	-u "$ROOT/init.lua" \
+	+"lua b1=vim.fn.bufnr()" \
+	+"bnext" \
+	+"lua b2=vim.fn.bufnr()" \
+	+"bprevious" \
+	+"lua print(b1,b2,vim.fn.bufnr())" +qa 2>&1)"
+STATUS=$?
+set -e
+if ((STATUS != 0)); then
+	echo "$OUT_BUF"
+	echo "❌ buffer cycle failed"
+	exit $STATUS
+fi
+read -r b1 b2 b3 <<<"$(printf '%s\n' "$OUT_BUF" | tr -d '\r' | head -n1)"
+if [ "$b1" = "$b3" ] && [ "$b1" != "$b2" ]; then
+	:
+else
+	echo "$OUT_BUF"
+	echo "❌ buffer cycle not working"
+	exit 1
+fi
+
+# -----------------------------------------------------------------------------
+# 5.  Session save and restore
 # -----------------------------------------------------------------------------
 set +e
 "${TIMEOUT[@]}" "$NVIM" --headless "${FILES[0]}" "${FILES[1]}" \
