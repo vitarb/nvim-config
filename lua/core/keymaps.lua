@@ -22,12 +22,29 @@ if tb then
 end
 
 map("n", "'1", "<cmd>NvimTreeToggle<CR>", "Toggle sidebar")
-map("n", "<C-F4>", "<cmd>bdelete<CR>", "Close buffer")
-map("n", "<D-w>", "<cmd>bdelete<CR>", "Close buffer")
-map("n", "<M-Right>", "<cmd>bnext<CR>", "Next buffer")
-map("n", "<M-Left>", "<cmd>bprevious<CR>", "Previous buffer")
-map("n", "<C-Tab>", "<cmd>bnext<CR>", "Next buffer")
-map("n", "<C-S-Tab>", "<cmd>bprevious<CR>", "Previous buffer")
+map("n", "'j", "<cmd>bnext<CR>", "Next buffer")
+map("n", "'k", "<cmd>bprevious<CR>", "Previous buffer")
+map("n", "'q", "<cmd>bdelete<CR>", "Close buffer")
+map("n", "'Q", function()
+	local current = vim.api.nvim_get_current_buf()
+	for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+		if buf ~= current and vim.api.nvim_buf_is_loaded(buf) then
+			vim.api.nvim_buf_delete(buf, {})
+		end
+	end
+end, "Close other buffers")
+map("n", "'h", function()
+	local ok, bl = pcall(require, "bufferline")
+	if ok and bl.move then
+		bl.move(-1)
+	end
+end, "Move buffer left")
+map("n", "'l", function()
+	local ok, bl = pcall(require, "bufferline")
+	if ok and bl.move then
+		bl.move(1)
+	end
+end, "Move buffer right")
 map("n", "<leader>w", "<cmd>w<CR>", "Save file")
 map("n", "<leader>x", "<cmd>q<CR>", "Close window")
 map("n", "<leader>/", function()

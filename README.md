@@ -59,19 +59,20 @@ Additional plugins or language integrations will be documented here.
 
 ### Common hotkeys
 
-| Mapping | Description |
-| ------- | ----------- |
-| `<C-n>` | Find files |
-| `<leader>o` | Document symbols |
-| `<C-e>` | Recent files |
-| `<leader>s` | Search project |
-| `'1` | Toggle file explorer |
-| `<C-F4>`/`<D-w>` | Close buffer |
-| `<M-Right>`/`<M-Left>` | Next/previous buffer |
-| `<C-Tab>`/`<C-S-Tab>` | Next/previous buffer |
-| `<leader>w` | Save file |
-| `<leader>x` | Close window |
-| `<leader>/` | Toggle comment line |
+* `<C-n>` – Find files
+* `<leader>o` – Document symbols
+* `<C-e>` – Recent files
+* `<leader>s` – Search project
+* `'1` – Toggle file explorer
+* `'j` – Next buffer
+* `'k` – Previous buffer
+* `'q` – Close buffer
+* `'Q` – Close all but current
+* `'h` – Move buffer left
+* `'l` – Move buffer right
+* `<leader>w` – Save file
+* `<leader>x` – Close window
+* `<leader>/` – Toggle comment line
 
 ## Development
 
