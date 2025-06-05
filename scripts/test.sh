@@ -136,9 +136,9 @@ else
 fi
 
 NVIM_CMD=("$NVIM" --headless
-        --cmd "set rtp^=$ROOT packpath^=$ROOT"
-        --cmd "set noswapfile"
-        -u "$ROOT/init.lua"
+	--cmd "set rtp^=$ROOT packpath^=$ROOT"
+	--cmd "set noswapfile"
+	-u "$ROOT/init.lua"
 	+"$CMD")
 
 set +e

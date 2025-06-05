@@ -18,7 +18,7 @@ if tb then
 	map("n", "<C-n>", tb.find_files, "Navigate file")
 	map("n", "<leader>o", tb.lsp_document_symbols, "Document symbols")
 	map("n", "<C-e>", tb.buffers, "Open buffers")
-	map("n", "<leader>s", tb.live_grep, "Search project")
+	map("n", "<C-f>", tb.live_grep, "Search project")
 end
 
 map("n", "'1", "<cmd>NvimTreeToggle<CR>", "Toggle sidebar")
