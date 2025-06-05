@@ -85,7 +85,7 @@ Line numbers (absolute and relative) are enabled by default.
 * `<leader>c` – Copy to clipboard
 * `<leader>v` – Paste from clipboard
 * `<C-x>` – Exit Vim
-* `<leader>;` – Toggle color variant
+* `<leader>;` – Cycle color variants
 * `'gh` – Stage Git hunk
 * `'gl` – Reset Git hunk
 * `'gp` – Preview Git hunk

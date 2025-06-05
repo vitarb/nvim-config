@@ -59,12 +59,13 @@ map("v", "<leader>c", '"+y', "Copy to clipboard")
 map({ "n", "v" }, "<leader>v", '"+p', "Paste from clipboard")
 map("n", "<C-x>", "<cmd>qa<CR>", "Exit Neovim")
 
-local kanagawa_variant = "wave"
+local kanagawa_variants = { "wave", "dragon", "lotus" }
+local kanagawa_index = 1
 map("n", "<leader>;", function()
-	local next = kanagawa_variant == "wave" and "dragon" or "wave"
+	kanagawa_index = kanagawa_index % #kanagawa_variants + 1
+	local next = kanagawa_variants[kanagawa_index]
 	local ok, kg = pcall(require, "kanagawa")
 	if ok and kg.load then
 		kg.load(next)
-		kanagawa_variant = next
 	end
-end, "Toggle color variant")
+end, "Cycle color variant")
