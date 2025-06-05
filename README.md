@@ -50,7 +50,7 @@ ln -s /path/to/nvim-config/.tools/bin/nvim ~/bin/nvim
 This configuration intentionally stays tiny. A handful of popular plugins are bundled out of the box:
 
 - **nvim-treesitter/nvim-treesitter** – Modern syntax highlighting (and more)
-- **catppuccin/nvim** – pastel color scheme
+- **rebelot/kanagawa.nvim** – Japanese-themed color scheme
 - **nvim-telescope/telescope.nvim** – fuzzy finder powered by plenary
 - **nvim-lualine/lualine.nvim** – sleek status line
 - **nvim-tree/nvim-tree.lua** – simple file explorer
@@ -85,6 +85,7 @@ Line numbers (absolute and relative) are enabled by default.
 * `<leader>c` – Copy to clipboard
 * `<leader>v` – Paste from clipboard
 * `<C-x>` – Exit Vim
+* `<leader>;` – Toggle color variant
 * `'gh` – Stage Git hunk
 * `'gl` – Reset Git hunk
 * `'gp` – Preview Git hunk

@@ -58,3 +58,13 @@ end, "Toggle comment")
 map("v", "<leader>c", '"+y', "Copy to clipboard")
 map({ "n", "v" }, "<leader>v", '"+p', "Paste from clipboard")
 map("n", "<C-x>", "<cmd>qa<CR>", "Exit Neovim")
+
+local kanagawa_variant = "wave"
+map("n", "<leader>;", function()
+	local next = kanagawa_variant == "wave" and "dragon" or "wave"
+	local ok, kg = pcall(require, "kanagawa")
+	if ok and kg.load then
+		kg.load(next)
+		kanagawa_variant = next
+	end
+end, "Toggle color variant")
