@@ -25,13 +25,14 @@ TMPDIR="$(mktemp -d)"
 trap 'rm -rf "$TMPDIR"' EXIT
 
 FILES=()
-for ft in lua python go rust c cpp markdown vim; do
+for ft in lua python go rust ts c cpp markdown vim; do
 	case "$ft" in
 	lua) snippet='print("hello")' ;;
 	python) snippet='print("hello")' ;;
 	go) snippet='package main; func main(){}' ;;
 	rust) snippet='fn main(){}' ;;
 	c | cpp) snippet='int main() {return 0;}' ;;
+	ts) snippet='console.log("hi")' ;;
 	markdown) snippet='# Hello' ;;
 	vim) snippet='echo "hi"' ;;
 	esac
@@ -53,22 +54,35 @@ done < <(
 	awk '/^### Common hotkeys/{flag=1; next}/^##/{flag=0} flag && /\*/' "$ROOT/README.md"
 )
 
+# create a tiny Lua script executing each hotkey
+LUA_KEYS="$TMPDIR/keys.lua"
+{
+    echo "local data = [==["
+    printf '%s\n' "${HOTKEYS[@]}"
+    echo "]==]"
+    echo "local lsp_keys = { K=true, gd=true, gr=true, gR=true, ['<leader>a']=true }"
+    printf '%s\n' \
+"for line in data:gmatch('[^\\n]+') do" \
+"  if line ~= '' and (not lsp_keys[line] or #vim.lsp.get_clients()>0) then" \
+"    pcall(vim.cmd, 'silent! normal '..line)" \
+"  end" \
+"end"
+} >"$LUA_KEYS"
+
 # -----------------------------------------------------------------------------
 # 3.  One Neovim instance, open all buffers, test hotkeys, then quit
 #     (running :checkhealth at the end for good measure)
 # -----------------------------------------------------------------------------
-CMD_OPEN=""
-for f in "${FILES[@]}"; do
-	CMD_OPEN+=" | edit ${f}"
-done
-CMD_OPEN="${CMD_OPEN# | }" # drop leading separator
-
-CMD_KEYS=""
-for k in "${HOTKEYS[@]}"; do
-	CMD_KEYS+=" | silent! execute \"normal ${k}\""
-done
-
-CMD="${CMD_OPEN}${CMD_KEYS} | execute 'normal! gg' | checkhealth | qa!"
+SCRIPT="$TMPDIR/run.vim"
+{
+    for f in "${FILES[@]}"; do
+        echo "edit ${f}"
+    done
+    echo "luafile ${LUA_KEYS}"
+    echo "execute 'normal! gg'"
+    echo "checkhealth"
+    echo "qa!"
+} >"$SCRIPT"
 
 # On macOS, `timeout` might not exist, so fall back to `gtimeout` (from coreutils)
 # or a Perl alarm wrapper as a last resort.
@@ -140,7 +154,7 @@ NVIM_CMD=("$NVIM" --headless
 	--cmd "set rtp^=$ROOT packpath^=$ROOT"
 	--cmd "set noswapfile"
 	-u "$ROOT/init.lua"
-	+"$CMD")
+	-S "$SCRIPT")
 
 set +e
 OUT="$("${TIMEOUT[@]}" "${NVIM_CMD[@]}" 2>&1)"
