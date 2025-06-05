@@ -67,7 +67,7 @@ Line numbers (absolute and relative) are enabled by default.
 
 * `<C-n>` – Find files
 * `<leader>o` – Document symbols
-* `<C-e>` – Recent files
+* `<C-e>` – Open buffers
 * `<leader>s` – Search project
 * `'1` – Toggle file explorer
 * `'j` – Next buffer

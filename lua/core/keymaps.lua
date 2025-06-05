@@ -17,7 +17,7 @@ end
 if tb then
 	map("n", "<C-n>", tb.find_files, "Navigate file")
 	map("n", "<leader>o", tb.lsp_document_symbols, "Document symbols")
-	map("n", "<C-e>", tb.oldfiles, "Recent files")
+	map("n", "<C-e>", tb.buffers, "Open buffers")
 	map("n", "<leader>s", tb.live_grep, "Search project")
 end
 
