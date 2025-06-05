@@ -1,9 +1,12 @@
 -- Minimal plugin list – Lazy handles itself
 return {
 	{
-		"catppuccin/nvim",
-		name = "catppuccin",
+		"rebelot/kanagawa.nvim",
+		name = "kanagawa",
 		priority = 1000,
+		config = function()
+			require("kanagawa").setup({})
+		end,
 	},
 	{
 		"nvim-treesitter/nvim-treesitter",
