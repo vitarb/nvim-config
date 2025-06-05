@@ -56,6 +56,8 @@ This configuration intentionally stays tiny. A handful of popular plugins are bu
 - **nvim-tree/nvim-tree.lua** – simple file explorer
 - **akinsho/bufferline.nvim** – tab-like buffer list
 - **lewis6991/gitsigns.nvim** – Git decorations
+- **folke/which-key.nvim** – displays available keybindings
+- **lukas-reineke/indent-blankline.nvim** – indentation guides
 
 Additional plugins or language integrations will be documented here.
 

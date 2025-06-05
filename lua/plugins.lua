@@ -82,4 +82,17 @@ return {
 			vim.keymap.set("n", "'gp", gs.preview_hunk, { desc = "Preview hunk" })
 		end,
 	},
+	{
+		"folke/which-key.nvim",
+		event = "VeryLazy",
+		config = function()
+			require("which-key").setup({})
+		end,
+	},
+	{
+		"lukas-reineke/indent-blankline.nvim",
+		main = "ibl",
+		event = "VeryLazy",
+		opts = {},
+	},
 }
