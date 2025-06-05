@@ -58,8 +58,17 @@ This configuration intentionally stays tiny. A handful of popular plugins are bu
 - **lewis6991/gitsigns.nvim** – Git decorations
 - **folke/which-key.nvim** – displays available keybindings
 - **lukas-reineke/indent-blankline.nvim** – indentation guides
+- **williamboman/mason.nvim** – LSP package manager
+- **williamboman/mason-lspconfig.nvim** – Mason integration for LSP
+- **neovim/nvim-lspconfig** – built-in LSP configurations
 
 Additional plugins or language integrations will be documented here.
+
+### Language-Server Integration
+
+`mason.nvim` auto-installs servers for Go, Rust, Python, Lua, and TypeScript.
+LSP provides diagnostics, *Go to definition*, *Hover*, code actions, rename and
+more out of the box. Extra hotkeys below expose these features.
 
 ### Editor behaviour
 
@@ -70,6 +79,11 @@ Line numbers (absolute and relative) are enabled by default.
 * `<C-n>` – Find files
 * `<leader><leader>` – Outline / symbols
 * Press `<leader>` to see all bindings (powered by *which-key*)
+* `K` – Hover docs
+* `gd` – Jump to definition
+* `gr` – References (Telescope)
+* `gR` – Rename symbol
+* `<leader>a` – Code actions
 * `<C-e>` – Open buffers
 * `<C-f>` – Search project
 * `'1` – Toggle file explorer
