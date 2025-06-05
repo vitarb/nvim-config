@@ -13,4 +13,4 @@ if vim.env.NVIM_OFFLINE_BOOT == "1" then
 end
 require("core.lazy")
 require("core.keymaps")
-vim.cmd.colorscheme("kanagawa")
+vim.cmd.colorscheme("github_dark")

@@ -60,13 +60,13 @@ map("v", "<leader>c", '"+y', "Copy to clipboard")
 map({ "n", "v" }, "<leader>v", '"+p', "Paste from clipboard")
 map("n", "<C-x>", "<cmd>qa<CR>", "Exit Neovim")
 
-local kanagawa_variants = { "wave", "dragon", "lotus" }
-local kanagawa_index = 1
+local github_variants = { "github_dark", "github_dark_dimmed", "github_light" }
+local github_index = 1
 map("n", "<leader>;", function()
-	kanagawa_index = kanagawa_index % #kanagawa_variants + 1
-	local next = kanagawa_variants[kanagawa_index]
-	local ok, kg = pcall(require, "kanagawa")
-	if ok and kg.load then
-		kg.load(next)
+	github_index = github_index % #github_variants + 1
+	local next = github_variants[github_index]
+	local ok, gh = pcall(require, "github-theme")
+	if ok and gh.load then
+		gh.load(next)
 	end
 end, "Cycle color variant")

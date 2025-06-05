@@ -1,11 +1,11 @@
 -- Minimal plugin list – Lazy handles itself
 return {
 	{
-		"rebelot/kanagawa.nvim",
-		name = "kanagawa",
+		"projekt0n/github-nvim-theme",
+		name = "github-theme",
 		priority = 1000,
 		config = function()
-			require("kanagawa").setup({})
+			require("github-theme").setup({})
 		end,
 	},
 	{
