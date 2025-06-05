@@ -68,7 +68,7 @@ for k in "${HOTKEYS[@]}"; do
 	CMD_KEYS+=" | silent! execute \"normal ${k}\""
 done
 
-CMD="${CMD_OPEN} | edit $ROOT/scripts/test.lua${CMD_KEYS} | execute 'normal! gg' | checkhealth | qa!"
+CMD="${CMD_OPEN}${CMD_KEYS} | execute 'normal! gg' | checkhealth | qa!"
 
 # On macOS, `timeout` might not exist, so fall back to `gtimeout` (from coreutils)
 # or a Perl alarm wrapper as a last resort.
@@ -126,7 +126,8 @@ if ((STATUS != 0)); then
 	echo "❌ buffer cycle failed"
 	exit $STATUS
 fi
-read -r b1 b2 b3 <<<"$(printf '%s\n' "$OUT_BUF" | tr -d '\r' | head -n1)"
+nums="$(printf '%s\n' "$OUT_BUF" | tr -d '\r' | grep -Eo '^[0-9]+ [0-9]+ [0-9]+$' | head -n1)"
+read -r b1 b2 b3 <<<"$nums"
 if [ "$b1" = "$b3" ] && [ "$b1" != "$b2" ]; then
 	:
 else

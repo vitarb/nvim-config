@@ -16,7 +16,8 @@ end
 
 if tb then
 	map("n", "<C-n>", tb.find_files, "Navigate file")
-	map("n", "<leader>o", tb.lsp_document_symbols, "Document symbols")
+	-- outline / symbol picker
+	map("n", "<leader><leader>", tb.lsp_document_symbols, "Outline / symbols")
 	map("n", "<C-e>", tb.buffers, "Open buffers")
 	map("n", "<C-f>", tb.live_grep, "Search project")
 end

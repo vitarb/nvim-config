@@ -42,6 +42,11 @@ Update README.md (and this file) so others know how to use the new feature.
 
 Happy hacking — reproducible and CI-verified!
 
+### Extending the configuration
+
+When you add or remove hot-keys, also update the test matrix.
+Hot-key list lives in README; tests parse it automatically, so remember to update both together.
+
 ### Hotkeys added in this repo
 
 * `'gh` – Stage Git hunk
