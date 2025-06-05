@@ -68,7 +68,8 @@ Line numbers (absolute and relative) are enabled by default.
 ### Common hotkeys
 
 * `<C-n>` – Find files
-* `<leader>o` – Document symbols
+* `<leader><leader>` – Outline / symbols
+* Press `<leader>` to see all bindings (powered by *which-key*)
 * `<C-e>` – Open buffers
 * `<C-f>` – Search project
 * `'1` – Toggle file explorer
