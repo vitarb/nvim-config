@@ -65,7 +65,7 @@ map({ "n", "v" }, "<leader>/", function()
 end, "Toggle comment")
 map("v", "<leader>c", '"+y', "Copy to clipboard")
 map({ "n", "v" }, "<leader>v", '"+p', "Paste from clipboard")
-map("n", "<C-x>", "<cmd>qa<CR>", "Exit Neovim")
+map("n", "<C-x>", "<cmd>qa!<CR>", "Exit Neovim without saving")
 
 local kanagawa_variants = { "wave", "dragon", "lotus" }
 local kanagawa_index = 1

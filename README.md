@@ -102,7 +102,7 @@ Diagnostics are disabled by default; press `'dd` to toggle them.
 * `<leader>/` – Toggle comment line
 * `<leader>c` – Copy to clipboard
 * `<leader>v` – Paste from clipboard
-* `<C-x>` – Exit Vim
+* `<C-x>` – Exit without saving
 * `<leader>;` – Cycle color variants
 * `'gh` – Stage Git hunk
 * `'gl` – Reset Git hunk
