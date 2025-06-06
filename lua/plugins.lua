@@ -80,9 +80,9 @@ return {
 		config = function()
 			require("gitsigns").setup({})
 			local gs = require("gitsigns")
-			vim.keymap.set("n", "'gh", gs.stage_hunk, { desc = "Stage hunk" })
-			vim.keymap.set("n", "'gl", gs.reset_hunk, { desc = "Reset hunk" })
-			vim.keymap.set("n", "'gp", gs.preview_hunk, { desc = "Preview hunk" })
+			vim.keymap.set("n", "<leader>gh", gs.stage_hunk, { desc = "Stage hunk" })
+			vim.keymap.set("n", "<leader>gl", gs.reset_hunk, { desc = "Reset hunk" })
+			vim.keymap.set("n", "<leader>gp", gs.preview_hunk, { desc = "Preview hunk" })
 		end,
 	},
 	{
