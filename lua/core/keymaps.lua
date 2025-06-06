@@ -46,7 +46,8 @@ map("n", "'l", function()
 		bl.move(1)
 	end
 end, "Move buffer right")
-local diag_on = true
+local diag_on = false
+vim.diagnostic.config({ virtual_text = diag_on, signs = diag_on })
 map("n", "'dd", function()
 	diag_on = not diag_on
 	vim.diagnostic.config({ virtual_text = diag_on, signs = diag_on })

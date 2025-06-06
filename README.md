@@ -74,6 +74,7 @@ more out of the box. Extra hotkeys below expose these features.
 
 Line numbers (absolute and relative) are enabled by default.
 Undo history persists across sessions and yanked text briefly highlights.
+Diagnostics are disabled by default; press `'dd` to toggle them.
 
 ### Common hotkeys
 
@@ -95,7 +96,7 @@ Undo history persists across sessions and yanked text briefly highlights.
 * `'Q` – Close all but current
 * `'h` – Move buffer left
 * `'l` – Move buffer right
-* `'dd` – Toggle diagnostics
+* `'dd` – Toggle diagnostics (off by default)
 * `<leader>w` – Save file
 * `<leader>x` – Close window
 * `<leader>/` – Toggle comment line
