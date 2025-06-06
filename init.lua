@@ -5,6 +5,9 @@ vim.g.mapleader = "'"
 vim.g.maplocalleader = "'"
 vim.opt.number = true -- absolute line numbers
 vim.opt.relativenumber = true -- relative line numbers
+local udir = vim.fn.stdpath("cache") .. "/undo"
+vim.fn.mkdir(udir, "p")
+vim.o.undofile, vim.o.undodir = true, udir
 if vim.env.CI == "true" then
 	vim.notify = function() end
 end
@@ -13,4 +16,5 @@ if vim.env.NVIM_OFFLINE_BOOT == "1" then
 end
 require("core.lazy")
 require("core.keymaps")
+require("core.autocmds")
 vim.cmd.colorscheme("kanagawa")
