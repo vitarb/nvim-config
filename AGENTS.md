@@ -57,3 +57,5 @@ Hot-key list lives in README; tests parse it automatically, so remember to updat
 * `<C-S-Tab>` – Previous buffer
 
 Whenever you add, remove, or change a shortcut in *Common hotkeys* of `README.md`, add or update the matching test in `scripts/test.sh` so CI still passes.
+
+YankFlash highlight is built-in and requires no offline dependency.
