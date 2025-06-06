@@ -73,6 +73,7 @@ more out of the box. Extra hotkeys below expose these features.
 ### Editor behaviour
 
 Line numbers (absolute and relative) are enabled by default.
+Undo history persists across sessions and yanked text briefly highlights.
 
 ### Common hotkeys
 
@@ -94,6 +95,7 @@ Line numbers (absolute and relative) are enabled by default.
 * `'Q` – Close all but current
 * `'h` – Move buffer left
 * `'l` – Move buffer right
+* `'dd` – Toggle diagnostics
 * `<leader>w` – Save file
 * `<leader>x` – Close window
 * `<leader>/` – Toggle comment line

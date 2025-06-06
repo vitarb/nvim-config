@@ -52,6 +52,7 @@ Hot-key list lives in README; tests parse it automatically, so remember to updat
 * `'gh` – Stage Git hunk
 * `'gl` – Reset Git hunk
 * `'gp` – Preview Git hunk
+* `'dd` – Toggle diagnostics
 * `<C-Tab>` – Next buffer
 * `<C-S-Tab>` – Previous buffer
 
