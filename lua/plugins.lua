@@ -98,6 +98,14 @@ return {
 		event = "VeryLazy",
 		opts = {},
 	},
+	{
+		"machakann/vim-highlightedyank",
+		event = "VeryLazy",
+		init = function()
+			vim.g.highlightedyank_highlight_duration = 450
+			vim.cmd([[hi! link HighlightedyankRegion YankFlash]])
+		end,
+	},
 	-- minimal LSP setup powering the outline view
 	{
 		"williamboman/mason.nvim",

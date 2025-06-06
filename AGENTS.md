@@ -17,6 +17,8 @@ make test    # full head-less config test     → prints “TEST OK”
 make lint    # Stylua + ShellCheck            → prints “LINT OK”
 make format  # Fix formatting (run it if lint gives formatting errors)
 They run quickly and fail fast on any error.
+Run `make format` before committing and verify with `make lint`, `make smoke`,
+and `make test` before submitting a PR.
 
 3. Optional helpers
 make clean        # wipe ./.tools + ./.cache (forces a fresh bootstrap next time)
@@ -58,4 +60,4 @@ Hot-key list lives in README; tests parse it automatically, so remember to updat
 
 Whenever you add, remove, or change a shortcut in *Common hotkeys* of `README.md`, add or update the matching test in `scripts/test.sh` so CI still passes.
 
-YankFlash highlight is built-in and requires no offline dependency.
+YankFlash highlight now comes via vim-highlightedyank (still no extra deps).
