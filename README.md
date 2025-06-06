@@ -73,7 +73,7 @@ more out of the box. Extra hotkeys below expose these features.
 ### Editor behaviour
 
 Line numbers (absolute and relative) are enabled by default.
-Undo history persists across sessions and yanking text blinks twice for ≈¼ s.
+Undo history persists across sessions and yanking text blinks twice for about half a second in a soft peach tone.
 Diagnostics are disabled by default; press `'dd` to toggle them.
 
 ### Common hotkeys

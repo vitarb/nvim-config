@@ -3,10 +3,10 @@ local M = {}
 function M.setup()
 	-- Define default highlight for yank flash
 	vim.api.nvim_set_hl(0, "YankFlash", {
-		bg = "#ffcfaf",
+		bg = "#ffe8d0",
 		fg = "#1c1a19",
 		bold = true,
-		ctermbg = 216,
+		ctermbg = 224,
 		ctermfg = 233,
 		default = true,
 	})
