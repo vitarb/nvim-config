@@ -22,11 +22,11 @@ if tb then
 	map("n", "<C-f>", tb.live_grep, "Search project")
 end
 
-map("n", "'1", "<cmd>NvimTreeToggle<CR>", "Toggle sidebar")
-map("n", "'j", "<cmd>bnext<CR>", "Next buffer")
-map("n", "'k", "<cmd>bprevious<CR>", "Previous buffer")
-map("n", "'q", "<cmd>bdelete<CR>", "Close buffer")
-map("n", "'Q", function()
+map("n", "<leader>1", "<cmd>NvimTreeToggle<CR>", "Toggle sidebar")
+map("n", "<leader>j", "<cmd>bnext<CR>", "Next buffer")
+map("n", "<leader>k", "<cmd>bprevious<CR>", "Previous buffer")
+map("n", "<leader>q", "<cmd>bdelete<CR>", "Close buffer")
+map("n", "<leader>Q", function()
 	local current = vim.api.nvim_get_current_buf()
 	for _, buf in ipairs(vim.api.nvim_list_bufs()) do
 		if buf ~= current and vim.api.nvim_buf_is_loaded(buf) then
@@ -34,13 +34,13 @@ map("n", "'Q", function()
 		end
 	end
 end, "Close other buffers")
-map("n", "'h", function()
+map("n", "<leader>h", function()
 	local ok, bl = pcall(require, "bufferline")
 	if ok and bl.move then
 		bl.move(-1)
 	end
 end, "Move buffer left")
-map("n", "'l", function()
+map("n", "<leader>l", function()
 	local ok, bl = pcall(require, "bufferline")
 	if ok and bl.move then
 		bl.move(1)
@@ -48,15 +48,17 @@ map("n", "'l", function()
 end, "Move buffer right")
 local diag_on = false
 vim.diagnostic.config({ virtual_text = diag_on, signs = diag_on })
-map("n", "'dd", function()
+map("n", "<leader>dd", function()
 	diag_on = not diag_on
 	vim.diagnostic.config({ virtual_text = diag_on, signs = diag_on })
 	print(diag_on and "Diagnostics ON" or "Diagnostics OFF")
 end, "Toggle diagnostics")
+map("n", "<leader>s", "<cmd>w<CR>", "Save file")
 map("n", "<C-Tab>", "<cmd>bnext<CR>", "Next buffer")
 map("n", "<C-S-Tab>", "<cmd>bprevious<CR>", "Previous buffer")
 map("n", "<leader>w", "<cmd>w<CR>", "Save file")
 map("n", "<leader>x", "<cmd>q<CR>", "Close window")
+map("n", "<leader>x", "<cmd>x<CR>", "Save & quit")
 map({ "n", "v" }, "<leader>/", function()
 	local ok, api = pcall(require, "Comment.api")
 	if ok then

@@ -74,7 +74,7 @@ more out of the box. Extra hotkeys below expose these features.
 
 Line numbers (absolute and relative) are enabled by default.
 Undo history persists across sessions, and yanked text now fades out over ~½ s in a soft peach tint (via highlightedyank).
-Diagnostics are disabled by default; press `'dd` to toggle them.
+Diagnostics are disabled by default; press `<leader>dd` to toggle them.
 
 ### Common hotkeys
 
@@ -88,25 +88,27 @@ Diagnostics are disabled by default; press `'dd` to toggle them.
 * `<leader>a` – Code actions
 * `<C-e>` – Open buffers
 * `<C-f>` – Search project
-* `'1` – Toggle file explorer
-* `'j` – Next buffer
-* `'k` – Previous buffer
+* `<leader>1` – Toggle file explorer
+* `<leader>j` – Next buffer
+* `<leader>k` – Previous buffer
 * `<C-Tab> / <C-S-Tab>` – Next / previous buffer
-* `'q` – Close buffer
-* `'Q` – Close all but current
-* `'h` – Move buffer left
-* `'l` – Move buffer right
-* `'dd` – Toggle diagnostics (off by default)
+* `<leader>q` – Close buffer
+* `<leader>Q` – Close all but current
+* `<leader>h` – Move buffer left
+* `<leader>l` – Move buffer right
+* `<leader>dd` – Toggle diagnostics (off by default)
 * `<leader>w` – Save file
+* `<leader>s` – Save file
 * `<leader>x` – Close window
+* `<leader>x` – Save & quit
 * `<leader>/` – Toggle comment line
 * `<leader>c` – Copy to clipboard
 * `<leader>v` – Paste from clipboard
 * `<C-x>` – Exit without saving
 * `<leader>;` – Cycle color variants
-* `'gh` – Stage Git hunk
-* `'gl` – Reset Git hunk
-* `'gp` – Preview Git hunk
+* `<leader>gh` – Stage Git hunk
+* `<leader>gl` – Reset Git hunk
+* `<leader>gp` – Preview Git hunk
 * Use stock `Ctrl-w` motions for splits
 
 ## Development
