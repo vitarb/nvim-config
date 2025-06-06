@@ -92,17 +92,25 @@ return {
 			require("which-key").setup({})
 		end,
 	},
-	{
-		"lukas-reineke/indent-blankline.nvim",
-		main = "ibl",
-		event = "VeryLazy",
-		opts = {},
-	},
-	-- minimal LSP setup powering the outline view
-	{
-		"williamboman/mason.nvim",
-		build = ":MasonUpdate",
-		config = true,
+        {
+                "lukas-reineke/indent-blankline.nvim",
+                main = "ibl",
+                event = "VeryLazy",
+                opts = {},
+        },
+        {
+                "machakann/vim-highlightedyank",
+                event = "VeryLazy",
+                init = function()
+                        vim.g.highlightedyank_highlight_duration = 450
+                        vim.cmd([[hi! link HighlightedyankRegion YankFlash]])
+                end,
+        },
+        -- minimal LSP setup powering the outline view
+        {
+                "williamboman/mason.nvim",
+                build = ":MasonUpdate",
+                config = true,
 	},
 	{
 		"williamboman/mason-lspconfig.nvim",
