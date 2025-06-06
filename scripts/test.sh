@@ -58,16 +58,19 @@ done < <(
 # create a tiny Lua script executing each hotkey
 LUA_KEYS="$TMPDIR/keys.lua"
 {
-    echo "local data = [==["
-    printf '%s\n' "${HOTKEYS[@]}"
-    echo "]==]"
-    echo "local lsp_keys = { K=true, gd=true, gr=true, gR=true, ['<leader>a']=true }"
-    printf '%s\n' \
-"for line in data:gmatch('[^\\n]+') do" \
-"  if line ~= '' and (not lsp_keys[line] or #vim.lsp.get_clients()>0) then" \
-"    pcall(vim.cmd, 'silent! normal '..line)" \
-"  end" \
-"end"
+	echo "local data = [==["
+	printf '%s\n' "${HOTKEYS[@]}"
+	echo "]==]"
+	echo "local lsp_keys = { K=true, gd=true, gr=true, gR=true, ['<leader>a']=true }"
+	printf '%s\n' \
+		"for line in data:gmatch('[^\\n]+') do" \
+		"  if line ~= '' and (not lsp_keys[line] or #vim.lsp.get_clients()>0) then" \
+		"    pcall(vim.cmd, 'silent! normal '..line)" \
+		"  end" \
+		"end" \
+		"vim.cmd('normal! yy')" \
+		"vim.cmd('sleep 300m')" \
+		"if vim.fn.hlexists('YankFlash') ~= 1 then error('no YankFlash') end"
 } >"$LUA_KEYS"
 
 # -----------------------------------------------------------------------------
@@ -76,13 +79,13 @@ LUA_KEYS="$TMPDIR/keys.lua"
 # -----------------------------------------------------------------------------
 SCRIPT="$TMPDIR/run.vim"
 {
-    for f in "${FILES[@]}"; do
-        echo "edit ${f}"
-    done
-    echo "luafile ${LUA_KEYS}"
-    echo "execute 'normal! gg'"
-    echo "checkhealth"
-    echo "qa!"
+	for f in "${FILES[@]}"; do
+		echo "edit ${f}"
+	done
+	echo "luafile ${LUA_KEYS}"
+	echo "execute 'normal! gg'"
+	echo "checkhealth"
+	echo "qa!"
 } >"$SCRIPT"
 
 # On macOS, `timeout` might not exist, so fall back to `gtimeout` (from coreutils)
