@@ -77,7 +77,8 @@ def untar_or_unzip(archive: Path, dest: Path) -> None:
             zf.extractall(dest)
 
 # ───────────────────────── download & extract Neovim ──────────────────────
-if not STAMP.exists():
+# Redownload if either the version stamp or the nvim binary is missing
+if not STAMP.exists() or not NVIM.exists():
     archive = TOOLS / asset
     say(f"Fetching Neovim {NVIM_VERSION} …")
     fetch(NVIM_URL, archive)
