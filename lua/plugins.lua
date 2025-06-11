@@ -108,7 +108,7 @@ return {
 	{
 		"williamboman/mason-lspconfig.nvim",
 		opts = {
-			ensure_installed = { "gopls", "rust_analyzer", "pyright", "lua_ls", "tsserver" },
+			ensure_installed = { "gopls", "rust_analyzer", "pyright", "lua_ls", "ts_ls" },
 		},
 		config = function(_, opts)
 			require("mason-lspconfig").setup(opts)
@@ -118,7 +118,7 @@ return {
 		"neovim/nvim-lspconfig",
 		config = function()
 			local lsp = require("lspconfig")
-			for _, s in ipairs({ "gopls", "rust_analyzer", "pyright", "lua_ls", "tsserver" }) do
+			for _, s in ipairs({ "gopls", "rust_analyzer", "pyright", "lua_ls", "ts_ls" }) do
 				lsp[s].setup({})
 			end
 		end,
