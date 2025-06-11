@@ -54,10 +54,10 @@ Hot-key list lives in README; tests parse it automatically, so remember to updat
 * `<leader>gh` – Stage Git hunk
 * `<leader>gl` – Reset Git hunk
 * `<leader>gp` – Preview Git hunk
-* `<leader>dd` – Toggle diagnostics
+* `<leader>dd` – Cycle diagnostics
 * `<C-Tab>` – Next buffer
 * `<C-S-Tab>` – Previous buffer
 
 Whenever you add, remove, or change a shortcut in *Common hotkeys* of `README.md`, add or update the matching test in `scripts/test.sh` so CI still passes.
 
-YankFlash highlight now comes via vim-highlightedyank (still no extra deps).
+YankFlash highlight now uses Neovim's built-in `on_yank` highlight (no extra plugin).

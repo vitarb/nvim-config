@@ -1,1 +1,1 @@
--- Yank highlight handled by highlightedyank plugin
+-- Custom autocommands can be added here

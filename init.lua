@@ -17,6 +17,6 @@ end
 require("core.lazy")
 require("core.keymaps")
 vim.cmd.colorscheme("kanagawa")
-require("core.highlight").setup()
 require("core.autocmds")
+vim.highlight.on_yank({ higroup = "IncSearch", timeout = 150 })
 require("core.update")
