@@ -10,6 +10,7 @@ return {
 	},
 	{
 		"nvim-treesitter/nvim-treesitter",
+		event = { "BufReadPost", "BufNewFile" },
 		config = function()
 			require("nvim-treesitter.configs").setup({
 				ensure_installed = { "lua", "bash", "python", "go", "rust", "c", "cpp" },
@@ -21,6 +22,7 @@ return {
 	},
 	{
 		"nvim-telescope/telescope.nvim",
+		cmd = { "Telescope" },
 		dependencies = { "nvim-lua/plenary.nvim" },
 		config = function()
 			local actions = require("telescope.actions")
@@ -46,6 +48,7 @@ return {
 	},
 	{
 		"nvim-tree/nvim-tree.lua",
+		cmd = { "NvimTreeToggle", "NvimTreeFindFile" },
 		config = function()
 			require("nvim-tree").setup({
 				view = { width = 35 },

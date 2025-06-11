@@ -15,4 +15,6 @@ vim.opt.rtp:prepend(lazypath)
 -- NEW: pull the spec from lua/plugins.lua instead of `{}`.
 -----------------------------------------------------------------
 local plugins = require("plugins") -- your list lives here
-require("lazy").setup(plugins) -- hand it to Lazy
+require("lazy").setup(plugins, {
+	performance = { cache = { enabled = true } },
+}) -- hand it to Lazy
