@@ -55,6 +55,9 @@ done < <(
 	awk '/^### Common hotkeys/{flag=1; next}/^##/{flag=0} flag && /\*/' "$ROOT/README.md"
 )
 
+# remove duplicates (if any)
+mapfile -t HOTKEYS < <(printf '%s\n' "${HOTKEYS[@]}" | awk '!seen[$0]++')
+
 # create a tiny Lua script executing each hotkey
 LUA_KEYS="$TMPDIR/keys.lua"
 {

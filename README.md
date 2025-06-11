@@ -88,6 +88,8 @@ Diagnostics are disabled by default; press `<leader>dd` to toggle them.
 * `<leader>a` – Code actions
 * `<C-e>` – Open buffers
 * `<C-f>` – Search project
+* `<leader>ff` – Find files
+* `<leader>fg` – Live grep
 * `<leader>1` – Toggle file explorer
 * `<leader>j` – Next buffer
 * `<leader>k` – Previous buffer
