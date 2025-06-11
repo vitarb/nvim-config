@@ -57,6 +57,7 @@ This configuration intentionally stays tiny. A handful of popular plugins are bu
 - **akinsho/bufferline.nvim** – tab-like buffer list
 - **lewis6991/gitsigns.nvim** – Git decorations
 - **folke/which-key.nvim** – displays available keybindings
+- **echasnovski/mini.nvim** – icon library used by which-key
 - **lukas-reineke/indent-blankline.nvim** – indentation guides
 - **williamboman/mason.nvim** – LSP package manager
 - **williamboman/mason-lspconfig.nvim** – Mason integration for LSP
