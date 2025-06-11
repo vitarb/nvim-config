@@ -98,6 +98,13 @@ return {
 		end,
 	},
 	{
+		"echasnovski/mini.nvim",
+		version = "*",
+		config = function()
+			require("mini.icons").setup()
+		end,
+	},
+	{
 		"lukas-reineke/indent-blankline.nvim",
 		main = "ibl",
 		event = "VeryLazy",

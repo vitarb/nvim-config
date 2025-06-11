@@ -124,9 +124,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
 local wk_ok, wk = pcall(require, "which-key")
 if wk_ok then
-	wk.register({
-		{ "<leader>f", group = "find" },
-		{ "<leader>g", group = "git" },
-		{ "<leader>d", group = "diagnostics" },
-	})
+	wk.add({ { "", group = "find" } }, { prefix = "<leader>f" })
+	wk.add({ { "", group = "git" } }, { prefix = "<leader>g" })
+	wk.add({ { "", group = "diagnostics" } }, { prefix = "<leader>d" })
 end
