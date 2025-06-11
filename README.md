@@ -100,7 +100,6 @@ Diagnostics are disabled by default; press `<leader>dd` to toggle them.
 * `<leader>w` – Save file
 * `<leader>s` – Save file
 * `<leader>x` – Close window
-* `<leader>x` – Save & quit
 * `<leader>/` – Toggle comment line
 * `<leader>c` – Copy to clipboard
 * `<leader>v` – Paste from clipboard
