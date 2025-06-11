@@ -14,8 +14,20 @@ do
 	end
 end
 
+local gs
+do
+	local ok, gitsigns = pcall(require, "gitsigns")
+	if ok then
+		gs = gitsigns
+	end
+end
+
 if tb then
 	map("n", "<C-n>", tb.find_files, "Navigate file")
+	map("n", "<leader>ff", function()
+		tb.find_files({ hidden = true })
+	end, "Find files")
+	map("n", "<leader>fg", tb.live_grep, "Live grep")
 	-- outline / symbol picker
 	map("n", "<leader><leader>", tb.lsp_document_symbols, "Outline / symbols")
 	map("n", "<C-e>", tb.buffers, "Open buffers")
@@ -79,6 +91,12 @@ map("n", "<leader>;", function()
 	end
 end, "Cycle color variant")
 
+if gs then
+	map("n", "<leader>gh", gs.stage_hunk, "Stage hunk")
+	map("n", "<leader>gl", gs.reset_hunk, "Reset hunk")
+	map("n", "<leader>gp", gs.preview_hunk, "Preview hunk")
+end
+
 -- LSP-specific mappings once a server is attached
 vim.api.nvim_create_autocmd("LspAttach", {
 	callback = function(ev)
@@ -95,3 +113,12 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		lspmap("<leader>a", vim.lsp.buf.code_action, "Code actions")
 	end,
 })
+
+local wk_ok, wk = pcall(require, "which-key")
+if wk_ok then
+	wk.register({
+		["<leader>f"] = { name = "+find" },
+		["<leader>g"] = { name = "+git" },
+		["<leader>d"] = { name = "+diagnostics" },
+	})
+end

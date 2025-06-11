@@ -31,10 +31,6 @@ return {
 				},
 			})
 			local builtin = require("telescope.builtin")
-			vim.keymap.set("n", "<leader>ff", function()
-				builtin.find_files({ hidden = true })
-			end, { desc = "Find files" })
-			vim.keymap.set("n", "<leader>fg", builtin.live_grep, { desc = "Live grep" })
 		end,
 	},
 	{
@@ -80,9 +76,6 @@ return {
 		config = function()
 			require("gitsigns").setup({})
 			local gs = require("gitsigns")
-			vim.keymap.set("n", "<leader>gh", gs.stage_hunk, { desc = "Stage hunk" })
-			vim.keymap.set("n", "<leader>gl", gs.reset_hunk, { desc = "Reset hunk" })
-			vim.keymap.set("n", "<leader>gp", gs.preview_hunk, { desc = "Preview hunk" })
 		end,
 	},
 	{
