@@ -82,9 +82,8 @@ LUA_KEYS="$TMPDIR/keys.lua"
 		"    pcall(vim.cmd, 'silent! normal '..line)" \
 		"  end" \
 		"end" \
-		"vim.cmd('normal! yy')" \
-		"vim.cmd('sleep 300m')" \
-		"if vim.fn.hlexists('YankFlash') ~= 1 then error('no YankFlash') end"
+                "vim.cmd('normal! yy')" \
+                "vim.cmd('sleep 300m')"
 } >"$LUA_KEYS"
 
 # -----------------------------------------------------------------------------

@@ -58,13 +58,21 @@ map("n", "<leader>l", function()
 		bl.move(1)
 	end
 end, "Move buffer right")
-local diag_on = false
-vim.diagnostic.config({ virtual_text = diag_on, signs = diag_on })
+local diag_modes = { "none", "virtual", "full" }
+local diag_index = 1
+local function apply_diag()
+	local mode = diag_modes[diag_index]
+	vim.diagnostic.config({
+		virtual_text = mode ~= "none",
+		signs = mode == "full",
+	})
+	print("Diagnostics: " .. mode)
+end
+apply_diag()
 map("n", "<leader>dd", function()
-	diag_on = not diag_on
-	vim.diagnostic.config({ virtual_text = diag_on, signs = diag_on })
-	print(diag_on and "Diagnostics ON" or "Diagnostics OFF")
-end, "Toggle diagnostics")
+	diag_index = diag_index % #diag_modes + 1
+	apply_diag()
+end, "Cycle diagnostics")
 map("n", "<leader>s", "<cmd>w<CR>", "Save file")
 map("n", "<C-Tab>", "<cmd>bnext<CR>", "Next buffer")
 map("n", "<C-S-Tab>", "<cmd>bprevious<CR>", "Previous buffer")

@@ -73,8 +73,8 @@ more out of the box. Extra hotkeys below expose these features.
 ### Editor behaviour
 
 Line numbers (absolute and relative) are enabled by default.
-Undo history persists across sessions, and yanked text now fades out over ~½ s in a soft peach tint (via highlightedyank).
-Diagnostics are disabled by default; press `<leader>dd` to toggle them.
+Undo history persists across sessions, and yanked text briefly highlights using the built-in `IncSearch` group.
+Diagnostics are disabled by default; press `<leader>dd` to cycle between none, virtual text, and signs.
 
 ### Common hotkeys
 
@@ -98,7 +98,7 @@ Diagnostics are disabled by default; press `<leader>dd` to toggle them.
 * `<leader>Q` – Close all but current
 * `<leader>h` – Move buffer left
 * `<leader>l` – Move buffer right
-* `<leader>dd` – Toggle diagnostics (off by default)
+* `<leader>dd` – Cycle diagnostics (off by default)
 * `<leader>w` – Save file
 * `<leader>s` – Save file
 * `<leader>x` – Close window
