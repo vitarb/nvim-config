@@ -47,6 +47,10 @@ return {
 		end,
 	},
 	{
+		"nvim-tree/nvim-web-devicons",
+		lazy = true,
+	},
+	{
 		"nvim-tree/nvim-tree.lua",
 		cmd = { "NvimTreeToggle", "NvimTreeFindFile" },
 		config = function()
@@ -71,7 +75,12 @@ return {
 		"numToStr/Comment.nvim",
 		event = "VeryLazy",
 		config = function()
-			require("Comment").setup({})
+			require("Comment").setup({
+				mappings = {
+					basic = false,
+					extra = false,
+				},
+			})
 		end,
 	},
 	{
