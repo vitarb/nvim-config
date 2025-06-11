@@ -58,7 +58,6 @@ map("n", "<C-Tab>", "<cmd>bnext<CR>", "Next buffer")
 map("n", "<C-S-Tab>", "<cmd>bprevious<CR>", "Previous buffer")
 map("n", "<leader>w", "<cmd>w<CR>", "Save file")
 map("n", "<leader>x", "<cmd>q<CR>", "Close window")
-map("n", "<leader>x", "<cmd>x<CR>", "Save & quit")
 map({ "n", "v" }, "<leader>/", function()
 	local ok, api = pcall(require, "Comment.api")
 	if ok then

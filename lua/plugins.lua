@@ -12,7 +12,7 @@ return {
 		"nvim-treesitter/nvim-treesitter",
 		config = function()
 			require("nvim-treesitter.configs").setup({
-				ensure_installed = { "lua", "bash", "python", "go", "rust", "cpp" },
+				ensure_installed = { "lua", "bash", "python", "go", "rust", "c", "cpp" },
 				highlight = { enable = true },
 				indent = { enable = true },
 				incremental_selection = { enable = true },
@@ -115,7 +115,7 @@ return {
 	{
 		"williamboman/mason-lspconfig.nvim",
 		opts = {
-			ensure_installed = { "gopls", "rust_analyzer", "pyright", "lua_ls", "ts_ls" },
+			ensure_installed = { "gopls", "rust_analyzer", "pyright", "lua_ls", "tsserver" },
 		},
 		config = function(_, opts)
 			require("mason-lspconfig").setup(opts)
@@ -125,7 +125,7 @@ return {
 		"neovim/nvim-lspconfig",
 		config = function()
 			local lsp = require("lspconfig")
-			for _, s in ipairs({ "gopls", "rust_analyzer", "pyright", "lua_ls", "ts_ls" }) do
+			for _, s in ipairs({ "gopls", "rust_analyzer", "pyright", "lua_ls", "tsserver" }) do
 				lsp[s].setup({})
 			end
 		end,
