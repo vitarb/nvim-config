@@ -105,23 +105,6 @@ if gs then
 	map("n", "<leader>gp", gs.preview_hunk, "Preview hunk")
 end
 
--- LSP-specific mappings once a server is attached
-vim.api.nvim_create_autocmd("LspAttach", {
-	callback = function(ev)
-		local function lspmap(lhs, rhs, desc)
-			vim.keymap.set("n", lhs, rhs, { buffer = ev.buf, noremap = true, silent = true, desc = desc })
-		end
-		lspmap("K", vim.lsp.buf.hover, "Hover docs")
-		lspmap("gd", vim.lsp.buf.definition, "Go to definition")
-		local tb_ok, tb = pcall(require, "telescope.builtin")
-		if tb_ok then
-			lspmap("gr", tb.lsp_references, "References")
-		end
-		lspmap("gR", vim.lsp.buf.rename, "Rename symbol")
-		lspmap("<leader>a", vim.lsp.buf.code_action, "Code actions")
-	end,
-})
-
 local wk_ok, wk = pcall(require, "which-key")
 if wk_ok then
 	wk.add({ { "", group = "find" } }, { prefix = "<leader>f" })
