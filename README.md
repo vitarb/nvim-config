@@ -102,7 +102,6 @@ Diagnostics are disabled by default; press `<leader>dd` to cycle between none, v
 * `<leader>l` – Move buffer right
 * `<leader>dd` – Cycle diagnostics (off by default)
 * `<leader>w` – Save file
-* `<leader>s` – Save file
 * `<leader>x` – Close window
 * `<leader>/` – Toggle comment line
 * `<leader>c` – Copy to clipboard

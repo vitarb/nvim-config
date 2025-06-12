@@ -73,7 +73,6 @@ map("n", "<leader>dd", function()
 	diag_index = diag_index % #diag_modes + 1
 	apply_diag()
 end, "Cycle diagnostics")
-map("n", "<leader>s", "<cmd>w<CR>", "Save file")
 map("n", "<C-Tab>", "<cmd>bnext<CR>", "Next buffer")
 map("n", "<C-S-Tab>", "<cmd>bprevious<CR>", "Previous buffer")
 map("n", "<leader>w", "<cmd>w<CR>", "Save file")
@@ -107,7 +106,9 @@ end
 
 local wk_ok, wk = pcall(require, "which-key")
 if wk_ok then
-	wk.add({ { "", group = "find" } }, { prefix = "<leader>f" })
-	wk.add({ { "", group = "git" } }, { prefix = "<leader>g" })
-	wk.add({ { "", group = "diagnostics" } }, { prefix = "<leader>d" })
+	wk.register({
+		f = { name = "find" },
+		g = { name = "git" },
+		d = { name = "diagnostics" },
+	}, { prefix = "<leader>" })
 end
