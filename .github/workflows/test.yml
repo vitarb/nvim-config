@@ -10,13 +10,27 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-14]
+        include:
+          - os: ubuntu-latest
+            env: { NVIM_VERSION: nightly }
+          - os: macos-14
+            env: { NVIM_VERSION: nightly }
     runs-on: ${{ matrix.os }}
+    env:
+      NVIM_VERSION: ${{ matrix.env.NVIM_VERSION }}
 
     steps:
       - name: Check out sources
         uses: actions/checkout@v4
         with:
           fetch-depth: 0  # get tags/commits for good measure
+
+      - name: Cache Treesitter
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/nvim/treesitter
+          key: ${{ runner.os }}-ts-${{ env.NVIM_VERSION }}
+          restore-keys: ${{ runner.os }}-ts-
 
       # ─────────────────────────────────────────────────────────────
       # 1 · Online phase – download & bootstrap the tool-chain

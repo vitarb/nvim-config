@@ -157,7 +157,7 @@ OFFLINE=1 make test
 | `offline`       | Bootstrap Neovim and plugins (skipped with `OFFLINE=1`) |
 | `smoke`         | Headless start; prints `SMOKE OK` on success |
 | `test`          | Headless full config test; fails on any error |
-| `lint`          | Run Stylua and ShellCheck |
+| `lint`          | Run Stylua, ShellCheck, and Luacheck |
 | `clean`         | Remove downloaded tools and caches |
 | `docker-image`  | Build dev image (Ubuntu 22.04) |
 
