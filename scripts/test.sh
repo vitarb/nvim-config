@@ -87,6 +87,10 @@ LUA_KEYS="$TMPDIR/keys.lua"
 		"vim.cmd('sleep 300m')"
 } >"$LUA_KEYS"
 
+[[ $("$NVIM" --clean --headless \
+	+"luafile $ROOT/lua/core/highlight.lua" \
+	+'echo hlexists("YankFlash")' +qa 2>&1 | tr -dc '0-9') -eq 1 ]]
+
 # -----------------------------------------------------------------------------
 # 3.  One Neovim instance, open all buffers, test hotkeys, then quit
 #     (running :checkhealth at the end for good measure)

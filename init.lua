@@ -22,5 +22,6 @@ end
 require("core.format")
 vim.cmd.colorscheme("kanagawa")
 require("core.autocmds")
-vim.highlight.on_yank({ higroup = "IncSearch", timeout = 150 })
+require("core.highlight")
+vim.highlight.on_yank({ higroup = "YankFlash", timeout = 250 })
 require("core.update")
