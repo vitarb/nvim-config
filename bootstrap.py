@@ -63,10 +63,11 @@ SHFMT_ASSETS  = {
 # ────────────────────────────── Luacheck ─────────────────────────────────
 LUACHECK_VERSION = "v1.2.0"
 LUACHECK_ASSETS = {
-    ("Linux",  "x86_64"):  "luacheck",
-    ("Linux",  "aarch64"): "luacheck",
-    ("Darwin", "x86_64"):  "luacheck",
-    ("Darwin", "arm64"):   "luacheck",
+    ("Linux",  "x86_64"):  None,
+    ("Linux",  "aarch64"): None,
+    # No official macOS binary – install via brew
+    ("Darwin", "x86_64"):  None,
+    ("Darwin", "arm64"):   None,
     ("Windows_NT", "x86_64"): "luacheck.exe",
 }
 
