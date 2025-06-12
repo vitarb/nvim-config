@@ -69,5 +69,8 @@ return {
 				timeout_ms = 500,
 			},
 		},
+		config = function(_, opts)
+			require("conform").setup(opts)
+		end,
 	},
 }
