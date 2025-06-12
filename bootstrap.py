@@ -15,7 +15,7 @@ TOOLS.mkdir(parents=True, exist_ok=True)
 BIN.mkdir(exist_ok=True)
 
 # ──────────────────────────── Neovim (same as before) ─────────────────────
-NVIM_VERSION = "v0.11.2"
+NVIM_VERSION = os.environ.get("NVIM_VERSION") or "v0.11.2"
 ASSET_MAP = {
     ("Linux",  "x86_64"):  "nvim-linux-x86_64.tar.gz",
     ("Linux",  "aarch64"): "nvim-linux-arm64.tar.gz",
@@ -58,6 +58,17 @@ SHFMT_ASSETS  = {
     ("Linux",  "aarch64"): "shfmt_v3.7.0_linux_arm64",
     ("Darwin", "x86_64"):  "shfmt_v3.7.0_darwin_amd64",
     ("Darwin", "arm64"):   "shfmt_v3.7.0_darwin_arm64",
+}
+
+# ────────────────────────────── Luacheck ─────────────────────────────────
+LUACHECK_VERSION = "v1.2.0"
+LUACHECK_ASSETS = {
+    ("Linux",  "x86_64"):  None,
+    ("Linux",  "aarch64"): None,
+    # No official macOS binary – install via brew
+    ("Darwin", "x86_64"):  None,
+    ("Darwin", "arm64"):   None,
+    ("Windows_NT", "x86_64"): "luacheck.exe",
 }
 
 # ───────────────────────────────── utilities ──────────────────────────────
@@ -182,6 +193,19 @@ if shfmt_asset and not shfmt_stamp.exists():
     shfmt_stamp.touch()
 elif not shfmt_asset:
     say("Skipping shfmt – unsupported platform")
+
+# ───────────────────────────── grab Luacheck ─────────────────────────────
+luacheck_asset = LUACHECK_ASSETS.get((sysname, machine))
+luacheck_stamp = TOOLS / f".luacheck.{LUACHECK_VERSION}.ok"
+if luacheck_asset and not luacheck_stamp.exists():
+    url = f"https://github.com/lunarmodules/luacheck/releases/download/{LUACHECK_VERSION}/{luacheck_asset}"
+    bin_path = TOOLS / luacheck_asset
+    say(f"Fetching Luacheck {LUACHECK_VERSION} …")
+    fetch(url, bin_path)
+    link_into_bin(bin_path, "luacheck")
+    luacheck_stamp.touch()
+elif not luacheck_asset:
+    say("Skipping Luacheck – unsupported platform")
 
 say("✅ bootstrap complete")
 

@@ -1,7 +1,8 @@
 #───────────────────────────────────────────────────────────────────────────────
 #  Neovim mini-config – make targets
 #───────────────────────────────────────────────────────────────────────────────
-.PHONY: offline smoke test lint clean docker-image
+.PHONY: offline smoke test lint luacheck clean docker-image
+LUACHECK_BIN := $(shell command -v luacheck 2>/dev/null || echo .tools/bin/luacheck)
 
 #-------------------------------------------------------------
 # build or update the tool-chain in .tools/  (downloads once)
@@ -32,15 +33,23 @@ endif
 #-------------------------------------------------------------
 # lint Lua & shell scripts
 #-------------------------------------------------------------
-lint: offline     ## run Stylua & ShellCheck
+lint: offline luacheck ## run Stylua, Luacheck & ShellCheck
 ifeq ($(DOCKER),1)
 	$(call run_in_docker,make lint DOCKER=0)
 else
 	@.tools/bin/stylua --check init.lua lua
+	@$(LUACHECK_BIN) init.lua lua
 	@if [ -d scripts ] && ls scripts/*.sh >/dev/null 2>&1; then \
-	  .tools/bin/shellcheck scripts/*.sh; \
-	fi
+  .tools/bin/shellcheck scripts/*.sh; \
+fi
 	@echo "LINT OK"
+endif
+
+luacheck: offline ## run Lua static analysis
+ifeq ($(DOCKER),1)
+        $(call run_in_docker,make luacheck DOCKER=0)
+else
+	@$(LUACHECK_BIN) init.lua lua
 endif
 
 #-------------------------------------------------------------

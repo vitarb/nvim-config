@@ -8,15 +8,38 @@ on:
 jobs:
   nvim-config:
     strategy:
+      fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-14]
+        include:
+          - os: ubuntu-latest
+          - os: macos-14
+          - os: ubuntu-latest
+            NVIM_VERSION: nightly
     runs-on: ${{ matrix.os }}
+    env:
+      NVIM_VERSION: ${{ matrix.NVIM_VERSION }}
 
     steps:
       - name: Check out sources
         uses: actions/checkout@v4
         with:
           fetch-depth: 0  # get tags/commits for good measure
+
+      - name: Cache TS parsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/nvim/treesitter
+          key: ${{ runner.os }}-ts-${{ hashFiles('lazy-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-ts-
+
+      - name: Install luacheck (Linux)
+        if: runner.os == 'Linux'
+        run: sudo apt-get update -y && sudo apt-get install -y lua-check
+
+      - name: Install luacheck (macOS)
+        if: runner.os == 'macOS'
+        run: brew install luacheck
 
       # ─────────────────────────────────────────────────────────────
       # 1 · Online phase – download & bootstrap the tool-chain
