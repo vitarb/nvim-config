@@ -1,3 +1,4 @@
+-- luacheck: globals vim
 -- Minimal plugin list – Lazy handles itself
 if vim.fn.executable("rg") == 0 then
 	vim.schedule(function()
@@ -37,7 +38,7 @@ return {
 					mappings = { i = { ["<Esc>"] = actions.close } },
 				},
 			})
-			local builtin = require("telescope.builtin")
+			-- builtin functions can be used externally if needed
 		end,
 	},
 	{
@@ -92,7 +93,7 @@ return {
 		"lewis6991/gitsigns.nvim",
 		config = function()
 			require("gitsigns").setup({})
-			local gs = require("gitsigns")
+			-- gitsigns instance available as needed
 		end,
 	},
 	{

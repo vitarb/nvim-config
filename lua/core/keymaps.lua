@@ -1,3 +1,4 @@
+-- luacheck: globals vim
 local map = function(mode, lhs, rhs, desc)
 	vim.keymap.set(mode, lhs, rhs, { noremap = true, silent = true, desc = desc })
 end
@@ -113,9 +114,9 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		end
 		lspmap("K", vim.lsp.buf.hover, "Hover docs")
 		lspmap("gd", vim.lsp.buf.definition, "Go to definition")
-		local tb_ok, tb = pcall(require, "telescope.builtin")
+		local tb_ok, builtin = pcall(require, "telescope.builtin")
 		if tb_ok then
-			lspmap("gr", tb.lsp_references, "References")
+			lspmap("gr", builtin.lsp_references, "References")
 		end
 		lspmap("gR", vim.lsp.buf.rename, "Rename symbol")
 		lspmap("<leader>a", vim.lsp.buf.code_action, "Code actions")
