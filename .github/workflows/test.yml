@@ -4,20 +4,17 @@ on:
   push:
     branches: [ main ]
   pull_request:
+  schedule:
+    - cron: '16 2 * * *'
+  workflow_dispatch:
 
 jobs:
   nvim-config:
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - os: ubuntu-latest
-          - os: macos-14
-          - os: ubuntu-latest
-            NVIM_VERSION: nightly
+        os: [ubuntu-latest, macos-14]
     runs-on: ${{ matrix.os }}
-    env:
-      NVIM_VERSION: ${{ matrix.NVIM_VERSION }}
 
     steps:
       - name: Check out sources
@@ -65,4 +62,27 @@ jobs:
         run: make lint
         env:
           OFFLINE: 1
+
+  nightly:
+    needs: nvim-config
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    env:
+      NVIM_VERSION: nightly
+    steps:
+      - uses: actions/checkout@v4
+      - name: Cache TS parsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/nvim/treesitter
+          key: ${{ runner.os }}-ts-${{ hashFiles('lazy-lock.json') }}
+          restore-keys: ${{ runner.os }}-ts-
+      - name: Bootstrap & offline tests (nightly)
+        run: |
+          make offline
+          OFFLINE=1 make smoke
+          OFFLINE=1 make test
 
