@@ -14,7 +14,7 @@ tool-chain is already present.
 2. Day-to-day commands
 make smoke   # head-less “does it run?” check → prints “SMOKE OK”
 make test    # full head-less config test     → prints “TEST OK”
-make lint    # Stylua + ShellCheck            → prints “LINT OK”
+make lint    # Luacheck, Stylua & ShellCheck → prints “LINT OK”
 make format  # Fix formatting (run it if lint gives formatting errors)
 They run quickly and fail fast on any error.
 Run `make format` before committing and verify with `make lint`, `make smoke`,
