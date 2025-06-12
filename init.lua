@@ -16,6 +16,9 @@ if vim.env.NVIM_OFFLINE_BOOT == "1" then
 end
 require("core.lazy")
 require("core.keymaps")
+if vim.fn.has("termguicolors") == 1 then
+	vim.o.termguicolors = true
+end
 vim.cmd.colorscheme("kanagawa")
 require("core.autocmds")
 vim.highlight.on_yank({ higroup = "IncSearch", timeout = 150 })
