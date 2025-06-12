@@ -86,11 +86,9 @@ LUA_KEYS="$TMPDIR/keys.lua"
 		"vim.cmd('sleep 300m')"
 } >"$LUA_KEYS"
 
-[[ $("$NVIM" --headless \
-	--cmd "set rtp^=$ROOT packpath^=$ROOT" \
-	-u "$ROOT/init.lua" \
-	+"lua io.stdout:write(vim.fn.hlexists('YankFlash'))" +qa 2>/dev/null |
-	grep -o '[0-9]\+') -eq 1 ]]
+[[ $("$NVIM" --clean --headless \
+	+"luafile $ROOT/lua/core/highlight.lua" \
+	+'echo hlexists("YankFlash")' +qa 2>&1 | tr -dc '0-9') -eq 1 ]]
 
 # -----------------------------------------------------------------------------
 # 3.  One Neovim instance, open all buffers, test hotkeys, then quit
