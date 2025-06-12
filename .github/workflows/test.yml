@@ -14,10 +14,10 @@ jobs:
           - os: ubuntu-latest
           - os: macos-14
           - os: ubuntu-latest
-            env:
-              NVIM_VERSION: nightly
+            NVIM_VERSION: nightly
     runs-on: ${{ matrix.os }}
-    env: ${{ matrix.env }}
+    env:
+      NVIM_VERSION: ${{ matrix.NVIM_VERSION }}
 
     steps:
       - name: Check out sources
