@@ -1,4 +1,5 @@
 # Neovim mini-config
+[![test](https://github.com/yourname/nvim-config/actions/workflows/test.yml/badge.svg)](https://github.com/yourname/nvim-config/actions/workflows/test.yml)
 
 A tiny Neovim configuration with its own pinned binary.  Everything lives in
 this repository so a clone can be bootstrapped and tested without Internet
@@ -179,6 +180,8 @@ GitHub Actions performs the same bootstrap and offline tests:
 `make offline` once online, then `make smoke` and `make test` with `OFFLINE=1`
 variables set. If any target fails,
 CI blocks the change.
+
+The test matrix covers both the latest stable and nightly Neovim builds.
 
 Optionally install [pre-commit](https://pre-commit.com/) to run the same linters automatically: `pip install pre-commit && pre-commit install`.
 
