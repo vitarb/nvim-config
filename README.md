@@ -59,6 +59,7 @@ This configuration intentionally stays tiny. A handful of popular plugins are bu
 - **folke/which-key.nvim** – displays available keybindings
 - **echasnovski/mini.nvim** – icon library used by which-key
 - **lukas-reineke/indent-blankline.nvim** – indentation guides
+- **stevearc/conform.nvim** – auto formatting framework
 - **williamboman/mason.nvim** – LSP package manager
 - **williamboman/mason-lspconfig.nvim** – Mason integration for LSP
 - **neovim/nvim-lspconfig** – built-in LSP configurations
