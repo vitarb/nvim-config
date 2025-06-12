@@ -10,6 +10,7 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 NVIM="$ROOT/.tools/bin/nvim"
+export PATH="$ROOT/.tools/bin:$PATH"
 
 [[ -x $NVIM ]] || {
 	echo "❌ test: $NVIM not found (run \`make offline\` first)"
@@ -28,7 +29,7 @@ trap 'rm -rf "$TMPDIR" >/dev/null 2>&1 || true' EXIT
 FILES=()
 for ft in lua python go rust ts c cpp markdown vim; do
 	case "$ft" in
-	lua) snippet='print("hello")' ;;
+	lua) snippet=$'local x=1\nprint("hello")' ;;
 	python) snippet='print("hello")' ;;
 	go) snippet='package main; func main(){}' ;;
 	rust) snippet='fn main(){}' ;;
@@ -164,6 +165,28 @@ if [ "$b1" = "$b3" ] && [ "$b1" != "$b2" ]; then
 else
 	echo "$OUT_BUF"
 	echo "❌ buffer cycle not working"
+	exit 1
+fi
+
+# -----------------------------------------------------------------------------
+# 5.  Format on save via conform
+# -----------------------------------------------------------------------------
+set +e
+OUT_FMT="$("${TIMEOUT[@]}" "$NVIM" --headless "${FILES[0]}" \
+	--cmd "set rtp^=$ROOT packpath^=$ROOT" \
+	--cmd "set noswapfile" \
+	-u "$ROOT/init.lua" \
+	+"w" +qa 2>&1)"
+STATUS=$?
+set -e
+if ((STATUS != 0)); then
+	echo "$OUT_FMT"
+	echo "❌ format on save failed"
+	exit $STATUS
+fi
+if ! grep -q 'local x = 1' "${FILES[0]}"; then
+	echo "$OUT_FMT"
+	echo "❌ format on save not applied"
 	exit 1
 fi
 
