@@ -58,14 +58,14 @@ done < <(
 # remove duplicates (if any) - portable across bash versions
 dedup_keys=()
 for key in "${HOTKEYS[@]}"; do
-        found=
-        for seen in "${dedup_keys[@]-}"; do
-                if [ "$seen" = "$key" ]; then
-                        found=1
-                        break
-                fi
-        done
-        [ -n "$found" ] || dedup_keys+=("$key")
+	found=
+	for seen in "${dedup_keys[@]-}"; do
+		if [ "$seen" = "$key" ]; then
+			found=1
+			break
+		fi
+	done
+	[ -n "$found" ] || dedup_keys+=("$key")
 done
 HOTKEYS=("${dedup_keys[@]-}")
 
@@ -82,8 +82,8 @@ LUA_KEYS="$TMPDIR/keys.lua"
 		"    pcall(vim.cmd, 'silent! normal '..line)" \
 		"  end" \
 		"end" \
-                "vim.cmd('normal! yy')" \
-                "vim.cmd('sleep 300m')"
+		"vim.cmd('normal! yy')" \
+		"vim.cmd('sleep 300m')"
 } >"$LUA_KEYS"
 
 # -----------------------------------------------------------------------------

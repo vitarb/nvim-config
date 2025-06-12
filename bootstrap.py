@@ -2,7 +2,7 @@
 """Private, fail-fast, offline-friendly bootstrap."""
 
 from __future__ import annotations
-import os, shutil, subprocess, sys, tarfile, zipfile
+import os, shutil, subprocess, sys, tarfile, zipfile, platform
 from pathlib import Path
 
 # ───────────────────────────────────────── paths ──────────────────────────
@@ -21,10 +21,16 @@ ASSET_MAP = {
     ("Linux",  "aarch64"): "nvim-linux-arm64.tar.gz",
     ("Darwin", "x86_64"):  "nvim-macos-x86_64.tar.gz",
     ("Darwin", "arm64"):   "nvim-macos-arm64.tar.gz",
+    ("Windows_NT", "x86_64"): "nvim-win64.zip",
 }
-asset = ASSET_MAP.get((os.uname().sysname, os.uname().machine))
+sysname = os.environ.get("OS") or platform.system()
+machine = platform.machine()
+machine = "x86_64" if machine.lower() in ("amd64", "x86_64") else machine
+asset = ASSET_MAP.get((sysname, machine))
 if not asset:
-    sys.exit(f"[bootstrap] Unsupported platform: {os.uname().sysname} {os.uname().machine}")
+    say(f"Unsupported platform: {sysname} {machine} – skipping Neovim download")
+    sys.exit(0)
+
 NVIM_URL = f"https://github.com/neovim/neovim/releases/download/{NVIM_VERSION}/{asset}"
 STAMP    = TOOLS / f".nvim.{NVIM_VERSION}.{asset}.ok"
 
@@ -59,7 +65,14 @@ def say(msg: str) -> None:
     print(f"\033[1;34m[bootstrap]\033[0m {msg}", flush=True)
 
 def fetch(url: str, out: Path) -> None:
-    subprocess.check_call(["curl", "-Lf", "--retry", "3", "-o", out, url])
+    if os.name == "nt":
+        subprocess.check_call([
+            "powershell",
+            "-Command",
+            f"curl -L -o \"{out}\" {url}",
+        ])
+    else:
+        subprocess.check_call(["curl", "-Lf", "--retry", "3", "-o", out, url])
 
 def link_into_bin(binary: Path, name: str) -> None:
     target = BIN / name
@@ -69,8 +82,10 @@ def link_into_bin(binary: Path, name: str) -> None:
     binary.chmod(0o755)
 
 def untar_or_unzip(archive: Path, dest: Path) -> None:
-    if archive.suffixes[-2:] == [".tar", ".xz"]:
-        with tarfile.open(archive, "r:xz") as tf:
+    suf = archive.suffixes[-2:]
+    if suf == [".tar", ".xz"] or suf == [".tar", ".gz"]:
+        mode = "r:xz" if suf[-1] == ".xz" else "r:gz"
+        with tarfile.open(archive, mode) as tf:
             tf.extractall(dest, filter="data")
     else:
         with zipfile.ZipFile(archive) as zf:
@@ -86,8 +101,7 @@ if not STAMP.exists() or not NVIM.exists():
     say("Extracting …")
     shutil.rmtree(TOOLS / "nvim-extracted", ignore_errors=True)
     (TOOLS / "nvim-extracted").mkdir()
-    with tarfile.open(archive) as tf:
-        tf.extractall(TOOLS / "nvim-extracted", filter="data")
+    untar_or_unzip(archive, TOOLS / "nvim-extracted")
 
     found = next((p for p in (TOOLS / "nvim-extracted").rglob("bin/nvim")), None)
     if not found:
@@ -117,9 +131,9 @@ run_nvim("+lua require('lazy').sync{wait=true}", "+qa")
 run_nvim("+TSUpdateSync", "+qa")
 
 # ───────────────────────────── grab Stylua ────────────────────────────────
-stylua_asset = STYLUA_ASSETS[(os.uname().sysname, os.uname().machine)]
+stylua_asset = STYLUA_ASSETS.get((sysname, machine))
 stylua_stamp = TOOLS / f".stylua.{STYLUA_VERSION}.ok"
-if not stylua_stamp.exists():
+if stylua_asset and not stylua_stamp.exists():
     archive = TOOLS / stylua_asset
     say(f"Fetching Stylua {STYLUA_VERSION} …")
     fetch(f"https://github.com/JohnnyMorganz/StyLua/releases/download/{STYLUA_VERSION}/{stylua_asset}", archive)
@@ -133,11 +147,13 @@ if not stylua_stamp.exists():
         sys.exit("[bootstrap] stylua binary not found")
     link_into_bin(bin_path, "stylua")
     stylua_stamp.touch()
+elif not stylua_asset:
+    say("Skipping Stylua – unsupported platform")
 
 # ──────────────────────────── grab ShellCheck ─────────────────────────────
-shell_asset = SHELLCHECK_ASSETS[(os.uname().sysname, os.uname().machine)]
+shell_asset = SHELLCHECK_ASSETS.get((sysname, machine))
 shell_stamp = TOOLS / f".shellcheck.{SHELLCHECK_VERSION}.ok"
-if not shell_stamp.exists():
+if shell_asset and not shell_stamp.exists():
     archive = TOOLS / shell_asset
     say(f"Fetching ShellCheck {SHELLCHECK_VERSION} …")
     fetch(f"https://github.com/koalaman/shellcheck/releases/download/{SHELLCHECK_VERSION}/{shell_asset}", archive)
@@ -151,17 +167,21 @@ if not shell_stamp.exists():
         sys.exit("[bootstrap] shellcheck binary not found")
     link_into_bin(bin_path, "shellcheck")
     shell_stamp.touch()
+elif not shell_asset:
+    say("Skipping ShellCheck – unsupported platform")
 
 # ───────────────────────────── grab shfmt ─────────────────────────────────
-shfmt_asset = SHFMT_ASSETS[(os.uname().sysname, os.uname().machine)]
+shfmt_asset = SHFMT_ASSETS.get((sysname, machine))
 shfmt_stamp = TOOLS / f".shfmt.{SHFMT_VERSION}.ok"
-if not shfmt_stamp.exists():
+if shfmt_asset and not shfmt_stamp.exists():
     url = f"https://github.com/mvdan/sh/releases/download/{SHFMT_VERSION}/{shfmt_asset}"
     bin_path = TOOLS / shfmt_asset
     say(f"Fetching shfmt {SHFMT_VERSION} …")
     fetch(url, bin_path)
     link_into_bin(bin_path, "shfmt")
     shfmt_stamp.touch()
+elif not shfmt_asset:
+    say("Skipping shfmt – unsupported platform")
 
 say("✅ bootstrap complete")
 
