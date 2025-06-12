@@ -15,7 +15,7 @@ TOOLS.mkdir(parents=True, exist_ok=True)
 BIN.mkdir(exist_ok=True)
 
 # ──────────────────────────── Neovim (same as before) ─────────────────────
-NVIM_VERSION = os.environ.get("NVIM_VERSION", "v0.11.2")
+NVIM_VERSION = os.environ.get("NVIM_VERSION") or "v0.11.2"
 ASSET_MAP = {
     ("Linux",  "x86_64"):  "nvim-linux-x86_64.tar.gz",
     ("Linux",  "aarch64"): "nvim-linux-arm64.tar.gz",
