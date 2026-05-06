@@ -15,7 +15,7 @@ TOOLS.mkdir(parents=True, exist_ok=True)
 BIN.mkdir(exist_ok=True)
 
 # ──────────────────────────── Neovim (same as before) ─────────────────────
-NVIM_VERSION = os.environ.get("NVIM_VERSION") or "v0.11.2"
+NVIM_VERSION = os.environ.get("NVIM_VERSION") or "v0.12.2"
 ASSET_MAP = {
     ("Linux",  "x86_64"):  "nvim-linux-x86_64.tar.gz",
     ("Linux",  "aarch64"): "nvim-linux-arm64.tar.gz",
@@ -138,8 +138,8 @@ def run_nvim(*extra: str) -> None:
 
 say("Syncing Lazy plugins …")
 run_nvim("+lua require('lazy').sync{wait=true}", "+qa")
-# Compile treesitter grammars once while we still have network
-run_nvim("+TSUpdateSync", "+qa")
+# Compile treesitter grammars once while we still have network.
+run_nvim("+lua if vim.fn.exists(':TSUpdateSync') == 2 then vim.cmd('TSUpdateSync') end", "+qa")
 
 # ───────────────────────────── grab Stylua ────────────────────────────────
 stylua_asset = STYLUA_ASSETS.get((sysname, machine))
@@ -205,7 +205,24 @@ if luacheck_asset and not luacheck_stamp.exists():
     link_into_bin(bin_path, "luacheck")
     luacheck_stamp.touch()
 elif not luacheck_asset:
-    say("Skipping Luacheck – unsupported platform")
+    luacheck_lua_version = "5.4" if shutil.which("lua5.4") else None
+    luacheck_tree = TOOLS / (f"luarocks-{luacheck_lua_version}" if luacheck_lua_version else "luarocks")
+    luacheck_rock_stamp = TOOLS / f".luacheck.{LUACHECK_VERSION}.luarocks-{luacheck_lua_version or 'default'}.ok"
+    if shutil.which("luarocks") and not luacheck_rock_stamp.exists():
+        say(f"Fetching Luacheck {LUACHECK_VERSION} via LuaRocks …")
+        luarocks_cmd = ["luarocks"]
+        if luacheck_lua_version:
+            luarocks_cmd.extend(["--lua-version", luacheck_lua_version])
+        subprocess.check_call(luarocks_cmd + [
+            "--tree",
+            str(luacheck_tree),
+            "install",
+            "luacheck",
+            LUACHECK_VERSION.removeprefix("v"),
+        ])
+        link_into_bin(luacheck_tree / "bin" / "luacheck", "luacheck")
+        luacheck_rock_stamp.touch()
+    elif not shutil.which("luarocks"):
+        say("Skipping Luacheck – unsupported platform and luarocks is not installed")
 
 say("✅ bootstrap complete")
-

@@ -53,6 +53,7 @@ This configuration intentionally stays tiny. A handful of popular plugins are bu
 - **nvim-treesitter/nvim-treesitter** – Modern syntax highlighting (and more)
 - **rebelot/kanagawa.nvim** – Japanese-themed color scheme
 - **nvim-telescope/telescope.nvim** – fuzzy finder powered by plenary
+- **nvim-telescope/telescope-fzf-native.nvim** – faster native sorter for Telescope
 - **nvim-lualine/lualine.nvim** – sleek status line
 - **nvim-tree/nvim-tree.lua** – simple file explorer
 - **akinsho/bufferline.nvim** – tab-like buffer list
@@ -184,4 +185,3 @@ CI blocks the change.
 The test matrix covers both the latest stable and nightly Neovim builds.
 
 Optionally install [pre-commit](https://pre-commit.com/) to run the same linters automatically: `pip install pre-commit && pre-commit install`.
-
