@@ -14,16 +14,26 @@ return {
 	{
 		"nvim-telescope/telescope.nvim",
 		cmd = { "Telescope" },
-		dependencies = { "nvim-lua/plenary.nvim" },
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+			{
+				"nvim-telescope/telescope-fzf-native.nvim",
+				build = "make",
+				cond = function()
+					return vim.fn.executable("make") == 1
+				end,
+			},
+		},
 		config = function()
 			local actions = require("telescope.actions")
-			require("telescope").setup({
+			local telescope = require("telescope")
+			telescope.setup({
 				defaults = {
 					layout_config = { width = 0.9 },
 					mappings = { i = { ["<Esc>"] = actions.close } },
 				},
 			})
-			local builtin = require("telescope.builtin")
+			pcall(telescope.load_extension, "fzf")
 		end,
 	},
 	{
