@@ -27,7 +27,7 @@ TMPDIR="$(mktemp -d)"
 trap 'rm -rf "$TMPDIR" >/dev/null 2>&1 || true' EXIT
 
 FILES=()
-for ft in lua python go rust ts c cpp markdown vim; do
+for ft in lua python go rust ts c cpp bash markdown vim; do
 	case "$ft" in
 	lua) snippet=$'local x=1\nprint("hello")' ;;
 	python) snippet='print("hello")' ;;
@@ -35,7 +35,8 @@ for ft in lua python go rust ts c cpp markdown vim; do
 	rust) snippet='fn main(){}' ;;
 	c | cpp) snippet='int main() {return 0;}' ;;
 	ts) snippet='console.log("hi")' ;;
-	markdown) snippet='# Hello' ;;
+	bash) snippet=$'#!/usr/bin/env bash\ncat <<EOF\nVALUE=1\nEOF' ;;
+	markdown) snippet=$'# Hello\n\n```lua\nprint("hello")\n```' ;;
 	vim) snippet='echo "hi"' ;;
 	esac
 	f="$TMPDIR/test.$ft"
@@ -100,6 +101,7 @@ SCRIPT="$TMPDIR/run.vim"
 	for f in "${FILES[@]}"; do
 		echo "edit ${f}"
 	done
+	echo "lua local q = vim.treesitter.query.get('markdown', 'injections'); if q and next(q.captures) ~= nil then error('markdown injection override not active: ' .. vim.inspect(q.captures)) end"
 	echo "luafile ${LUA_KEYS}"
 	echo "execute 'normal! gg'"
 	echo "checkhealth"
