@@ -9,6 +9,7 @@ return {
 				indent = { enable = true },
 				incremental_selection = { enable = true },
 			})
+			require("core.treesitter_compat").setup()
 		end,
 	},
 	{
