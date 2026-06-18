@@ -16,12 +16,7 @@ return {
 	{
 		"mason-org/mason.nvim",
 		build = ":MasonUpdate",
-		opts = {
-			providers = { "mason.providers.registry-api" },
-		},
-		config = function(_, opts)
-			require("mason").setup(opts)
-		end,
+		config = true,
 	},
 	{
 		"mason-org/mason-lspconfig.nvim",
