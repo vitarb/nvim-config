@@ -93,7 +93,10 @@ local tokyonight_index = 1
 map("n", "<leader>;", function()
 	tokyonight_index = tokyonight_index % #tokyonight_variants + 1
 	local next = tokyonight_variants[tokyonight_index]
-	pcall(vim.cmd.colorscheme, "tokyonight-" .. next)
+	local ok, tn = pcall(require, "tokyonight")
+	if ok and tn.load then
+		tn.load({ style = next })
+	end
 end, "Cycle color variant")
 
 if gs then
