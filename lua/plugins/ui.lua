@@ -1,10 +1,18 @@
 return {
 	{
-		"rebelot/kanagawa.nvim",
-		name = "kanagawa",
+		"folke/tokyonight.nvim",
+		name = "tokyonight",
+		lazy = false,
 		priority = 1000,
 		config = function()
-			require("kanagawa").setup({})
+			require("tokyonight").setup({
+				style = "night", -- matches Alacritty/i3 system palette (#1a1b26)
+				transparent = true, -- match Alacritty opacity = 0.88
+				styles = {
+					sidebars = "transparent",
+					floats = "transparent",
+				},
+			})
 		end,
 	},
 	{
@@ -13,7 +21,7 @@ return {
 			require("lualine").setup({
 				options = {
 					icons_enabled = false,
-					theme = "auto",
+					theme = "tokyonight",
 				},
 			})
 		end,

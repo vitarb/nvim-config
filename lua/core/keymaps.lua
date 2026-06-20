@@ -88,15 +88,12 @@ map("v", "<leader>c", '"+y', "Copy to clipboard")
 map({ "n", "v" }, "<leader>v", '"+p', "Paste from clipboard")
 map("n", "<C-x>", "<cmd>qa!<CR>", "Exit Neovim without saving")
 
-local kanagawa_variants = { "wave", "dragon", "lotus" }
-local kanagawa_index = 1
+local tokyonight_variants = { "night", "storm", "moon", "day" }
+local tokyonight_index = 1
 map("n", "<leader>;", function()
-	kanagawa_index = kanagawa_index % #kanagawa_variants + 1
-	local next = kanagawa_variants[kanagawa_index]
-	local ok, kg = pcall(require, "kanagawa")
-	if ok and kg.load then
-		kg.load(next)
-	end
+	tokyonight_index = tokyonight_index % #tokyonight_variants + 1
+	local next = tokyonight_variants[tokyonight_index]
+	pcall(vim.cmd.colorscheme, "tokyonight-" .. next)
 end, "Cycle color variant")
 
 if gs then

@@ -19,7 +19,7 @@ require("core.keymaps")
 if vim.fn.has("termguicolors") == 1 then
 	vim.o.termguicolors = true
 end
-vim.cmd.colorscheme("kanagawa")
+vim.cmd.colorscheme("tokyonight-night")
 require("core.autocmds")
 require("core.highlight")
 vim.highlight.on_yank({ higroup = "YankFlash", timeout = 250 })
